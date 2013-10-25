@@ -9,7 +9,7 @@
 // ==/UserScript==
 
 //autocomplete
-$.getScript('https://github.com/Bibbytube/Instasynch/tree/master/Chat%20Additions/Autocomplete/autocomplete.js')
+$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Autocomplete/autocomplete.js')
  
 //messagefilter
-$.getScript('https://github.com/Bibbytube/Instasynch/tree/master/Chat%20Additions/Messagefilter/Messagefilter.js')
+$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Messagefilter/messagefilter.js')
