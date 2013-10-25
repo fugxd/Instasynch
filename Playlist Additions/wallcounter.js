@@ -51,9 +51,10 @@ function loadWallCounter(){
 
         if(value == 0){
             delete wallCounter[video.addedby];
+        }else{
+            wallCounter[video.addedby] = value;
         }
 
-        wallCounter[video.addedby] = value;
 
         oldRemoveVideo(vidinfo);
     };
