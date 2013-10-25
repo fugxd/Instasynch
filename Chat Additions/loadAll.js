@@ -8,10 +8,10 @@
 // @grant       none
 // ==/UserScript==
 
-
-(function(){
-    var jA = document.createElement('script');
-    jA.setAttribute('type', 'text/javascript');
-    jA.setAttribute('src', 'https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/deploy.js');
-    document.body.appendChild(jA);
-})();
+if(unsafeWindow){
+	with(unsafeWindow) {
+		$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/deploy.js');
+	}
+}else{
+	$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/deploy.js');
+}
