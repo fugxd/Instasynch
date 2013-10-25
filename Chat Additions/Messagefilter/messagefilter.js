@@ -44,7 +44,7 @@ function loadWordfilter() {
         //if the text matches [tag]/emote[/tag] or /emote
         if ((match = message.match(/^((\[.*?\])*)\/([^\[ ]+)((\[.*?\])*)/i))) {
             emoteFound = true;
-            var emote = (match[3] in $codes)?$codes[match[3]]: "/"+match[3];
+            var emote = (match[3].toLowerCase() in $codes)?$codes[match[3].toLowerCase()]: "/"+match[3];
             message = "<span class='cm'>" + match[1] + emote + match[4] + "</span>";
         } else {
             var greentext = false;
