@@ -22,15 +22,32 @@
 */
 
 
-function loadHappyBirthdayJPB() {
-	var oldAddUser = addUser;
+function loadWallCounter(){
 
-	addUser = function addUser(user, css, sort){
-		if(user == 'JustPassingBy'){
+    var oldAddVideo = addVideo;
 
-		}
-		oldAddUser(user,css,sort);
-	};
+    addVideo = function addVideo(vidinfo) {
+
+        var value = wallCounter[vidinfo.addedby];
+
+        if(value){
+            value += vidinfo.duration;
+        }else{
+            value = vidinfo.duration;
+        }
+        wallCounter[vidinfo.addedby] = value;
+
+        oldAddVideo(vidinfo);
+    }
+
+}
+var wallCounter = {};
+
+function printWallCounter(){
+    for(var key in wallCounter){
+        console.log(key + ": "+wallCounter[key]);
+    }
 }
 
-loadHappyBirthdayJPB();
+
+loadWallCounter();
