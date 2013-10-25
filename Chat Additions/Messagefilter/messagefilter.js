@@ -1,16 +1,3 @@
-// ==UserScript==
-// @name        Chat Addons
-// @namespace   Bibby
-// @description adds the old tags and wordfilter
-// @include     http://instasynch.com/rooms/*
-// @include     http://*.instasynch.com/rooms/*
-// @version     1
-// @grant       none
-// ==/UserScript==
-
-
-loadWordfilter();
-
 function loadWordfilter() {
 
     //wait until we got a connection to the server
@@ -68,7 +55,9 @@ function loadWordfilter() {
             message = message.replace(new RegExp(word, 'gi'), tags[word]);
         }
         //remove unnused tags [asd]
-        message = message.replace(/\[.*?\]/, '');
+        if(emoteFound){
+            message = message.replace(/\[.*?\]/, '');
+        }
         
         //continue with Mewtes addMessage function
         oldAddMessage(username, message, userstyle, textstyle);
@@ -170,3 +159,7 @@ var tags = {
     '\\[strong\\]': '<strong>',
     '\\[/strong\\]': '</strong>'
 };
+
+
+loadWordfilter();
+

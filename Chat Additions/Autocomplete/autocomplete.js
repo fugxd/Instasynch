@@ -1,14 +1,3 @@
-// ==UserScript==
-// @name        Autocomplete
-// @namespace   Bibby
-// @description autocompletes emotes and or commands
-// @include     http://*.instasynch.com/rooms/*
-// @include     http://instasynch.com/rooms/*
-// @version     1
-// @grant       none
-// ==/UserScript==
-loadAutoComplete();
-
 function loadAutoComplete() {
 
     //wait until we got a connection to the server
@@ -100,3 +89,6 @@ function loadAutoComplete() {
         delay: 0
     });
 }
+
+loadAutoComplete();
+
