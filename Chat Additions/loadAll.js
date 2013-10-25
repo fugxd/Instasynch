@@ -9,7 +9,7 @@
 // ==/UserScript==
 
 
-(function loadDeploayScripts(){
+(function(){
     var jA = document.createElement('script');
     jA.setAttribute('type', 'text/javascript');
     jA.setAttribute('src', 'https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/deploy.js');

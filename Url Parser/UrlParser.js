@@ -1,10 +1,26 @@
+/*
+    Copyright (C) 2013  Faqqq
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+
 function parseUrl(URL){
 	//Parse URLs from  youtube / twitch / vimeo / dailymotion / livestream
-
-	//If you add brackets in your RegExp like (www\.)? the result will be saved in an array
-	//example: [1] = http, [2] = www, [3] = undefined,  [4] = youtube
-	//for http://www.youtube.com
-	//this also can be accessed with RegExp.$1, .$2 etc.
+ 
 	var match = URL.match(/(https?:\/\/)?(.*\.)?(\w+)\./i);
 	if(match === null){
 		/*error*/
@@ -18,11 +34,6 @@ function parseUrl(URL){
 		case 'youtu':
 		case 'youtube':{ 
 			provider = 'youtube'; //so that we don't have youtu or youtube later on
-
-			//if((match = URL.match(...))) is short for
-
-			//match = URL.match(...)
-			//if(match !== null)
 
 			//match for http://www.youtube.com/watch?v=12345678901
 			if((match=URL.match(/v=([\w-_]{11})/i))){
@@ -109,8 +120,6 @@ function parseUrl(URL){
 		//different provider -> error
 		default: /*error*/ return false;
 	}
-	//printFunction for jsfiddle
-	//logIt("["+provider + "] [" +mediaType + "] [" + id + "] [" + channel + "]");
 
 	//return the data
 	return {
