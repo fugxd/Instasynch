@@ -30,7 +30,7 @@ function loadWallCounter(){
     //overwrite InstaSynch's addVideo
     addVideo = function addVideo(vidinfo) {
 
-        var value = wallCounter[vidinfo.addedby];
+        var value = wallCounter[vidinfo.addedby.toLowerCase()]];
 
         if(value){
             value += vidinfo.duration;
@@ -44,8 +44,9 @@ function loadWallCounter(){
 
     //overwrite InstaSynch's removeVideo
     removeVideo = function removeVideo(vidinfo){
-        var value = wallCounter[vidinfo.addedby];
+        var value = wallCounter[vidinfo.addedby.toLowerCase()];
         value -= vidinfo.duration;
+        console.log(value);
         console.log(vidinfo.addedby + ": "+secondsToTime(value));
         if(value == 0){
             delete wallCounter[vidinfo.addedby];
