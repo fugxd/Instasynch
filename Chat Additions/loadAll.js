@@ -9,4 +9,9 @@
 // ==/UserScript==
 
 
-$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/deploy.js')
+(function loadDeploayScripts(){
+    var jA = document.createElement('script');
+    jA.setAttribute('type', 'text/javascript');
+    jA.setAttribute('src', 'https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/deploy.js');
+    document.body.appendChild(jA);
+})();

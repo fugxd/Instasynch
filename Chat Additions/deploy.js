@@ -1,6 +1,16 @@
 
 //autocomplete
-$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Autocomplete/autocomplete.js')
+(function loadDeploayScripts(){
+    var jA = document.createElement('script');
+    jA.setAttribute('type', 'text/javascript');
+    jA.setAttribute('src', 'https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Autocomplete/autocomplete.js');
+    document.body.appendChild(jA);
+})();
  
 //messagefilter
-$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Messagefilter/messagefilter.js')
+(function loadDeploayScripts(){
+    var jA = document.createElement('script');
+    jA.setAttribute('type', 'text/javascript');
+    jA.setAttribute('src', 'https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Messagefilter/messagefilter.js');
+    document.body.appendChild(jA);
+})();
