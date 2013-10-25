@@ -44,6 +44,7 @@ function loadWallCounter(){
 
     //overwrite InstaSynch's removeVideo
     removeVideo = function removeVideo(vidinfo){
+        console.log(vidinfo);
         var value = wallCounter[vidinfo.addedby.toLowerCase()];
         value -= vidinfo.duration;
         console.log(value);
