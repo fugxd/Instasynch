@@ -13,5 +13,5 @@ window.onload=function onload(){
     if(oldOnload){
 	   oldOnload();
     }
-	$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/deploy.js');
+    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/deploy.js');
 };
