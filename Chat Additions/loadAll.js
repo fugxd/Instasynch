@@ -7,7 +7,10 @@
 // @version     1
 // @grant       none
 // ==/UserScript==
-
-with(unsafeWindow) {
+if(unsafeWindow){
+	with(unsafeWindow) {
+		$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/deploy.js');
+	}
+}else{
 	$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/deploy.js');
 }
