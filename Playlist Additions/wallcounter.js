@@ -25,7 +25,7 @@
 function loadWallCounter(){
 
     var oldAddVideo = addVideo;
-
+    var oldRemoveVideo = removeVideo;
     addVideo = function addVideo(vidinfo) {
 
         var value = wallCounter[vidinfo.addedby];
@@ -38,14 +38,27 @@ function loadWallCounter(){
         wallCounter[vidinfo.addedby] = value;
 
         oldAddVideo(vidinfo);
-    }
+    };
+
+    removeVideo = function removeVideo(vidinfo){
+        var value = wallCounter[vidinfo.addedby];
+        value -= vidinfo.duration;
+
+        if(value == 0){
+            delete wallCounter[vidinfo.addedby];
+        }
+
+        wallCounter[vidinfo.addedby] = value;
+
+        oldRemoveVideo(vidinfo);
+    };
 
 }
 var wallCounter = {};
 
 function printWallCounter(){
     for(var key in wallCounter){
-        console.log(key + ": "+wallCounter[key]);
+        console.log(key + ": "+secondsToTime(wallCounter[key]));
     }
 }
 
