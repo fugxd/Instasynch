@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        Autocomplete
+// @name        Instasynch Addons
 // @namespace   Bibby
 // @description autocompletes emotes and or commands
 // @include     http://*.instasynch.com/rooms/*
@@ -9,6 +9,8 @@
 // ==/UserScript==
 
 with(unsafeWindow) {
+	//autocomplete
    	$.getScript('https://github.com/Bibbytube/Instasynch/tree/master/Chat%20Additions/Autocomplete/autocomplete.js')
+   	//messagefilter
    	$.getScript('https://github.com/Bibbytube/Instasynch/tree/master/Chat%20Additions/Messagefilter/Messagefilter.js')
 }
