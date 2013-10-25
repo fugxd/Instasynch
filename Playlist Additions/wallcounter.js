@@ -44,16 +44,16 @@ function loadWallCounter(){
 
     //overwrite InstaSynch's removeVideo
     removeVideo = function removeVideo(vidinfo){
-        console.log(vidinfo);
-        var value = wallCounter[vidinfo.addedby.toLowerCase()];
-        value -= vidinfo.duration;
-        console.log(value);
-        console.log(vidinfo.addedby + ": "+secondsToTime(value));
+        var indexOfVid = getVideoIndex(vidinfo);
+        var video = playlist[indexOfVid];
+        var value = wallCounter[video.addedby.toLowerCase()];
+        value -= video.duration;
+
         if(value == 0){
-            delete wallCounter[vidinfo.addedby];
+            delete wallCounter[video.addedby];
         }
 
-        wallCounter[vidinfo.addedby] = value;
+        wallCounter[video.addedby] = value;
 
         oldRemoveVideo(vidinfo);
     };
