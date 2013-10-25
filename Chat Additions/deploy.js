@@ -8,9 +8,8 @@
 // @grant       none
 // ==/UserScript==
 
-with(unsafeWindow) {
-	//autocomplete
-   	$.getScript('https://github.com/Bibbytube/Instasynch/tree/master/Chat%20Additions/Autocomplete/autocomplete.js')
-   	//messagefilter
-   	$.getScript('https://github.com/Bibbytube/Instasynch/tree/master/Chat%20Additions/Messagefilter/Messagefilter.js')
-}
+//autocomplete
+$.getScript('https://github.com/Bibbytube/Instasynch/tree/master/Chat%20Additions/Autocomplete/autocomplete.js')
+ 
+//messagefilter
+$.getScript('https://github.com/Bibbytube/Instasynch/tree/master/Chat%20Additions/Messagefilter/Messagefilter.js')
