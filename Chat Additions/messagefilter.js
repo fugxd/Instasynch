@@ -12,27 +12,37 @@
 loadWordfilter();
 
 function loadWordfilter() {
+
+    //wait until we got a connection to the server
     if (messages < 3) {
         setTimeout(function () {
             loadWordfilter();
         }, 100);
         return;
     }
-    var oldLinkify = linkify;
+
+
     var emoteFound = false;
+    var oldLinkify = linkify;
     var oldAddMessage = addMessage;
+
+    //overwrite Mewtes addMessage function
     addMessage = function addMessage(username, message, userstyle, textstyle) {
         emoteFound = false;
         var match;
+
+        //if the text matches [tag]/emote[/tag] or /emote
         if ((match = message.match(/^((\[.*?\])*)\/([^\[ ]+)((\[.*?\])*)/))) {
             emoteFound = true;
             var emote = (match[3] in $codes)?$codes[match[3]]: "/"+match[3];
             message = "<span class='cm'>" + match[1] + emote + match[4] + "</span>";
         } else {
             var greentext = false;
-            if (message.substring(0, 4) == "&gt;") {
+            //if the text matches [tag]>* or >*
+            if (message.match(/^((\[.*?\])*)((&gt;)|>)/) ) {
                 greentext = true;
             } else {
+                //split up the message and add hashtag colors #SWAG #YOLO
                 var words = message.split(" ");
                 for (var i = 0; i < words.length; i++) {
                     if (words[i][0] == "#") {
@@ -48,19 +58,22 @@ function loadWordfilter() {
                 message = "<span class='cm'>" + message + "</span>";
             }
         }
-
+        //filter words
         for (var word in filteredwords) {
             message = message.replace(new RegExp(word, 'gi'), filteredwords[word]);
         }
+        //filter tags
         for (var word in tags) {
             message = message.replace(new RegExp(word, 'gi'), tags[word]);
         }
-        if (emoteFound) {
-            message = message.replace(/\[.*?\]/, '');
-        }
+        //remove unnused tags [asd]
+        message = message.replace(/\[.*?\]/, '');
+        
+        //continue with Mewtes addMessage function
         oldAddMessage(username, message, userstyle, textstyle);
     }
 
+    //overwrite linkify so it won't try to add a link when a emote has been added
     linkify = function linkify(str, buildHashtagUrl, includeW3, target) {
         if (!emoteFound) {
             return oldLinkify(str, buildHashtagUrl, includeW3, target);
@@ -70,11 +83,13 @@ function loadWordfilter() {
     }
 }
 
+//filteredwords
 var filteredwords = {
     "skip": "UPVOTE",
     "club": "PARTY" //Etc ...
 };
 
+//tags
 var tags = {
     '\\[black\\]': '<span style="color:black">',
     '\\[/black\\]': '</span>',
