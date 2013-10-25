@@ -7,8 +7,8 @@ Create a new userscript for each file and just copy and paste the code in.
 
 
 Messagefilter
-![Alt text](/Instasynch/to/messagefilterexample.png "Messagefilter")
+![Alt text](/Chat Addtitions/messagefilterexample.png "Messagefilter")
 
 
 Autocomplete
-![Alt text](/Instasynch/to/autocompleteexample.png "Autocomplete")
+![Alt text](/Chat Addtitions/autocompleteexample.png "Autocomplete")
