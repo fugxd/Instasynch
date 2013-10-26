@@ -24,7 +24,7 @@
 
 function loadInputHistory(){
 
-    $("#chat input").on('onkeypress'),function(key){
+    $("#chat input").bind('keypress'),function(key){
         console.log(key);
     };
 }
