@@ -56,7 +56,7 @@ function loadInputHistory(){
             if(inputHistoryIndex > 0){
                 inputHistoryIndex--;
             }else{
-                inputHistoryIndex = 0;
+                inputHistoryIndex = inputHistory.length-1;
             }            
             $(this).val(inputHistory[inputHistoryIndex]);
         }
