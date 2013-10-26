@@ -49,10 +49,10 @@ function loadWallCounter(){
         var value = wallCounter[video.addedby.toLowerCase()];
         value -= video.duration;
 
-        if(value > 0){
-            wallCounter[video.addedby] = value;
-        }else{
+        if(value == 0){
             delete wallCounter[video.addedby];
+        }else{
+            wallCounter[video.addedby] = value;
         }
 
 

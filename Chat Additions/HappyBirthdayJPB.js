@@ -25,6 +25,7 @@
 function loadHappyBirthdayJPB() {
 	var oldAddUser = addUser;
 
+	
 	addUser = function addUser(user, css, sort){
 		if(user == 'JustPassingBy'){
 
