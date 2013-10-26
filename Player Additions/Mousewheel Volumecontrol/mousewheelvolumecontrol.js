@@ -21,7 +21,7 @@
     http://opensource.org/licenses/GPL-3.0
 */
 
-function loadMouseroverVolumecontrol(){
+function loadMouseWheelVolumecontrol(){
 
     if(window.addEventListener){
         window.addEventListener('DOMMouseScroll',preventScroll,false);
@@ -59,25 +59,40 @@ function loadMouseroverVolumecontrol(){
     loadYoutubePlayer = function loadYoutubePlayer(id, time, playing) {
         oldLoadYoutubePlayer(id, time, playing);
         //set the globalVolume to the player after it has been loaded
-        //TODO: rewrite properly
-        setTimeout(function () {setVol();}, 2000);
+        var oldAfterReady = $.tubeplayer.defaults.afterReady;
+        $.tubeplayer.defaults.afterReady = function afterReady(k3) {
+            init();
+            oldAfterReady(k3);
+        };
     };    
+
 
     var oldLoadVimeoVideo = loadVimeoVideo;
     //overwrite InstaSynch's loadVimeoPlayer
     loadVimeoVideo = function loadVimeoPlayer(id, time, playing) {
         oldLoadVimeoVideo(id, time, playing);
+
         //set the globalVolume to the player after it has been loaded
-        //TODO: rewrite properly
-        setTimeout(function () {setVol();}, 2000);
+        $f($('#vimeo')[0])['addEvent']('ready',init);
     };
 }
 
-
+var isReady = false;
 var globalVolume = 50;
 var mouserOverPlayer = false;
 
-
+function init(){
+    if(isReady){
+        setVol();
+    }else{
+        if(loadedPlayer === 'youtube'){
+            globalVolume = $('#media').tubeplayer('volume');
+        }else if(loadedPlayer === 'vimeo'){
+            $f($('#vimeo')[0]).api('getVolume',function(vol){globalVolume = vol*100.0;});
+        }   
+        isReady = true;
+    }
+}
 function setVol(){
     if(loadedPlayer === 'youtube'){
         $('#media').tubeplayer('volume',globalVolume);
@@ -86,4 +101,4 @@ function setVol(){
     }
 }
 
-loadMouseroverVolumecontrol();
+loadMouseWheelVolumecontrol();
