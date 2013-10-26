@@ -20,3 +20,8 @@ Autocomplete
 Wallcounter (only in the console for now)
 
 ![Alt text](/Playlist Additions/Wallcounter/wallcounterexample.png "Wallcounter")
+
+
+Input History
+
+<img src="Chat Additions/Input History/inputhistoryexample.gif" >
