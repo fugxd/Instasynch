@@ -25,3 +25,8 @@ Wallcounter (only in the console for now)
 Input History (up and down keys)
 
 <img src="Chat Additions/Input History/inputhistoryexample.gif" >
+
+
+Mousewheel Volumecontrol
+
+<img src="Player Additions/Mousewheel Volumecontrol/mousewheelvolumecontrolexample.gif" >
