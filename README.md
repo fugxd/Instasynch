@@ -14,7 +14,7 @@ Messagefilter
 
 Autocomplete
 
-![Alt text](/Chat Additions/Autocomplete/autocompleteexample.png "Autocomplete")
+<img src="Chat Additions/Autocomplete/autocompleteexample.gif" >
 
 
 Wallcounter (only in the console for now)
