@@ -22,6 +22,6 @@ Wallcounter (only in the console for now)
 ![Alt text](/Playlist Additions/Wallcounter/wallcounterexample.png "Wallcounter")
 
 
-Input History
+Input History (up and down keys)
 
 <img src="Chat Additions/Input History/inputhistoryexample.gif" >
