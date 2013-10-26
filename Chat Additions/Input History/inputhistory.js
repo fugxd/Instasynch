@@ -34,7 +34,9 @@ function loadInputHistory(){
                 //add the string to the array at position 1
                 inputHistory.splice(1,0,$(this).val());
 
+                //50 messages limit (for now)
                 if(inputHistory.length == 50){
+                    //delete the last
                     inputHistory.splice(inputHistory.length-1,1);
                 }
                 inputHistoryIndex = 0;
@@ -50,6 +52,7 @@ function loadInputHistory(){
             }else{
                 inputHistoryIndex = 0;
             }   
+            //insert the string into the text field
             $(this).val(inputHistory[inputHistoryIndex]);         
 
         }else if(key.keyCode == 40){//downkey
@@ -58,6 +61,7 @@ function loadInputHistory(){
             }else{
                 inputHistoryIndex = inputHistory.length-1;
             }            
+            //insert the string into the text field
             $(this).val(inputHistory[inputHistoryIndex]);
         }
     });
