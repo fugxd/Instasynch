@@ -30,3 +30,6 @@ Input History (up and down keys)
 Mousewheel Volumecontrol (and global volume over youtube and vimeo)
 
 <img src="Player Additions/Mousewheel Volumecontrol/mousewheelvolumecontrolexample.gif" >
+
+
+Gifs made with <a href="http://blog.bahraniapps.com/?page_id=21">GifCam</a>
