@@ -90,8 +90,8 @@ function loadWordfilter() {
         if (!emoteFound) {
             return oldLinkify(str, buildHashtagUrl, includeW3, target);
         } else {
-            return str;
             emoteFound = false;
+            return str;
         }
     }
 }
