@@ -89,9 +89,9 @@ function loadWordfilter() {
     linkify = function linkify(str, buildHashtagUrl, includeW3, target) {
         if (!emoteFound) {
             return oldLinkify(str, buildHashtagUrl, includeW3, target);
-            emoteFound = false;
         } else {
             return str;
+            emoteFound = false;
         }
     }
 }
