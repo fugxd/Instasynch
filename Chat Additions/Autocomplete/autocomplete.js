@@ -102,7 +102,7 @@ function loadAutoComplete() {
         //this function is needed so that the string will be matched from the beginng so /a won't find /pekaface
         source: function (request, response) {
             var matches = $.map(autocomplete, function (item) {
-                if (item.toUpperCase().indexOf(request.term.toUpperCase()) === 0) {
+                if (item.toLowerCase().indexOf(request.term.toLowerCase()) === 0 && item != request.term) {
                     return item;
                 }
             });
