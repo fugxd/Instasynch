@@ -25,7 +25,7 @@
 function loadInputHistory(){
 
     $("#chat input").bind('keypress',function(key){
-        console.log(key);
+        //console.log(key);
     });
 }
 
