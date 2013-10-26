@@ -17,6 +17,6 @@ Autocomplete
 ![Alt text](/Chat Additions/Autocomplete/autocompleteexample.png "Autocomplete")
 
 
-Wallcounter
+Wallcounter (only in the console for now)
 
 ![Alt text](/Playlist Additions/Wallcounter/wallcounterexample.png "Wallcounter")
