@@ -15,3 +15,8 @@ Messagefilter
 Autocomplete
 
 ![Alt text](/Chat Additions/Autocomplete/autocompleteexample.png "Autocomplete")
+
+
+Wallcounter
+
+![Alt text](/Playlist Additions/Wallcounter/wallcounterexample.png "Wallcounter")
