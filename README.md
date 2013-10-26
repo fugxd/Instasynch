@@ -27,6 +27,6 @@ Input History (up and down keys)
 <img src="Chat Additions/Input History/inputhistoryexample.gif" >
 
 
-Mousewheel Volumecontrol
+Mousewheel Volumecontrol (and global volume over youtube and vimeo)
 
 <img src="Player Additions/Mousewheel Volumecontrol/mousewheelvolumecontrolexample.gif" >
