@@ -63,9 +63,11 @@ function loadWallCounter(){
 var wallCounter = {};
 
 function printWallCounter(){
+    var string = "";
     for(var key in wallCounter){
-        console.log(key + ": "+secondsToTime(wallCounter[key]));
+        string += key + ": "+secondsToTime(wallCounter[key])+"\n";
     }
+    console.log(string);
 }
 
 
