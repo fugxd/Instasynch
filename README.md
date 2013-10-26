@@ -9,7 +9,7 @@ Create a new userscript and copy the contents of <a href="https://github.com/Bib
 
 Messagefilter
 
-![Alt text](/Chat Additions/Messagefilter/messagefilterexample.gif "Messagefilter")
+<img src="/Chat Additions/Messagefilter/messagefilterexample.gif">
 
 
 Autocomplete
