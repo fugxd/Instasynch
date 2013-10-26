@@ -25,8 +25,45 @@
 function loadInputHistory(){
 
     $("#chat input").bind('keypress',function(key){
-        //console.log(key);
+        if(key.keyCode == 13){
+            if($(this).val() != ""){
+                if(inputHistoryIndex != 0){
+                    //remove the string from the array
+                    inputHistory.splice(inputHistoryIndex,1);
+                }
+                //add the string to the array at position 1
+                inputHistory.splice(1,0,$(this).val());
+
+                if(inputHistory.length == 50){
+                    inputHistory.splice(inputHistory.length-1,1);
+                }
+                inputHistoryIndex = 0;
+            }
+        }
+    });    
+
+    $("#chat input").bind('keydown',function(key){
+        
+        if(key.keyCode == 38){//upkey
+            if(inputHistoryIndex < inputHistory.length){
+                inputHistoryIndex++;
+            }else{
+                inputHistoryIndex = 0;
+            }   
+            $(this).val(inputHistory[inputHistoryIndex]);         
+
+        }else if(key.keyCode == 40){//downkey
+            if(inputHistoryIndex > 0){
+                inputHistoryIndex--;
+            }else{
+                inputHistoryIndex = 0;
+            }            
+            $(this).val(inputHistory[inputHistoryIndex]);
+        }
     });
 }
+var inputHistory = [""];
+var inputHistoryIndex =0;
+
 
 loadInputHistory();
