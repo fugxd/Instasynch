@@ -140,8 +140,6 @@ function loadAutoComplete() {
     });
 }
 
-loadAutoComplete();
-
 tags = [
     "[black]",
     "[/black]",
@@ -218,3 +216,5 @@ tags = [
     "[strong]",
     "[/strong]"
 ];
+
+loadAutoComplete();
