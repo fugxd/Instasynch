@@ -31,15 +31,15 @@ function loadAutocomplete() {
             //split the message
             var message = $(this).val().split(' ');
             //make a regex out of the last part 
-            var tags = message[message.length-1].match(/([^A-Za-z0-9_-]*)(.*)/);
+            var tags = message[message.length-1].match(/((\[.*?\])*\[?)(.*)/);
             //save tags if there were any
             tags[1] = (tags[1])?tags[1]:'';
-            if(!tags[2]){
+            if(!tags[3]){
                 return;
             }   
             
             //make a regex out of the name
-            var name = new RegExp('^'+tags[2],'i');
+            var name = new RegExp('^'+tags[3],'i');
             var data;
             var autocomplete ='';
             //find matching users
