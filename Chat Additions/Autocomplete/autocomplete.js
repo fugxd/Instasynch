@@ -109,7 +109,7 @@ function loadAutoComplete() {
         // don't navigate away from the field on tab when selecting an item
         if (event.keyCode === $.ui.keyCode.TAB && isAutocompleteMenuActive) {
             event.keyCode = $.ui.keyCode.ENTER;  // fake select the item
-            $(this).trigger(e);
+            $(this).trigger(event);
         }
     })
     .autocomplete({
