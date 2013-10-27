@@ -81,12 +81,6 @@ function loadAutoComplete() {
         //"'description ",
         "'next"
     ];
-    var tagKeys = Object.keys(tags);
-
-    for(var i = 0; i< tagKeys.length;i++){
-        tagKeys[i] = tagKeys[i].replace(/\\/g,'');
-    }
-
     if (window.isMod) {
         //add mod commands
         commands = commands.concat(modCommands);
@@ -100,7 +94,7 @@ function loadAutoComplete() {
         data.concat(commands);
     }
     if(autocompleteTags){
-        data.concat(tagKeys);
+        data.concat(tags);
     }
 
     data.sort();
@@ -147,3 +141,80 @@ function loadAutoComplete() {
 }
 
 loadAutoComplete();
+
+tags = [
+    "[black]",
+    "[/black]",
+    "[blue]",
+    "[/blue]",
+    "[darkblue]",
+    "[/darkblue]",
+    "[cyan]",
+    "[/cyan]",
+    "[red]",
+    "[/red]",
+    "[green]",
+    "[/green]",
+    "[darkgreen]",
+    "[/darkgreen]",
+    "[violet]",
+    "[/violet]",
+    "[purple]",
+    "[/purple]",
+    "[orange]",
+    "[/orange]",
+    "[blueviolet]",
+    "[/blueviolet]",
+    "[brown]",
+    "[/brown]",
+    "[deeppink]",
+    "[/deeppink]",
+    "[aqua]",
+    "[/aqua]",
+    "[indigo]",
+    "[/indigo]",
+    "[orange]",
+    "[/orange]",
+    "[pink]",
+    "[/pink]",
+    "[chocolate]",
+    "[/chocolate]",
+    "[yellowgreen]",
+    "[/yellowgreen]",
+    "[steelblue]",
+    "[/steelblue]",
+    "[silver]",
+    "[/silver]",
+    "[tomato]",
+    "[/tomato]",
+    "[tan]",
+    "[/tan]",
+    "[royalblue]",
+    "[/royalblue]",
+    "[navy]",
+    "[/navy]",
+    "[yellow]",
+    "[/yellow]",
+    "[white]",
+    "[/white]",
+    "[/span]",
+    "[/]",
+    "[rmarquee]",
+    "[/rmarquee]",
+    "[marquee]",
+    "[/marquee]",
+    "[rsanic]",
+    "[/rsanic]",
+    "[sanic]",
+    "[/sanic]",
+    "[spoiler]",
+    "[/spoiler]",
+    "[i]",
+    "[/i]",
+    "[italic]",
+    "[/italic]",
+    "[strike]",
+    "[/strike]",
+    "[strong]",
+    "[/strong]"
+];
