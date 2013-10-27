@@ -26,76 +26,140 @@ function loadWordfilter() {
 
     //wait until we got a connection to the server
     //needs to be replaced with something better
-    if (messages < 3) {
-        setTimeout(function () {loadWordfilter();}, 100);
-        return;
-    }
-
-
-    var emoteFound = false;
     var oldLinkify = linkify;
     var oldAddMessage = addMessage;
+    var oldCreatePoll = createPoll;
+
+    //overwrite linkify so it won't try to linkify an emote
+    linkify = function linkify(str, buildHashtagUrl, includeW3, target) {
+        var emotes =[];
+        var index = 0;
+        str = str.replace(/src=\"(.*?)\"/gi,function(match){emotes.push(match); return 'src=\"\"';});
+        str = oldLinkify(str, buildHashtagUrl, includeW3, target);
+        str = str.replace(/src=\"\"/gi,function(){return emotes[index++];});
+        return str;
+    };
+
 
     //overwrite InstaSynch's addMessage function
     addMessage = function addMessage(username, message, userstyle, textstyle) {
-        emoteFound = false;
-        var match;
+        //continue with InstaSynch's  addMessage function
+        oldAddMessage(username, parseMessage(message,true), userstyle, textstyle);
+    };
 
-        //if the text matches [tag]/emote[/tag] or /emote
-        if ((match = message.match(/^((\[.*?\])*)\/([^\[ ]+)((\[.*?\])*)/i))) {
-            emoteFound = true;
-            var emote = (match[3].toLowerCase() in $codes)?$codes[match[3].toLowerCase()]: "/"+match[3];
-            message = "<span class='cm'>" + match[1] + emote + match[4] + "</span>";
-        } else {
-            var greentext = false;
-            //if the text matches [tag]>* or >*
-            if (message.match(/^((\[.*?\])*)((&gt;)|>)/) ) {
-                greentext = true;
-            } else {
-                //split up the message and add hashtag colors #SWAG #YOLO
-                var words = message.split(" ");
-                for (var i = 0; i < words.length; i++) {
-                    if (words[i][0] == "#") {
-                        words[i] = "<span class='cm hashtext'>" + words[i] + "</span>";
-                    }
-                }
-                //join the message back together
-                message = words.join(" ");
-            }
-            if (greentext) {
-                message = "<span class='cm greentext'>" + message + "</span>";
-            } else {
-                message = "<span class='cm'>" + message + "</span>";
-            }
-        }
-        //filter words
-        for (var word in filteredwords) {
-            message = message.replace(new RegExp(word, 'gi'), filteredwords[word]);
-        }
-        //filter tags
-        for (var word in tags) {
-            message = message.replace(new RegExp(word, 'gi'), tags[word]);
-        }
-        //remove unnused tags [asd]
-        if(emoteFound){
-            message = message.replace(/\[.*?\]/, '');
-        }
-        
-        //continue with Mewtes addMessage function
-        oldAddMessage(username, message, userstyle, textstyle);
-    }
 
-    //overwrite linkify so it won't try to add a link when a emote has been added
-    linkify = function linkify(str, buildHashtagUrl, includeW3, target) {
-        if (!emoteFound) {
-            return oldLinkify(str, buildHashtagUrl, includeW3, target);
-        } else {
-            emoteFound = false;
-            return str;
+    createPoll = function createPoll(poll){
+        poll.title = linkify(parseMessage(poll.title,false), false, true);
+        for(var i = 0; i< poll.options.length;i++){
+            poll.options[i]['option'] = parseMessage(poll.options[i]['option'],false);
         }
-    }
+        oldCreatePoll(poll);
+    };
+
+    //parse and linkify footer
+    var about = $('#roomFooter .roomFooter').children('p')[0];
+    about = linkify(parseMessage(about.textContent,false), false, true);
+    $('#roomFooter .roomFooter').children('p').html(about);
 }
 
+function parseMessage(message,isChatMessage){
+    var emoteFound = false;
+    var match;
+    //if the text matches [tag]/emote[/tag] or /emote
+    if ((match = message.match(/^((\[.*?\])*)\/([^\[ ]+)((\[.*?\])*)/i))&&isChatMessage) {
+        emoteFound = true;
+        var emote = (match[3].toLowerCase() in $codes)?$codes[match[3].toLowerCase()]: "/"+match[3];
+        message = "<span class='cm'>" + match[1] + emote + match[4] + "</span>";
+    } else {
+        var greentext = false;
+        //if the text matches [tag]>* or >*
+        if (message.match(/^((\[.*?\])*)((&gt;)|>)/) ) {
+            greentext = true;
+        } else {
+            //split up the message and add hashtag colors #SWAG #YOLO
+            var words = message.split(" ");
+            for (var i = 0; i < words.length; i++) {
+                if (words[i][0] == "#") {
+                    words[i] = "<span class='cm hashtext'>" + words[i] + "</span>";
+                }
+            }
+            //join the message back together
+            message = words.join(" ");
+        }
+        if (greentext) {
+            message = "<span class='cm greentext'>" + message + "</span>";
+        } else {
+            message = "<span class='cm'>" + message + "</span>";
+        }
+    }
+    if(!isChatMessage){
+        //filter all emotes
+        message = parseEmotes(message);
+    }
+    //filter words
+    for (var word in filteredwords) {
+        message = message.replace(new RegExp(word, 'gi'), filteredwords[word]);
+    }
+    //filter tags
+    for (var word in tags) {
+        message = message.replace(new RegExp(word, 'gi'), tags[word]);
+    }
+    //remove unnused tags [asd] if there is a emote
+    if(emoteFound && isChatMessage){
+        message = message.replace(/\[.*?\]/, '');
+    }
+    return message;
+}
+
+//parse multiple emotes in a message
+parseEmotes = function parseEmotes(message){
+    var possibleEmotes = [];
+    var exactMatches = [];
+    var emoteStart = -1;
+    var emote = '';
+    var end = false;
+    
+    while(!end){
+        emoteStart = message.indexOf('/',emoteStart+1);
+        if(emoteStart == -1){
+            end = true
+        }else{
+            possibleEmotes = Object.keys($codes);
+            exactMatches = [];
+            emote = '';
+            var i;
+            for(i = emoteStart+1; i< message.length;i++){
+                emote += message[i].toLowerCase();
+
+                for(var j = 0; j < possibleEmotes.length;j++){
+                    if(emote.indexOf(possibleEmotes[j]) == 0 ){
+                        exactMatches.push(possibleEmotes[j]);
+                        possibleEmotes.splice(j,1);
+                        j--;
+                        continue;
+                    }
+                    if(possibleEmotes[j].indexOf(emote) != 0){
+                        possibleEmotes.splice(j,1);
+                        j--;
+                    }
+                }
+                if(possibleEmotes.length == 0){
+                    break;
+                }
+            }
+            if(exactMatches.length != 0){
+                var code = $codes[exactMatches[exactMatches.length-1]];
+                message = message.substring(0,emoteStart) + code + message.substring(emoteStart+exactMatches[exactMatches.length-1].length+1);
+                i=emoteStart+ code.length;
+            }
+            emoteStart = i-1;
+
+        }
+    }
+    return message;
+}
+
+parseEmotes('/o/sanicfdgsdfgfdsg/o/sdfgsdsdfgosdfgsdfg/brodydafsdg/sad');
 //filteredwords
 var filteredwords = {
     "skip": "UPVOTE",
