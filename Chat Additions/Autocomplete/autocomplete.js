@@ -114,6 +114,7 @@ function loadAutoComplete() {
             var match = message[message.length-1].match(/((\[.*?\])*)(.*)/);
             match[1] = (match[1])?match[1]:'';
             var partToComplete = match[3];
+            console.log(match[3]);
             var matches = [];
             if(partToComplete.length>0){
                 matches = $.map(data, function (item) {
