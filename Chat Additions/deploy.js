@@ -6,7 +6,10 @@ $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions
 $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Messagefilter/messagefilter.js');
 
 //inputhistory
-$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Input%20History/inputhistory.js');
+$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Name%20Autocomplete/inputhistory.js');
+
+//inputhistory
+$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/name%20History/nameautocomplete.js');
 
 //wallcounter
 $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Playlist%20Additions/Wallcounter/wallcounter.js');
