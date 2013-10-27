@@ -3,7 +3,7 @@
 $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Messagefilter/messagefilter.js');
 
 //autocomplete
-$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Autocomplete/autocomplete.js');
+//$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Autocomplete/autocomplete.js');
 
 //inputhistory
 $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Input%20History/inputhistory.js');
