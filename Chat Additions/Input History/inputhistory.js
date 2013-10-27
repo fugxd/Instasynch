@@ -25,6 +25,7 @@
 function loadInputHistory(){
 
     $("#chat input").bind('keypress',function(event){
+        console.log(isAutocompleteMenuActive);
         if(isAutocompleteMenuActive){
             return ;
         }
