@@ -88,13 +88,13 @@ function loadAutoComplete() {
 
     var data = [];
     if(autocompleteEmotes){
-        data.concat(emotes);
+        data = data.concat(emotes);
     } 
     if(autocompleteCommands){
-        data.concat(commands);
+        data =  data.concat(commands);
     }
     if(autocompleteTags){
-        data.concat(tags);
+        data = data.concat(tags);
     }
 
     data.sort();
