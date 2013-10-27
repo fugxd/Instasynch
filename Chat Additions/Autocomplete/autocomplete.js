@@ -42,7 +42,7 @@ function loadAutoComplete() {
         var arr = Object.keys($codes);
 
         for (var i = 0; i < arr.length; i++) {
-            arr[i] = "/" + arr[i];
+            arr[i] = '/' + arr[i];
         }
         return arr;
     })();
@@ -85,6 +85,11 @@ function loadAutoComplete() {
         //add mod commands
         commands = commands.concat(modCommands);
     }
+    var tagKeys = Object.keys(tags);
+
+    for (var i = 0; i < tagKeys.length; i++) {
+        tagKeys[i] = tagKeys[i].replace(/\\/g,'');
+    }
 
     var data = [];
     if(autocompleteEmotes){
@@ -94,7 +99,7 @@ function loadAutoComplete() {
         data =  data.concat(commands);
     }
     if(autocompleteTags){
-        data = data.concat(tags);
+        data = data.concat(tagKeys);
     }
 
     data.sort();
@@ -102,8 +107,9 @@ function loadAutoComplete() {
     $("#chat input")    
     .bind("keydown", function(event) {
         // don't navigate away from the field on tab when selecting an item
-        if (event.keyCode === $.ui.keyCode.TAB) {
-            event.preventDefault();
+        if (event.keyCode === $.ui.keyCode.TAB && isAutocompleteMenuActive) {
+            event.keyCode = $.ui.keyCode.ENTER;  // fake select the item
+            $(this).trigger(event);
         }
     })
     .autocomplete({
@@ -136,85 +142,14 @@ function loadAutoComplete() {
             message[message.length-1] = match[1] + ui.item.value;
             this.value = message.join(' ');
             return false;
+        },
+        close : function(){
+            isAutocompleteMenuActive = false;
+        },
+        open : function(){
+            isAutocompleteMenuActive = true;
         }
     });
 }
-
-tags = [
-    "[black]",
-    "[/black]",
-    "[blue]",
-    "[/blue]",
-    "[darkblue]",
-    "[/darkblue]",
-    "[cyan]",
-    "[/cyan]",
-    "[red]",
-    "[/red]",
-    "[green]",
-    "[/green]",
-    "[darkgreen]",
-    "[/darkgreen]",
-    "[violet]",
-    "[/violet]",
-    "[purple]",
-    "[/purple]",
-    "[orange]",
-    "[/orange]",
-    "[blueviolet]",
-    "[/blueviolet]",
-    "[brown]",
-    "[/brown]",
-    "[deeppink]",
-    "[/deeppink]",
-    "[aqua]",
-    "[/aqua]",
-    "[indigo]",
-    "[/indigo]",
-    "[orange]",
-    "[/orange]",
-    "[pink]",
-    "[/pink]",
-    "[chocolate]",
-    "[/chocolate]",
-    "[yellowgreen]",
-    "[/yellowgreen]",
-    "[steelblue]",
-    "[/steelblue]",
-    "[silver]",
-    "[/silver]",
-    "[tomato]",
-    "[/tomato]",
-    "[tan]",
-    "[/tan]",
-    "[royalblue]",
-    "[/royalblue]",
-    "[navy]",
-    "[/navy]",
-    "[yellow]",
-    "[/yellow]",
-    "[white]",
-    "[/white]",
-    "[/span]",
-    "[/]",
-    "[rmarquee]",
-    "[/rmarquee]",
-    "[marquee]",
-    "[/marquee]",
-    "[rsanic]",
-    "[/rsanic]",
-    "[sanic]",
-    "[/sanic]",
-    "[spoiler]",
-    "[/spoiler]",
-    "[i]",
-    "[/i]",
-    "[italic]",
-    "[/italic]",
-    "[strike]",
-    "[/strike]",
-    "[strong]",
-    "[/strong]"
-];
-
+var isAutocompleteMenuActive = false;
 loadAutoComplete();

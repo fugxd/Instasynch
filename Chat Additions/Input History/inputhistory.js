@@ -45,7 +45,9 @@ function loadInputHistory(){
     });    
 
     $("#chat input").bind('keydown',function(event){
-        
+        if(isAutocompleteMenuActive){
+            return ;
+        }
         if(event.keyCode == 38){//upkey
             if(inputHistoryIndex < inputHistory.length){
                 inputHistoryIndex++;
