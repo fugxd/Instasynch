@@ -7,7 +7,7 @@ Create a new userscript and copy the contents of <a href="https://github.com/Bib
 
 
 
-Messagefilter
+Messagefilter (for chat, polls and the footer)
 
 <img src="/Chat Additions/Messagefilter/messagefilterexample.gif">
 
