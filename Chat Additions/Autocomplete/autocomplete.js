@@ -92,7 +92,7 @@ function loadAutoComplete() {
         commands = commands.concat(modCommands);
     }
 
-    var data [];
+    var data = [];
     if(autocompleteEmotes){
         data.concat(emotes);
     } 
