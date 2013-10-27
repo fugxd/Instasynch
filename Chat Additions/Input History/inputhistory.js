@@ -25,6 +25,9 @@
 function loadInputHistory(){
 
     $("#chat input").bind('keypress',function(event){
+        if(isAutocompleteMenuActive){
+            return ;
+        }
         if(event.keyCode == 13){
             if($(this).val() != ""){
                 if(inputHistoryIndex != 0){
