@@ -85,6 +85,11 @@ function loadAutoComplete() {
         //add mod commands
         commands = commands.concat(modCommands);
     }
+    var tagKeys = Object.keys(tags);
+
+    for (var i = 0; i < tagKeys.length; i++) {
+        tagKeys[i] = tagKeys[i].replace(/\\/g,'');
+    }
 
     var data = [];
     if(autocompleteEmotes){
@@ -94,7 +99,7 @@ function loadAutoComplete() {
         data =  data.concat(commands);
     }
     if(autocompleteTags){
-        data = data.concat(tags);
+        data = data.concat(tagKeys);
     }
 
     data.sort();
