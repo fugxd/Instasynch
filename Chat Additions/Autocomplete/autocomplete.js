@@ -105,12 +105,6 @@ function loadAutoComplete() {
     data.sort();
     //add the jquery autcomplete widget to InstaSynch's input field
     $("#chat input")    
-    .bind("keydown", function(event) {
-        // don't navigate away from the field on tab when selecting an item
-        if (event.keyCode === $.ui.keyCode.TAB) {
-            event.preventDefault();
-        }
-    })
     .autocomplete({
         delay: 0,
         minLength: 0,
@@ -119,7 +113,6 @@ function loadAutoComplete() {
             var match = message[message.length-1].match(/((\[.*?\])*)(.*)/);
             match[1] = (match[1])?match[1]:'';
             var partToComplete = match[3];
-            console.log(match[3]);
             var matches = [];
             if(partToComplete.length>0){
                 matches = $.map(data, function (item) {
