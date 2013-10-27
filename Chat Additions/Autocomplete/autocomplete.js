@@ -36,6 +36,7 @@ function loadAutoComplete() {
     //change to false to exlude from autocomplete
     var autocompleteEmotes = true;
     var autocompleteCommands = true;
+    var autocompleteTags = true;
 
     var emotes = (function () {
         var arr = Object.keys($codes);
@@ -55,24 +56,24 @@ function loadAutoComplete() {
     ];
     var modCommands = [
         "'ready",
-        "'kick ",
-        "'ban ",
-        "'unban ",
+        "'kick",
+        "'ban",
+        "'unban",
         "'clean",
         "'next",
         "'remove",
         "'purge",
-        "'move ",
+        "'move",
         "'play",
         "'pause",
         "'resume",
-        "'seekto ",
-        "'seekfrom ",
-        "'setskip ",
+        "'seekto",
+        "'seekfrom",
+        "'setskip",
         "'banlist",
         "'modlist",
         "'save",
-        "'leaverban ",
+        "'leaverban",
         //"'clearbans",
         //"'motd ",
         //"'mod ",
@@ -80,38 +81,69 @@ function loadAutoComplete() {
         //"'description ",
         "'next"
     ];
+    var tagKeys = Object.keys(tags);
+
+    for(var i = 0; i< tagKeys.length;i++){
+        tagKeys[i] = tagKeys[i].replace(/\\/g,'');
+    }
 
     if (window.isMod) {
         //add mod commands
         commands = commands.concat(modCommands);
     }
 
-    var autocomplete = 
-        (autocompleteEmotes && autocompleteCommands) ? 
-            emotes.concat(commands) : 
-        (autocompleteEmotes) ? 
-            emotes : 
-        (autocompleteCommands) ? 
-            commands : 
-        null;
-    autocomplete.sort();
+    var data [];
+    if(autocompleteEmotes){
+        data.concat(emotes);
+    } 
+    if(autocompleteCommands){
+        data.concat(commands);
+    }
+    if(autocompleteTags){
+        data.concat(tagKeys);
+    }
+
+    data.sort();
     //add the jquery autcomplete widget to InstaSynch's input field
-    $("#chat input").autocomplete({
-
-        //this function is needed so that the string will be matched from the beginng so /a won't find /pekaface
+    $("#chat input")    
+    .bind("keydown", function(event) {
+        // don't navigate away from the field on tab when selecting an item
+        if (event.keyCode === $.ui.keyCode.TAB) {
+            event.preventDefault();
+        }
+    })
+    .autocomplete({
+        delay: 0,
+        minLength: 0,
         source: function (request, response) {
-            var matches = $.map(autocomplete, function (item) {
-                if (item.toLowerCase().indexOf(request.term.toLowerCase()) === 0 && item != request.term) {
-                    return item;
-                }
-            });
-
+            var message = request.term.split(' ');
+            var match = message[message.length-1].match(/((\[.*?\])*)(.*)/);
+            match[1] = (match[1])?match[1]:'';
+            var partToComplete = match[3];
+            var matches = [];
+            if(partToComplete.length>0){
+                matches = $.map(data, function (item) {
+                    if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0 && item != partToComplete) {
+                        return item;
+                    }
+                });
+            }
             //show only 7 responses
             response(matches.slice(0, 7));
         },
-        delay: 0
+        autoFocus:true,
+        focus: function()  {
+            return false; // prevent value inserted on focus
+        },
+        select: function(event, ui) {
+            var message = this.value.split(' ');
+            var match = message[message.length-1].match(/((\[.*?\])*)(.*)/);
+            match[1] = (match[1])?match[1]:'';
+            message[message.length-1] = match[1] + ui.item.value;
+            this.value = message.join(' ');
+            return false;
+        }
     });
 }
 
 loadAutoComplete();
-
