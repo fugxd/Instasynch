@@ -16,6 +16,10 @@ Autocomplete
 
 <img src="Chat Additions/Autocomplete/autocompleteexample.gif" >
 
+Name Autocomplete (tab)
+
+<img src="Chat Additions/Name Autocomplete/nameautocompleteexample.gif" >
+
 
 Wallcounter (only in the console for now)
 
