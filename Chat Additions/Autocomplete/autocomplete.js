@@ -142,8 +142,14 @@ function loadAutoComplete() {
             message[message.length-1] = match[1] + ui.item.value;
             this.value = message.join(' ');
             return false;
+        },
+        close : function(){
+            isAutocompleteMenuActive = false;
+        },
+        open : function(){
+            isAutocompleteMenuActive = true;
         }
     });
 }
-
+var isAutocompleteMenuActive = false;
 loadAutoComplete();
