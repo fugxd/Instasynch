@@ -8,7 +8,7 @@ $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions
 //inputhistory
 $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Name%20Autocomplete/inputhistory.js');
 
-//inputhistory
+//name autocomplete
 $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/name%20History/nameautocomplete.js');
 
 //wallcounter
