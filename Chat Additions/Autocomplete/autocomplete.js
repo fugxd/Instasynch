@@ -45,7 +45,6 @@ function loadAutoComplete() {
         }
         return arr;
     })();
-
     var commands = [
         "'skip",
         "'reload",
@@ -95,7 +94,7 @@ function loadAutoComplete() {
         (autocompleteCommands) ? 
             commands : 
         null;
-
+    autocomplete.sort();
     //add the jquery autcomplete widget to InstaSynch's input field
     $("#chat input").autocomplete({
 
