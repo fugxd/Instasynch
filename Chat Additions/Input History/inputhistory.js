@@ -24,8 +24,8 @@
 
 function loadInputHistory(){
 
-    $("#chat input").bind('keypress',function(key){
-        if(key.keyCode == 13){
+    $("#chat input").bind('keypress',function(event){
+        if(event.keyCode == 13){
             if($(this).val() != ""){
                 if(inputHistoryIndex != 0){
                     //remove the string from the array
@@ -44,9 +44,9 @@ function loadInputHistory(){
         }
     });    
 
-    $("#chat input").bind('keydown',function(key){
+    $("#chat input").bind('keydown',function(event){
         
-        if(key.keyCode == 38){//upkey
+        if(event.keyCode == 38){//upkey
             if(inputHistoryIndex < inputHistory.length){
                 inputHistoryIndex++;
             }else{
@@ -55,7 +55,7 @@ function loadInputHistory(){
             //insert the string into the text field
             $(this).val(inputHistory[inputHistoryIndex]);         
 
-        }else if(key.keyCode == 40){//downkey
+        }else if(event.keyCode == 40){//downkey
             if(inputHistoryIndex > 0){
                 inputHistoryIndex--;
             }else{
