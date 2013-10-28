@@ -25,13 +25,6 @@
 
 function loadAutoComplete() {
 
-    //wait until we got a connection to the server
-    //needs to be replaced with something better
-
-    if (messages < 3) {
-        setTimeout(function () {loadAutoComplete();}, 100);
-        return;
-    }
 
     //change to false to exlude from autocomplete
     var autocompleteEmotes = true;
