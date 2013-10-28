@@ -110,9 +110,9 @@ function loadAutoComplete() {
         minLength: 0,
         source: function (request, response) {
             var message = request.term.split(' ');
-            var match = message[message.length-1].match(/((\[.*?\])*)(.*)/);
+            var match = message[message.length-1].match(/(((&gt;)|>)?(\[.*?\])*)(.*)/);
             match[1] = (match[1])?match[1]:'';
-            var partToComplete = match[3];
+            var partToComplete = match[5];
             var matches = [];
             if(partToComplete.length>0){
                 matches = $.map(data, function (item) {
@@ -130,7 +130,7 @@ function loadAutoComplete() {
         },
         select: function(event, ui) {
             var message = this.value.split(' ');
-            var match = message[message.length-1].match(/((\[.*?\])*)(.*)/);
+            var match = message[message.length-1].match(/(((&gt;)|>)?(\[.*?\])*)(.*)/);
             match[1] = (match[1])?match[1]:'';
             message[message.length-1] = match[1] + ui.item.value;
             this.value = message.join(' ');
