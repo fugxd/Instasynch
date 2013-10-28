@@ -1,4 +1,6 @@
 
+var afterConnectFunctions = [];
+
 //messagefilter
 $.getScript('https://dl.dropboxusercontent.com/1/view/en9aeqotf2nuex2/github/instasynch/chat%20additions/Messagefilter/messagefilter.js');
 
@@ -16,3 +18,15 @@ $.getScript('https://dl.dropboxusercontent.com/1/view/qfil2a2jpkk7raq/github/ins
 
 //Mousewheel Volumecontrol
 $.getScript('https://dl.dropboxusercontent.com/1/view/swh5m00f4z6zwg9/github/instasynch/player%20additions/Mousewheel%20Volumecontrol/mousewheelvolumecontrol.js');
+
+function afterConnect(){
+	if (messages < 3) {
+	    setTimeout(function () {afterConnect();}, 100);
+	    return;
+	}
+
+	for(var func in afterConnectFunctions){
+		func();
+	}
+}
+afterConnect();
