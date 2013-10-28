@@ -2,22 +2,22 @@
 var afterConnectFunctions = [];
 
 //messagefilter
-$.getScript('https://dl.dropboxusercontent.com/1/view/en9aeqotf2nuex2/github/instasynch/chat%20additions/Messagefilter/messagefilter.js');
+$.getScript('https://dl.dropboxusercontent.com/s/ghtrxs4ok03jyzy/messagefilter.js?dl=1&token_hash=AAGve0NoCbgXkON2gMP9XLNQuDhyDbAsJiVWYeTZJJDhUw');
 
 //autocomplete
-$.getScript('https://dl.dropboxusercontent.com/1/view/8jd9x58xfd811w8/github/instasynch/chat%20additions/Autocomplete/autocomplete.js');
+$.getScript('https://dl.dropboxusercontent.com/s/ohhe6bcza94t3jm/autocomplete.js?dl=1&token_hash=AAFjjSOInN5rBpezaj8Uq5UAJS6VivePCV9x3b7eHm45bw');
 
 //inputhistory
-$.getScript('https://dl.dropboxusercontent.com/1/view/wd0a3j5pyseyptl/github/instasynch/chat%20additions/Input%20History/inputhistory.js');
+$.getScript('https://dl.dropboxusercontent.com/s/t7wqz0ac5s29djw/inputhistory.js?dl=1&token_hash=AAH3uxWXfwyUueU4UKg3ojAylwWAnVudT_l0ZSkFPvahxA');
 
 //name autocomplete
-$.getScript('https://dl.dropboxusercontent.com/1/view/g0zqbai0sr9646b/github/instasynch/chat%20additions/Name%20Autocomplete/nameautocomplete.js');
+$.getScript('https://dl.dropboxusercontent.com/s/psaki7htt4lczej/nameautocomplete.js?dl=1&token_hash=AAGUOfRVohf6qlQwk0worAv1C4XU_A83ny1LvQgPAN7MMw');
 
 //wallcounter
-$.getScript('https://dl.dropboxusercontent.com/1/view/qfil2a2jpkk7raq/github/instasynch/playlist%20additions/Wallcounter/wallcounter.js');
+$.getScript('https://dl.dropboxusercontent.com/s/1is261tpt1de4ws/wallcounter.js?dl=1&token_hash=AAEWtGcm4eYcfAgZ8_6NoO2Sp2U9JzX33Gacv7RHTP1sQA');
 
 //Mousewheel Volumecontrol
-$.getScript('https://dl.dropboxusercontent.com/1/view/swh5m00f4z6zwg9/github/instasynch/player%20additions/Mousewheel%20Volumecontrol/mousewheelvolumecontrol.js');
+$.getScript('https://dl.dropboxusercontent.com/s/c1ef48th31cb2do/mousewheelvolumecontrol.js?dl=1&token_hash=AAHHmFBDLEme1D3hs5i2kjWRC0iOkKsTQLacX_nlcx3mIA');
 
 function afterConnect(){
 	if (messages < 3) {
