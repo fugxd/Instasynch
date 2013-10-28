@@ -159,7 +159,6 @@ parseEmotes = function parseEmotes(message){
     return message;
 }
 
-parseEmotes('/o/sanicfdgsdfgfdsg/o/sdfgsdsdfgosdfgsdfg/brodydafsdg/sad');
 //filteredwords
 var filteredwords = {
     "skip": "UPVOTE",
