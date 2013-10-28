@@ -123,7 +123,7 @@ function loadAutoComplete() {
             var matches = [];
             if(partToComplete.length>0){
                 matches = $.map(data, function (item) {
-                    if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0 && item != partToComplete) {
+                    if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
                         return item;
                     }
                 });
