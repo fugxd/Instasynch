@@ -19,7 +19,7 @@ $.getScript('https://dl.dropboxusercontent.com/s/1is261tpt1de4ws/wallcounter.js?
 //Mousewheel Volumecontrol
 $.getScript('https://dl.dropboxusercontent.com/s/c1ef48th31cb2do/mousewheelvolumecontrol.js?dl=1&token_hash=AAHHmFBDLEme1D3hs5i2kjWRC0iOkKsTQLacX_nlcx3mIA');
 function isFunctionA(object) {
- return object && getClass.call(object) == '[object Function]';
+ return object && typeof(obj) === 'function';
 }
 function afterConnect(){
 	if (messages < 3) {
