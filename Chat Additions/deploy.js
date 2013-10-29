@@ -28,6 +28,7 @@ function afterConnect(){
 	}
 
 	for(var func in afterConnectFunctions){
+		console.log(func);
 		if(isFunctionA(func)){
 			func();
 		}
