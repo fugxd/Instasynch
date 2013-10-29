@@ -25,11 +25,6 @@
 
 function loadAutoComplete() {
 
-    //change to false to exlude from autocomplete
-    var autocompleteEmotes = true;
-    var autocompleteCommands = true;
-    var autocompleteTags = true;
-
     var emotes = (function () {
         var arr = Object.keys($codes);
 
@@ -37,16 +32,16 @@ function loadAutoComplete() {
             arr[i] = '/' + arr[i];
         }
         return arr;
-    })();
-    var commands = [
+        })(),
+        commands = [
         "'skip",
         "'reload",
         "'resynch",
         "'toggleplaylistlock",
         "'togglefilter",
         "'toggleautosynch"
-    ];
-    var modCommands = [
+        ],
+        modCommands = [
         "'ready",
         "'kick",
         "'ban",
@@ -71,18 +66,19 @@ function loadAutoComplete() {
         //"'demod ",
         //"'description ",
         "'next"
-    ];
+        ],
+        tagKeys = Object.keys(tags),
+        data = [];
+
     if (window.isMod) {
         //add mod commands
         commands = commands.concat(modCommands);
     }
-    var tagKeys = Object.keys(tags);
 
     for (var i = 0; i < tagKeys.length; i++) {
         tagKeys[i] = tagKeys[i].replace(/\\/g,'');
     }
 
-    var data = [];
     if(autocompleteEmotes){
         data = data.concat(emotes);
     } 
@@ -107,11 +103,12 @@ function loadAutoComplete() {
         delay: 0,
         minLength: 0,
         source: function (request, response) {
-            var message = request.term.split(' ');
-            var match = message[message.length-1].match(/((\[.*?\])*)(.*)/);
+            var message = request.term.split(' '),
+                match = message[message.length-1].match(/((\[.*?\])*)(.*)/),
+                partToComplete = match[3],
+                matches = [];
+
             match[1] = (match[1])?match[1]:'';
-            var partToComplete = match[3];
-            var matches = [];
             if(partToComplete.length>0){
                 matches = $.map(data, function (item) {
                     if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
@@ -127,11 +124,16 @@ function loadAutoComplete() {
             return false; // prevent value inserted on focus
         },
         select: function(event, ui) {
-            var message = this.value.split(' ');
-            var match = message[message.length-1].match(/((\[.*?\])*)(.*)/);
+            var message = this.value.split(' '),
+                match = message[message.length-1].match(/((\[.*?\])*)(.*)/);
             match[1] = (match[1])?match[1]:'';
             message[message.length-1] = match[1] + ui.item.value;
             this.value = message.join(' ');
+
+            //if the selected item is a emote trigger a fake enter event
+            if(ui.item.value[0] === '/'){
+                $(this).trigger($.Event( "keypress", { which: 13,keyCode : 13 })); 
+            }
             return false;
         },
         close : function(){
@@ -142,5 +144,11 @@ function loadAutoComplete() {
         }
     });
 }
-var isAutocompleteMenuActive = false;
+
+var isAutocompleteMenuActive = false,
+//change to false to exlude from autocomplete
+    autocompleteEmotes = true,
+    autocompleteCommands = true,
+    autocompleteTags = true;
+
 afterConnectFunctions.push(loadAutoComplete);

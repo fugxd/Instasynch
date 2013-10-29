@@ -74,17 +74,18 @@ function loadWordfilter() {
                     var user = $(this)[0].innerText,
                         userFound = false,
                         isMod = false,
-                        userId;
+                        userId,
+                        i;
                     user = user.substring(0,user.length-1);
 
-                    for(var i = 0; i< users.length;i++){
+                    for(i = 0; i< users.length;i++){
 
-                        if(users[i]['username'] === user ) {
-                            if(users[i]['permissions'] > 0){
+                        if(users[i].username === user ) {
+                            if(users[i].permissions > 0){
                                 isMod = true;
                                 break;
                             }
-                            userId = users[i]['id'];
+                            userId = users[i].id;
                             userFound = true;
                             break;
                         }
@@ -108,6 +109,8 @@ function loadWordfilter() {
                             if(userFound){
                                 sendcmd('kick', {userid: userId});   
                                 addMessage('', 'Kicked user: '+user, '', 'hashtext');
+                            }else{
+                                addMessage('', "Didn't find the user", '', 'hashtext');
                             }
                         }
                     }
@@ -126,35 +129,39 @@ function loadWordfilter() {
                     return;
                 }
                 currentElement.css('cursor','default');
-                isCtrlKeyDown = false
+                isCtrlKeyDown = false;
                 $(document).unbind('keydown',keyDown);
                 $(document).unbind('keyup',keyUp);
             });
         }
     };
 
-
     createPoll = function createPoll(poll){
+        var i;
         poll.title = linkify(parseMessage(poll.title,false), false, true);
-        for(var i = 0; i< poll.options.length;i++){
-            poll.options[i]['option'] = parseMessage(poll.options[i]['option'],false);
+        for(i = 0; i< poll.options.length;i++){
+            poll.options[i].option = parseMessage(poll.options[i].option,false);
         }
         oldCreatePoll(poll);
     };
 
     //parse and linkify footer
+    /*
     var about = $('#roomFooter .roomFooter').children('p')[0];
     about = linkify(parseMessage(about.textContent,false), false, true);
     $('#roomFooter .roomFooter').children('p').html(about);
+    */
 }
 
 function parseMessage(message,isChatMessage){
-    var emoteFound = false;
-    var match;
+    var emoteFound = false,
+        match = message.match(/^((\[.*?\])*)\/([^\[ ]+)((\[.*?\])*)/i),
+        emote,
+        word;
     //if the text matches [tag]/emote[/tag] or /emote
-    if ((match = message.match(/^((\[.*?\])*)\/([^\[ ]+)((\[.*?\])*)/i))&&isChatMessage) {
+    if (match &&isChatMessage) {
         emoteFound = true;
-        var emote = (match[3].toLowerCase() in $codes)?$codes[match[3].toLowerCase()]: "/"+match[3];
+        emote = ($codes.hasOwnProperty(match[3].toLowerCase()))?$codes[match[3].toLowerCase()]: "/"+match[3];
         message = "<span class='cm'>" + match[1] + emote + match[4] + "</span>";
     } else {
         var greentext = false;
@@ -183,11 +190,11 @@ function parseMessage(message,isChatMessage){
         message = parseEmotes(message);
     }
     //filter words
-    for (var word in filteredwords) {
+    for (word in filteredwords) {
         message = message.replace(new RegExp(word, 'gi'), filteredwords[word]);
     }
     //filter tags
-    for (var word in tags) {
+    for (word in tags) {
         message = message.replace(new RegExp(word, 'gi'), tags[word]);
     }
     //remove unnused tags [asd] if there is a emote
@@ -199,25 +206,27 @@ function parseMessage(message,isChatMessage){
 
 //parse multiple emotes in a message
  function parseEmotes(message){
-    var possibleEmotes = [];
-    var exactMatches = [];
-    var emoteStart = -1;
-    var emote = '';
-    var end = false;
+    var possibleEmotes = [],
+        exactMatches = [],
+        emoteStart = -1,
+        emote = '',
+        end = false,
+        i,
+        j,
+        code;
     
     while(!end){
         emoteStart = message.indexOf('/',emoteStart+1);
         if(emoteStart == -1){
-            end = true
+            end = true;
         }else{
             possibleEmotes = Object.keys($codes);
             exactMatches = [];
             emote = '';
-            var i;
             for(i = emoteStart+1; i< message.length;i++){
                 emote += message[i].toLowerCase();
 
-                for(var j = 0; j < possibleEmotes.length;j++){
+                for(j = 0; j < possibleEmotes.length;j++){
                     if(emote.indexOf(possibleEmotes[j]) == 0 ){
                         exactMatches.push(possibleEmotes[j]);
                         possibleEmotes.splice(j,1);
@@ -234,7 +243,7 @@ function parseMessage(message,isChatMessage){
                 }
             }
             if(exactMatches.length != 0){
-                var code = $codes[exactMatches[exactMatches.length-1]];
+                code = $codes[exactMatches[exactMatches.length-1]];
                 message = message.substring(0,emoteStart) + code + message.substring(emoteStart+exactMatches[exactMatches.length-1].length+1);
                 i=emoteStart+ code.length;
             }
@@ -245,14 +254,11 @@ function parseMessage(message,isChatMessage){
     return message;
 }
 
-//filteredwords
 var filteredwords = {
     "skip": "UPVOTE",
     "club": "PARTY" //Etc ...
-};
-
-//tags
-var tags = {
+},
+    tags = {
     '\\[black\\]': '<span style="color:black">',
     '\\[/black\\]': '</span>',
     '\\[blue\\]': '<span style="color:blue">',
@@ -283,8 +289,6 @@ var tags = {
     '\\[/aqua\\]': '</span>',
     '\\[indigo\\]': '<span style="color:indigo">',
     '\\[/indigo\\]': '</span>',
-    '\\[orange\\]': '<span style="color:orange">',
-    '\\[/orange\\]': '</span>',
     '\\[pink\\]': '<span style="color:pink">',
     '\\[/pink\\]': '</span>',
     '\\[chocolate\\]': '<span style="color:chocolate">',
