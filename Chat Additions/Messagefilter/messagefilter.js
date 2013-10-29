@@ -47,18 +47,23 @@ function loadWordfilter() {
         oldAddMessage(username, parseMessage(message,true), userstyle, textstyle);
         if(username != ''){
             var currentElement,
+                //the cursor doesnt need to be changed if the key is still held down
+                isCtrlKeyDown = false,
                 keyDown = 
                 function(event){
-                    if(event.keyCode === 17 || event.keyCode === 18){
+                    if(!isCtrlKeyDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
+                        isCtrlKeyDown = true;
                         currentElement.css( 'cursor', 'pointer' );
                     }
                 },
                 keyUp = 
                 function(event){
-                    if(event.keyCode === 17 || event.keyCode === 18){
+                    if(isCtrlKeyDown && !event.ctrlKey){
+                        isCtrlKeyDown = false;
                         currentElement.css('cursor','default');
                     }
                 };
+            //add the events to the latest username in the chat list
             $('#chat_list > span:last-of-type').prev()
             .on('click', function(event){
                 if(!window.isMod){
@@ -120,6 +125,7 @@ function loadWordfilter() {
                     return;
                 }
                 currentElement.css('cursor','default');
+                isCtrlKeyDown = false
                 $(document).unbind('keydown',keyDown);
                 $(document).unbind('keyup',keyUp);
             });
