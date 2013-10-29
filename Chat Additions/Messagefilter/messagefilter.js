@@ -326,5 +326,4 @@ var tags = {
 };
 
 
-loadWordfilter();
-
+beforeConnectFunctions.push(loadWordfilter);

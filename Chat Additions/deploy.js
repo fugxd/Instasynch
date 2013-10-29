@@ -1,5 +1,6 @@
 
 var afterConnectFunctions = [];
+var beforeConnectFunctions = [];
 
 function afterConnect(){
 	if (messages < 3) {
@@ -11,8 +12,11 @@ function afterConnect(){
 		afterConnectFunctions[i]();
 	}
 }
-
-
+function beforeConnect(){
+	for(var i = 0; i< beforeConnectFunctions.length;i++){
+		beforeConnectFunctions[i]();
+	}
+}
 $.when(
 	//messagefilter
 	$.getScript('https://dl.dropboxusercontent.com/s/ghtrxs4ok03jyzy/messagefilter.js?dl=1&token_hash=AAGve0NoCbgXkON2gMP9XLNQuDhyDbAsJiVWYeTZJJDhUw'),
@@ -30,9 +34,8 @@ $.when(
         $( deferred.resolve );
     })
 ).done(function(){
-
+	beforeConnect();
 	afterConnect();
-
 });
 
 

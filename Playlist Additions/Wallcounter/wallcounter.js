@@ -70,5 +70,4 @@ function printWallCounter(){
     console.log(string);
 }
 
-
-loadWallCounter();
+beforeConnectFunctions.push(loadWallCounter);

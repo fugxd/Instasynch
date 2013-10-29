@@ -71,5 +71,4 @@ function loadInputHistory(){
 var inputHistory = [""];
 var inputHistoryIndex =0;
 
-
-loadInputHistory();
+beforeConnectFunctions.push(loadInputHistory);

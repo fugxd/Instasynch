@@ -143,4 +143,4 @@ function loadAutoComplete() {
     });
 }
 var isAutocompleteMenuActive = false;
-afterConnectFunctions.push(function(){loadAutoComplete();});
+afterConnectFunctions.push(loadAutoComplete);

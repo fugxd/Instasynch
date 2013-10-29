@@ -71,4 +71,4 @@ function loadAutocomplete() {
 
 }
 
-loadAutocomplete();
+beforeConnectFunctions.push(loadAutocomplete);
