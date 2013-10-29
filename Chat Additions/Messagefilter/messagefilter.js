@@ -55,11 +55,12 @@ function loadWordfilter() {
         }
         oldCreatePoll(poll);
     };
-
+    /*
     //parse and linkify footer
     var about = $('#roomFooter .roomFooter').children('p')[0];
     about = linkify(parseMessage(about.textContent,false), false, true);
     $('#roomFooter .roomFooter').children('p').html(about);
+    */
 }
 
 function parseMessage(message,isChatMessage){
