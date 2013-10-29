@@ -26,14 +26,14 @@ function loadWordfilter() {
 
     //wait until we got a connection to the server
     //needs to be replaced with something better
-    var oldLinkify = linkify;
-    var oldAddMessage = addMessage;
-    var oldCreatePoll = createPoll;
+    var oldLinkify = linkify,
+        oldAddMessage = addMessage,
+        oldCreatePoll = createPoll;
 
     //overwrite linkify so it won't try to linkify an emote
     linkify = function linkify(str, buildHashtagUrl, includeW3, target) {
-        var emotes =[];
-        var index = 0;
+        var emotes =[],
+            index = 0;
         str = str.replace(/src=\"(.*?)\"/gi,function(match){emotes.push(match); return 'src=\"\"';});
         str = oldLinkify(str, buildHashtagUrl, includeW3, target);
         str = str.replace(/src=\"\"/gi,function(){return emotes[index++];});
@@ -45,6 +45,85 @@ function loadWordfilter() {
     addMessage = function addMessage(username, message, userstyle, textstyle) {
         //continue with InstaSynch's  addMessage function
         oldAddMessage(username, parseMessage(message,true), userstyle, textstyle);
+        if(username != ''){
+            var currentElement,
+                keyDown = 
+                function(event){
+                    if(event.keyCode === 17 || event.keyCode === 18){
+                        currentElement.css( 'cursor', 'pointer' );
+                    }
+                },
+                keyUp = 
+                function(event){
+                    if(event.keyCode === 17 || event.keyCode === 18){
+                        currentElement.css('cursor','default');
+                    }
+                };
+            $('#chat_list > span:last-of-type').prev()
+            .on('click', function(event){
+                if(!window.isMod){
+                    return;
+                }
+                if(event.ctrlKey){
+                    var user = $(this)[0].innerText,
+                        userFound = false,
+                        isMod = false,
+                        userId;
+                    user = user.substring(0,user.length-1);
+
+                    for(var i = 0; i< users.length;i++){
+
+                        if(users[i]['username'] === user ) {
+                            if(users[i]['permissions'] > 0){
+                                isMod = true;
+                                break;
+                            }
+                            userId = users[i]['id'];
+                            userFound = true;
+                            break;
+                        }
+                    }       
+                    if(event.altKey){
+                        if(isMod){
+                            addMessage('', "Can't ban a mod", '', 'hashtext');
+                        }else{
+                            if(userFound){
+                                sendcmd('ban', {userid: userId});    
+                                addMessage('', 'b& user: '+user, '', 'hashtext');
+                            }else{
+                                sendcmd('leaverban', {userid: userId});    
+                                addMessage('', 'Leaverb& user: '+user, '', 'hashtext');
+                            }
+                        }
+                    }else{          
+                    if(isMod){
+                            addMessage('', "Can't kick a mod", '', 'hashtext');
+                        }else{
+                            if(userFound){
+                                sendcmd('kick', {userid: userId});   
+                                addMessage('', 'Kicked user: '+user, '', 'hashtext');
+                            }
+                        }
+                    }
+                }
+            })        
+            .hover(
+            function(event){
+                if(!window.isMod){
+                    return;
+                }            
+                currentElement = $(this);
+                $(document).bind('keydown',keyDown);
+                $(document).bind('keyup',keyUp);
+            },function(){       
+                if(!window.isMod){
+                    return;
+                }
+                currentElement.css('cursor','default');
+                $(document).unbind('keydown',keyDown);
+                $(document).unbind('keyup',keyUp);
+            });
+        }
     };
 
 
@@ -112,7 +191,7 @@ function parseMessage(message,isChatMessage){
 }
 
 //parse multiple emotes in a message
-parseEmotes = function parseEmotes(message){
+ function parseEmotes(message){
     var possibleEmotes = [];
     var exactMatches = [];
     var emoteStart = -1;
@@ -159,7 +238,6 @@ parseEmotes = function parseEmotes(message){
     return message;
 }
 
-parseEmotes('/o/sanicfdgsdfgfdsg/o/sdfgsdsdfgosdfgsdfg/brodydafsdg/sad');
 //filteredwords
 var filteredwords = {
     "skip": "UPVOTE",
