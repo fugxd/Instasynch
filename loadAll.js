@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        Instasynch Addons
+// @name        Instasynch Addons Test
 // @namespace   Bibby
 // @description autocompletes emotes and or commands
 // @include     http://*.instasynch.com/rooms/*
