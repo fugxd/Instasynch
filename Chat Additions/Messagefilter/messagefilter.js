@@ -30,12 +30,13 @@ function loadWordfilter() {
         oldAddMessage = addMessage,
         oldCreatePoll = createPoll;
 
-    //overwrite linkify so it won't try to linkify an emote
     linkify = function linkify(str, buildHashtagUrl, includeW3, target) {
         var emotes =[],
             index = 0;
+        //remove image urls so they wont get linkified
         str = str.replace(/src=\"(.*?)\"/gi,function(match){emotes.push(match); return 'src=\"\"';});
         str = oldLinkify(str, buildHashtagUrl, includeW3, target);
+        //put them back in
         str = str.replace(/src=\"\"/gi,function(){return emotes[index++];});
         return str;
     };
