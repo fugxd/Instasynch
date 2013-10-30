@@ -56,7 +56,7 @@ function loadWordfilter() {
         }
         oldCreatePoll(poll);
     };
-    /*
+
     //parse and linkify footer
     /*
     var about = $('#roomFooter .roomFooter').children('p')[0];
@@ -166,10 +166,6 @@ function parseMessage(message,isChatMessage){
     return message;
 }
 
-<<<<<<< HEAD
-//filteredwords
-=======
->>>>>>> origin/test
 var filteredwords = {
     "skip": "UPVOTE",
     "club": "PARTY" //Etc ...

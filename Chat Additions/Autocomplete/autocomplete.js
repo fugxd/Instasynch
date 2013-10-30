@@ -23,20 +23,6 @@
 
 
 function loadAutoComplete() {
-<<<<<<< HEAD
-    //wait until we got a connection to the server
-     //needs to be replaced with something better
-     if (messages < 3) {
-         setTimeout(function () {loadAutoComplete();}, 100);
-         return;
-     }
-     
-    //change to false to exlude from autocomplete
-    var autocompleteEmotes = true;
-    var autocompleteCommands = true;
-    var autocompleteTags = true;
-=======
->>>>>>> origin/test
 
     var emotes = (function () {
         var arr = Object.keys($codes);
@@ -87,11 +73,6 @@ function loadAutoComplete() {
         //add mod commands
         commands = commands.concat(modCommands);
     }
-    var tagKeys = Object.keys(tags);
-
-    for (var i = 0; i < tagKeys.length; i++) {
-        tagKeys[i] = tagKeys[i].replace(/\\/g,'');
-    }
 
     for (var i = 0; i < tagKeys.length; i++) {
         tagKeys[i] = tagKeys[i].replace(/\\/g,'');
@@ -121,20 +102,12 @@ function loadAutoComplete() {
         delay: 0,
         minLength: 0,
         source: function (request, response) {
-<<<<<<< HEAD
-            var message = request.term.split(' ');
-            var match = message[message.length-1].match(/(((&gt;)|>)?(\[.*?\])*)(.*)/);
-            match[1] = (match[1])?match[1]:'';
-            var partToComplete = match[5];
-            var matches = [];
-=======
             var message = request.term.split(' '),
                 match = message[message.length-1].match(/((\[.*?\])*)(.*)/),
                 partToComplete = match[3],
                 matches = [];
 
             match[1] = (match[1])?match[1]:'';
->>>>>>> origin/test
             if(partToComplete.length>0){
                 matches = $.map(data, function (item) {
                     if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
@@ -150,13 +123,8 @@ function loadAutoComplete() {
             return false; // prevent value inserted on focus
         },
         select: function(event, ui) {
-<<<<<<< HEAD
-            var message = this.value.split(' ');
-            var match = message[message.length-1].match(/(((&gt;)|>)?(\[.*?\])*)(.*)/);
-=======
             var message = this.value.split(' '),
                 match = message[message.length-1].match(/((\[.*?\])*)(.*)/);
->>>>>>> origin/test
             match[1] = (match[1])?match[1]:'';
             message[message.length-1] = match[1] + ui.item.value;
             this.value = message.join(' ');
@@ -175,10 +143,6 @@ function loadAutoComplete() {
         }
     });
 }
-<<<<<<< HEAD
-var isAutocompleteMenuActive = false;
-loadAutoComplete();
-=======
 
 var isAutocompleteMenuActive = false,
 //change to false to exlude from autocomplete
@@ -187,4 +151,3 @@ var isAutocompleteMenuActive = false,
     autocompleteTags = true;
 
 afterConnectFunctions.push(loadAutoComplete);
->>>>>>> origin/test

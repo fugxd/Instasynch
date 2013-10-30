@@ -29,14 +29,6 @@ function loadAutocomplete() {
             //prevent loosing focus from input
             event.preventDefault();
             //split the message
-<<<<<<< HEAD
-            var message = $(this).val().split(' ');
-            //make a regex out of the last part 
-            var tags = message[message.length-1].match(/(((&gt;)|>)?(\[.*?\])*\[?)(.*)/);
-            //save tags if there were any
-            tags[1] = (tags[1])?tags[1]:'';
-            if(!tags[5]){
-=======
             var message = $(this).val().split(' '),
                 //make a regex out of the last part 
                 messagetags = message[message.length-1].match(/((\[.*?\])*\[?)(.*)/),
@@ -51,19 +43,12 @@ function loadAutocomplete() {
                  messagetags[1] = '';
             }
             if(!messagetags[3]){
->>>>>>> origin/test
                 return;
             }   
             
             //make a regex out of the name
-<<<<<<< HEAD
-            var name = new RegExp('^'+tags[5],'i');
-            var data;
-            var autocomplete ='';
-=======
             name = new RegExp('^'+messagetags[3],'i');
 
->>>>>>> origin/test
             //find matching users
             for(i = 0; i< users.length;i++){
                 username = users[i].username;

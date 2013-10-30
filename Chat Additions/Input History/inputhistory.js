@@ -48,11 +48,7 @@ function loadInputHistory(){
         if(isAutocompleteMenuActive){
             return ;
         }
-<<<<<<< HEAD
-        if(event.keyCode == 38){//upkey
-=======
         if(event.keyCode === 38){//upkey
->>>>>>> origin/test
             if(inputHistoryIndex < inputHistory.length){
                 inputHistoryIndex++;
             }else{
