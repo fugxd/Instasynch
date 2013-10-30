@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-//messagefilter
-$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Messagefilter/messagefilter.js');
-=======
 
 var afterConnectFunctions = [];
 var beforeConnectFunctions = [];
->>>>>>> origin/test
 
 function afterConnect(){
     if (messages < 3) {
@@ -13,22 +8,6 @@ function afterConnect(){
         return;
     }
 
-<<<<<<< HEAD
-//inputhistory
-$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Input%20History/inputhistory.js');
-
-//name autocomplete
-$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Name%20Autocomplete/nameautocomplete.js');
-
-//wallcounter
-$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Playlist%20Additions/Wallcounter/wallcounter.js');
-
-//Mousewheel Volumecontrol
-$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Player%20Additions/Mousewheel%20Volumecontrol/mousewheelvolumecontrol.js');
-
-//Description replacement
-$.getScript('https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/Description.js');
-=======
     for(var i = 0; i< afterConnectFunctions.length;i++){
             afterConnectFunctions[i]();
     }
@@ -66,4 +45,3 @@ $.when(
         beforeConnect();
         afterConnect();
 });
->>>>>>> origin/test

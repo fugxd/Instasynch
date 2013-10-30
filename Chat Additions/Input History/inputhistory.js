@@ -25,7 +25,7 @@
 function loadInputHistory(){
 
     $("#chat input").bind('keypress',function(event){
-        if(event.keyCode == 13){
+        if(event.keyCode === 13){
             if($(this).val() != ""){
                 if(inputHistoryIndex != 0){
                     //remove the string from the array
@@ -35,7 +35,7 @@ function loadInputHistory(){
                 inputHistory.splice(1,0,$(this).val());
 
                 //50 messages limit (for now)
-                if(inputHistory.length == 50){
+                if(inputHistory.length === 50){
                     //delete the last
                     inputHistory.splice(inputHistory.length-1,1);
                 }
@@ -48,7 +48,11 @@ function loadInputHistory(){
         if(isAutocompleteMenuActive){
             return ;
         }
+<<<<<<< HEAD
         if(event.keyCode == 38){//upkey
+=======
+        if(event.keyCode === 38){//upkey
+>>>>>>> origin/test
             if(inputHistoryIndex < inputHistory.length){
                 inputHistoryIndex++;
             }else{
@@ -57,7 +61,7 @@ function loadInputHistory(){
             //insert the string into the text field
             $(this).val(inputHistory[inputHistoryIndex]);         
 
-        }else if(event.keyCode == 40){//downkey
+        }else if(event.keyCode === 40){//downkey
             if(inputHistoryIndex > 0){
                 inputHistoryIndex--;
             }else{
@@ -68,8 +72,7 @@ function loadInputHistory(){
         }
     });
 }
-var inputHistory = [""];
-var inputHistoryIndex =0;
+var inputHistory = [""],
+    inputHistoryIndex = 0;
 
-
-loadInputHistory();
+beforeConnectFunctions.push(loadInputHistory);

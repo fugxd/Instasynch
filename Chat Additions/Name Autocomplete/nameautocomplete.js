@@ -29,29 +29,51 @@ function loadAutocomplete() {
             //prevent loosing focus from input
             event.preventDefault();
             //split the message
+<<<<<<< HEAD
             var message = $(this).val().split(' ');
             //make a regex out of the last part 
             var tags = message[message.length-1].match(/(((&gt;)|>)?(\[.*?\])*\[?)(.*)/);
             //save tags if there were any
             tags[1] = (tags[1])?tags[1]:'';
             if(!tags[5]){
+=======
+            var message = $(this).val().split(' '),
+                //make a regex out of the last part 
+                messagetags = message[message.length-1].match(/((\[.*?\])*\[?)(.*)/),
+                name,
+                data,
+                autocomplete = '',
+                username,
+                i,
+                j,
+                sub;
+            if(!messagetags[1]){
+                 messagetags[1] = '';
+            }
+            if(!messagetags[3]){
+>>>>>>> origin/test
                 return;
             }   
             
             //make a regex out of the name
+<<<<<<< HEAD
             var name = new RegExp('^'+tags[5],'i');
             var data;
             var autocomplete ='';
+=======
+            name = new RegExp('^'+messagetags[3],'i');
+
+>>>>>>> origin/test
             //find matching users
-            for(var i = 0; i< users.length;i++){
-                var username = users[i]['username'];
+            for(i = 0; i< users.length;i++){
+                username = users[i].username;
                 if(username.match(name)){
                     if(autocomplete == ''){
                         autocomplete = username;
                     }else{
                         //check for partial matches with other found users
-                        for(var j = autocomplete.length; j>=0 ;j--){
-                            var sub = autocomplete.substring(0,j);
+                        for(j = autocomplete.length; j>=0 ;j--){
+                            sub = autocomplete.substring(0,j);
                             if(username.indexOf(sub) == 0){
                                 autocomplete = sub;
                                 break;
@@ -61,8 +83,8 @@ function loadAutocomplete() {
                 }
             }
             if(autocomplete != ''){
-                //put tags and the autocompleted name back into the message
-                message[message.length-1] =tags[1] + autocomplete;
+                //put messagetags and the autocompleted name back into the message
+                message[message.length-1] =messagetags[1] + autocomplete;
                 $(this).val(message.join(' '));
             }
 
@@ -71,4 +93,4 @@ function loadAutocomplete() {
 
 }
 
-loadAutocomplete();
+beforeConnectFunctions.push(loadAutocomplete);

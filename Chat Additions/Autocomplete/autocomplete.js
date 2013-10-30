@@ -22,8 +22,8 @@
 */
 
 
-
 function loadAutoComplete() {
+<<<<<<< HEAD
     //wait until we got a connection to the server
      //needs to be replaced with something better
      if (messages < 3) {
@@ -35,6 +35,8 @@ function loadAutoComplete() {
     var autocompleteEmotes = true;
     var autocompleteCommands = true;
     var autocompleteTags = true;
+=======
+>>>>>>> origin/test
 
     var emotes = (function () {
         var arr = Object.keys($codes);
@@ -43,22 +45,21 @@ function loadAutoComplete() {
             arr[i] = '/' + arr[i];
         }
         return arr;
-    })();
-    var commands = [
+        })(),
+        commands = [
         "'skip",
         "'reload",
         "'resynch",
         "'toggleplaylistlock",
         "'togglefilter",
         "'toggleautosynch"
-    ];
-    var modCommands = [
+        ],
+        modCommands = [
         "'ready",
         "'kick",
         "'ban",
         "'unban",
         "'clean",
-        "'next",
         "'remove",
         "'purge",
         "'move",
@@ -78,7 +79,10 @@ function loadAutoComplete() {
         //"'demod ",
         //"'description ",
         "'next"
-    ];
+        ],
+        tagKeys = Object.keys(tags),
+        data = [];
+
     if (window.isMod) {
         //add mod commands
         commands = commands.concat(modCommands);
@@ -89,7 +93,10 @@ function loadAutoComplete() {
         tagKeys[i] = tagKeys[i].replace(/\\/g,'');
     }
 
-    var data = [];
+    for (var i = 0; i < tagKeys.length; i++) {
+        tagKeys[i] = tagKeys[i].replace(/\\/g,'');
+    }
+
     if(autocompleteEmotes){
         data = data.concat(emotes);
     } 
@@ -114,11 +121,20 @@ function loadAutoComplete() {
         delay: 0,
         minLength: 0,
         source: function (request, response) {
+<<<<<<< HEAD
             var message = request.term.split(' ');
             var match = message[message.length-1].match(/(((&gt;)|>)?(\[.*?\])*)(.*)/);
             match[1] = (match[1])?match[1]:'';
             var partToComplete = match[5];
             var matches = [];
+=======
+            var message = request.term.split(' '),
+                match = message[message.length-1].match(/((\[.*?\])*)(.*)/),
+                partToComplete = match[3],
+                matches = [];
+
+            match[1] = (match[1])?match[1]:'';
+>>>>>>> origin/test
             if(partToComplete.length>0){
                 matches = $.map(data, function (item) {
                     if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
@@ -134,11 +150,21 @@ function loadAutoComplete() {
             return false; // prevent value inserted on focus
         },
         select: function(event, ui) {
+<<<<<<< HEAD
             var message = this.value.split(' ');
             var match = message[message.length-1].match(/(((&gt;)|>)?(\[.*?\])*)(.*)/);
+=======
+            var message = this.value.split(' '),
+                match = message[message.length-1].match(/((\[.*?\])*)(.*)/);
+>>>>>>> origin/test
             match[1] = (match[1])?match[1]:'';
             message[message.length-1] = match[1] + ui.item.value;
             this.value = message.join(' ');
+
+            //if the selected item is a emote trigger a fake enter event
+            if(ui.item.value[0] === '/'){
+                $(this).trigger($.Event( "keypress", { which: 13,keyCode : 13 })); 
+            }
             return false;
         },
         close : function(){
@@ -149,5 +175,16 @@ function loadAutoComplete() {
         }
     });
 }
+<<<<<<< HEAD
 var isAutocompleteMenuActive = false;
 loadAutoComplete();
+=======
+
+var isAutocompleteMenuActive = false,
+//change to false to exlude from autocomplete
+    autocompleteEmotes = true,
+    autocompleteCommands = true,
+    autocompleteTags = true;
+
+afterConnectFunctions.push(loadAutoComplete);
+>>>>>>> origin/test
