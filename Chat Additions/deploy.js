@@ -19,47 +19,30 @@ function beforeConnect(){
 }
 $.when(
     //messagefilter
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Messagefilter/messagefilter.js'),
+    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Chat%20Additions/Messagefilter/messagefilter.js'),
     
     //autocomplete
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Autocomplete/autocomplete.js'),
+    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Chat%20Additions/Autocomplete/autocomplete.js'),
     
     //inputhistory
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Input%20History/inputhistory.js'),
+    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Chat%20Additions/Input%20History/inputhistory.js'),
     
     //name autocomplete
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Name%20Autocomplete/nameautocomplete.js'),
+    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Chat%20Additions/Name%20Autocomplete/nameautocomplete.js'),
     
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
     //OnClick kick&ban
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/OnClickKickBan/OnClickKickBan.js'),
+    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Chat%20Additions/OnClickKickBan/OnClickKickBan.js'),
 
->>>>>>> origin/master
-=======
-    //OnClick kick&ban
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/OnClickKickBan/OnClickKickBan.js'),
-
->>>>>>> origin/master
     //wallcounter
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Playlist%20Additions/Wallcounter/wallcounter.js'),
+    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Playlist%20Additions/Wallcounter/wallcounter.js'),
     
     //Mousewheel Volumecontrol
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Player%20Additions/Mousewheel%20Volumecontrol/mousewheelvolumecontrol.js'),
+    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Player%20Additions/Mousewheel%20Volumecontrol/mousewheelvolumecontrol.js'),
     
     //Description replacement
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/Description.js'),
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
+    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/General%20Additions/Description.js'),
 
 
->>>>>>> origin/master
-=======
-
-
->>>>>>> origin/master
     $.Deferred(function( deferred ){
         $( deferred.resolve );
     })
