@@ -1,3 +1,13 @@
+// ==UserScript==
+// @name        Instasynch Addons
+// @namespace   Bibby
+// @description autocompletes emotes and or commands
+// @include     http://*.instasynch.com/rooms/*
+// @include     http://instasynch.com/rooms/*
+// @version     1
+// @grant       none
+// ==/UserScript==
+
 var afterConnectFunctions = [];
 var beforeConnectFunctions = [];
 
@@ -37,7 +47,6 @@ function beforeConnect(){
     
     http://opensource.org/licenses/GPL-3.0
 */
-
 
 
 function loadAutoComplete() {
@@ -328,94 +337,6 @@ function loadWordfilter() {
     addMessage = function addMessage(username, message, userstyle, textstyle) {
         //continue with InstaSynch's  addMessage function
         oldAddMessage(username, parseMessage(message,true), userstyle, textstyle);
-        if(username != ''){
-            var currentElement,
-                //the cursor doesnt need to be changed if the key is still held down
-                isCtrlKeyDown = false,
-                keyDown = 
-                function(event){
-                    if(!isCtrlKeyDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
-                        isCtrlKeyDown = true;
-                        currentElement.css( 'cursor', 'pointer' );
-                    }
-                },
-                keyUp = 
-                function(event){
-                    if(isCtrlKeyDown && !event.ctrlKey){
-                        isCtrlKeyDown = false;
-                        currentElement.css('cursor','default');
-                    }
-                };
-            //add the events to the latest username in the chat list
-            $('#chat_list > span:last-of-type').prev()
-            .on('click', function(event){
-                if(!window.isMod){
-                    return;
-                }
-                if(event.ctrlKey){
-                    var user = $(this)[0].innerText,
-                        userFound = false,
-                        isMod = false,
-                        userId,
-                        i;
-                    user = user.substring(0,user.length-1);
-
-                    for(i = 0; i< users.length;i++){
-
-                        if(users[i].username === user ) {
-                            if(users[i].permissions > 0){
-                                isMod = true;
-                                break;
-                            }
-                            userId = users[i].id;
-                            userFound = true;
-                            break;
-                        }
-                    }       
-                    if(event.altKey){
-                        if(isMod){
-                            addMessage('', "Can't ban a mod", '', 'hashtext');
-                        }else{
-                            if(userFound){
-                                sendcmd('ban', {userid: userId});    
-                                addMessage('', 'b& user: '+user, '', 'hashtext');
-                            }else{
-                                sendcmd('leaverban', {userid: userId});    
-                                addMessage('', 'Leaverb& user: '+user, '', 'hashtext');
-                            }
-                        }
-                    }else{          
-                    if(isMod){
-                            addMessage('', "Can't kick a mod", '', 'hashtext');
-                        }else{
-                            if(userFound){
-                                sendcmd('kick', {userid: userId});   
-                                addMessage('', 'Kicked user: '+user, '', 'hashtext');
-                            }else{
-                                addMessage('', "Didn't find the user", '', 'hashtext');
-                            }
-                        }
-                    }
-                }
-            })        
-            .hover(
-            function(event){
-                if(!window.isMod){
-                    return;
-                }            
-                currentElement = $(this);
-                $(document).bind('keydown',keyDown);
-                $(document).bind('keyup',keyUp);
-            },function(){       
-                if(!window.isMod){
-                    return;
-                }
-                currentElement.css('cursor','default');
-                isCtrlKeyDown = false;
-                $(document).unbind('keydown',keyDown);
-                $(document).unbind('keyup',keyUp);
-            });
-        }
     };
 
     createPoll = function createPoll(poll){
@@ -701,5 +622,296 @@ function loadAutocomplete() {
 }
 
 beforeConnectFunctions.push(loadAutocomplete);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+function loadOnClickKickBan(){
+
+    var oldAddMessage = addMessage;
+
+    //overwrite InstaSynch's  addMessage function
+    addMessage = function addMessage(username, message, userstyle, textstyle) {
+        
+        oldAddMessage(username, message, userstyle, textstyle);
+        //only add the onclick events if the user is a mod and its not a system message
+        if(username != '' && window.isMod){
+            var currentElement,
+                //the cursor doesnt need to be changed if the key is still held down
+                isCtrlKeyDown = false,
+                keyDown = 
+                function(event){
+                    if(!isCtrlKeyDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
+                        isCtrlKeyDown = true;
+                        currentElement.css( 'cursor', 'pointer' );
+                    }
+                },
+                keyUp = 
+                function(event){
+                    if(isCtrlKeyDown && !event.ctrlKey){
+                        isCtrlKeyDown = false;
+                        currentElement.css('cursor','default');
+                    }
+                };
+            //add the events to the latest username in the chat list
+            $('#chat_list > span:last-of-type').prev()
+            .on('click', function(event){
+                if(event.ctrlKey){
+                    var user = $(this)[0].innerText,
+                        userFound = false,
+                        isMod = false,
+                        userId,
+                        i;
+                    user = user.substring(0,user.length-1);
+                    for(i = 0; i< users.length;i++){
+                        if(users[i].username === user ) {
+                            if(users[i].permissions > 0){
+                                isMod = true;
+                                break;
+                            }
+                            userId = users[i].id;
+                            userFound = true;
+                            break;
+                        }
+                    }       
+                    if(event.altKey){
+                        if(isMod){
+                            addMessage('', "Can't ban a mod", '', 'hashtext');
+                        }else{
+                            if(userFound){
+                                sendcmd('ban', {userid: userId});    
+                                addMessage('', 'b& user: '+user, '', 'hashtext');
+                            }else{
+                                sendcmd('leaverban', {userid: userId});    
+                                addMessage('', 'Leaverb& user: '+user, '', 'hashtext');
+                            }
+                        }
+                    }else{          
+                    if(isMod){
+                            addMessage('', "Can't kick a mod", '', 'hashtext');
+                        }else{
+                            if(userFound){
+                                sendcmd('kick', {userid: userId});   
+                                addMessage('', 'Kicked user: '+user, '', 'hashtext');
+                            }else{
+                                addMessage('', "Didn't find the user", '', 'hashtext');
+                            }
+                        }
+                    }
+                }
+            })        
+            .hover(
+            function(event){
+                currentElement = $(this);
+                $(document).bind('keydown',keyDown);
+                $(document).bind('keyup',keyUp);
+            },function(){       
+                currentElement.css('cursor','default');
+                isCtrlKeyDown = false;
+                $(document).unbind('keydown',keyDown);
+                $(document).unbind('keyup',keyUp);
+            });
+        }
+    };
+};
+
+
+beforeConnectFunctions.push(loadOnClickKickBan);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadMouseWheelVolumecontrol(){
+
+    if(window.addEventListener){
+        window.addEventListener('DOMMouseScroll',preventScroll,false);
+    }
+    //prevent the site from scrolling while over the player
+    function preventScroll(event)
+    {
+        event.preventDefault();
+        event.returnValue=!mouserOverPlayer;
+        if(mouserOverPlayer){
+            if(event.wheelDeltaY < 0){
+                globalVolume-=2;
+            }else if(event.wheelDeltaY > 0){
+                globalVolume+=2;
+            }
+            globalVolume = (globalVolume<0)?0:(globalVolume>100)?100:globalVolume;
+            setVol();
+        }
+    }
+    window.onmousewheel=document.onmousewheel=preventScroll;
+
+    //add hover event to the player
+    $('#media').hover(
+        function() {
+            mouserOverPlayer = true;
+        },
+        function() {
+            mouserOverPlayer = false;
+        }
+    );
+
+
+    var oldLoadYoutubePlayer = loadYoutubePlayer,
+        oldLoadVimeoVideo = loadVimeoVideo;
+
+     //overwrite InstaSynch's loadYoutubePlayer
+    loadYoutubePlayer = function loadYoutubePlayer(id, time, playing) {
+        oldLoadYoutubePlayer(id, time, playing);
+        //set the globalVolume to the player after it has been loaded
+        var oldAfterReady = $.tubeplayer.defaults.afterReady;
+        $.tubeplayer.defaults.afterReady = function afterReady(k3) {
+            initGlobalVolume();
+            oldAfterReady(k3);
+        };
+    };    
+
+
+    //overwrite InstaSynch's loadVimeoPlayer
+    loadVimeoVideo = function loadVimeoPlayer(id, time, playing) {
+        oldLoadVimeoVideo(id, time, playing);
+
+        //set the globalVolume to the player after it has been loaded
+        $f($('#vimeo')[0])['addEvent']('ready',initGlobalVolume);
+    };
+}
+
+var isReady = false,
+    globalVolume = 50,
+    mouserOverPlayer = false;
+
+function initGlobalVolume(){
+    if(isReady){
+        setVol();
+    }else{
+        if(loadedPlayer === 'youtube'){
+            globalVolume = $('#media').tubeplayer('volume');
+        }else if(loadedPlayer === 'vimeo'){
+            $f($('#vimeo')[0]).api('getVolume',function(vol){globalVolume = vol*100.0;});
+        }   
+        isReady = true;
+    }
+}
+function setVol(){
+    if(loadedPlayer === 'youtube'){
+        $('#media').tubeplayer('volume',globalVolume);
+    }else if(loadedPlayer === 'vimeo'){
+        $f($('#vimeo')[0]).api('setVolume',globalVolume/100.0);
+    }
+}
+
+beforeConnectFunctions.push(loadMouseWheelVolumecontrol);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+
+function loadWallCounter(){
+
+    var oldAddVideo = addVideo,
+        oldRemoveVideo = removeVideo;
+
+    //overwrite InstaSynch's addVideo
+    addVideo = function addVideo(vidinfo) {
+
+        var value = wallCounter[vidinfo.addedby.toLowerCase()];
+
+        if(value){
+            value += vidinfo.duration;
+        }else{
+            value = vidinfo.duration;
+        }
+        wallCounter[vidinfo.addedby] = value;
+
+        oldAddVideo(vidinfo);
+    };
+
+    //overwrite InstaSynch's removeVideo
+    removeVideo = function removeVideo(vidinfo){
+        var indexOfVid = getVideoIndex(vidinfo),
+            video = playlist[indexOfVid],
+            value = wallCounter[video.addedby.toLowerCase()];
+        value -= video.duration;
+
+        if(value > 0){
+            wallCounter[video.addedby] = value;
+        }else{
+            delete wallCounter[video.addedby];
+        }
+
+
+        oldRemoveVideo(vidinfo);
+    };
+
+}
+var wallCounter = {};
+
+function printWallCounter(){
+    var string = "";
+    for(var key in wallCounter){
+        string += key + ": "+secondsToTime(wallCounter[key])+"\n";
+    }
+    console.log(string);
+}
+
+beforeConnectFunctions.push(loadWallCounter);
 beforeConnect();
 afterConnect();

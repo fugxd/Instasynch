@@ -22,7 +22,6 @@
 */
 
 
-
 function loadAutoComplete() {
 
     var emotes = (function () {

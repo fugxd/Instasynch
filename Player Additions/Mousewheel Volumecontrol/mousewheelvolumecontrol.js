@@ -54,34 +54,35 @@ function loadMouseWheelVolumecontrol(){
     );
 
 
-    var oldLoadYoutubePlayer = loadYoutubePlayer;
+    var oldLoadYoutubePlayer = loadYoutubePlayer,
+        oldLoadVimeoVideo = loadVimeoVideo;
+
      //overwrite InstaSynch's loadYoutubePlayer
     loadYoutubePlayer = function loadYoutubePlayer(id, time, playing) {
         oldLoadYoutubePlayer(id, time, playing);
         //set the globalVolume to the player after it has been loaded
         var oldAfterReady = $.tubeplayer.defaults.afterReady;
         $.tubeplayer.defaults.afterReady = function afterReady(k3) {
-            init();
+            initGlobalVolume();
             oldAfterReady(k3);
         };
     };    
 
 
-    var oldLoadVimeoVideo = loadVimeoVideo;
     //overwrite InstaSynch's loadVimeoPlayer
     loadVimeoVideo = function loadVimeoPlayer(id, time, playing) {
         oldLoadVimeoVideo(id, time, playing);
 
         //set the globalVolume to the player after it has been loaded
-        $f($('#vimeo')[0])['addEvent']('ready',init);
+        $f($('#vimeo')[0])['addEvent']('ready',initGlobalVolume);
     };
 }
 
-var isReady = false;
-var globalVolume = 50;
-var mouserOverPlayer = false;
+var isReady = false,
+    globalVolume = 50,
+    mouserOverPlayer = false;
 
-function init(){
+function initGlobalVolume(){
     if(isReady){
         setVol();
     }else{
