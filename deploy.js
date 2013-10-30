@@ -30,18 +30,9 @@ $.when(
     //name autocomplete
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Name%20Autocomplete/nameautocomplete.js'),
     
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
     //OnClick kick&ban
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/OnClickKickBan/OnClickKickBan.js'),
 
->>>>>>> origin/master
-=======
-    //OnClick kick&ban
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/OnClickKickBan/OnClickKickBan.js'),
-
->>>>>>> origin/master
     //wallcounter
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Playlist%20Additions/Wallcounter/wallcounter.js'),
     
@@ -50,16 +41,8 @@ $.when(
     
     //Description replacement
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/Description.js'),
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
 
->>>>>>> origin/master
-=======
-
-
->>>>>>> origin/master
     $.Deferred(function( deferred ){
         $( deferred.resolve );
     })
