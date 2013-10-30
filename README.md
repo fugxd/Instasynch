@@ -5,6 +5,9 @@ To execute the chat additions install <a href=https://chrome.google.com/webstore
 
 Create a new userscript and copy the contents of <a href="https://github.com/Bibbytube/Instasynch/blob/master/loadAll.js">loadAll.js</a> in it.
 
+How to install
+
+<img src="/install.gif">
 
 
 Messagefilter (for chat, polls and the footer)
@@ -37,3 +40,4 @@ Mousewheel Volumecontrol (and global volume over youtube and vimeo)
 
 
 Gifs made with <a href="http://blog.bahraniapps.com/?page_id=21">GifCam</a>
+
