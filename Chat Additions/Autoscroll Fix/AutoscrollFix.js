@@ -29,6 +29,7 @@ function loadAutoscrollFix(){
     var old_element = document.getElementById("chat_list"),
         new_element = old_element.cloneNode(true);
     old_element.parentNode.replaceChild(new_element, old_element);
+    //$('#chat_list').unbind('hover');//not working
 
     //add a scrolling event to the chat
     $('#chat_list').on('scroll',function()
