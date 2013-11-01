@@ -50,7 +50,7 @@ function loadAutoscrollFix(){
     //,also clean all the messages until messages === MAXMESSAGES
     cleanChat = function cleanChat(){
         var max = MAXMESSAGES;
-        //increasing the maximum messages by 2 so messages won't get cleared 
+        //increasing the maximum messages by the factor 2 so messages won't get cleared 
         //and won't pile up if the user goes afk with autoscroll off
         if(!autoscroll){
             max = max*2;
