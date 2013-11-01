@@ -19,28 +19,31 @@ function beforeConnect(){
 }
 $.when(
     //messagefilter
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Chat%20Additions/Messagefilter/messagefilter.js'),
+    $.getScript('https://dl.dropboxusercontent.com/s/ghtrxs4ok03jyzy/messagefilter.js?dl=1&token_hash=AAGve0NoCbgXkON2gMP9XLNQuDhyDbAsJiVWYeTZJJDhUw'),
     
     //autocomplete
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Chat%20Additions/Autocomplete/autocomplete.js'),
+    $.getScript('https://dl.dropboxusercontent.com/s/ohhe6bcza94t3jm/autocomplete.js?dl=1&token_hash=AAFjjSOInN5rBpezaj8Uq5UAJS6VivePCV9x3b7eHm45bw'),
     
     //inputhistory
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Chat%20Additions/Input%20History/inputhistory.js'),
+    $.getScript('https://dl.dropboxusercontent.com/s/t7wqz0ac5s29djw/inputhistory.js?dl=1&token_hash=AAH3uxWXfwyUueU4UKg3ojAylwWAnVudT_l0ZSkFPvahxA'),
     
     //name autocomplete
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Chat%20Additions/Name%20Autocomplete/nameautocomplete.js'),
+    $.getScript('https://dl.dropboxusercontent.com/s/psaki7htt4lczej/nameautocomplete.js?dl=1&token_hash=AAGUOfRVohf6qlQwk0worAv1C4XU_A83ny1LvQgPAN7MMw'),
     
     //OnClick kick&ban
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Chat%20Additions/OnClickKickBan/OnClickKickBan.js'),
+    $.getScript('https://dl.dropboxusercontent.com/s/gge2keppi6h1yfp/OnClickKickBan.js?dl=1&token_hash=AAGw-0s6LfVB5gB35Pv1uVgKVeT099hvaGgSOF8NS4b4Cg'),
+
+    //Autscroll Fix
+    $.getScript('https://dl.dropboxusercontent.com/s/xnhc00i7liixuq6/AutoscrollFix.js?dl=1&token_hash=AAEhEoNvmD4Ld34waMT5y-iQGVAe8sgZaDaatQGoO_zSHA'),
 
     //wallcounter
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Playlist%20Additions/Wallcounter/wallcounter.js'),
+    $.getScript('https://dl.dropboxusercontent.com/s/1is261tpt1de4ws/wallcounter.js?dl=1&token_hash=AAEWtGcm4eYcfAgZ8_6NoO2Sp2U9JzX33Gacv7RHTP1sQA'),
     
     //Mousewheel Volumecontrol
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Player%20Additions/Mousewheel%20Volumecontrol/mousewheelvolumecontrol.js'),
+    $.getScript('https://dl.dropboxusercontent.com/s/c1ef48th31cb2do/mousewheelvolumecontrol.js?dl=1&token_hash=AAHHmFBDLEme1D3hs5i2kjWRC0iOkKsTQLacX_nlcx3mIA'),
     
     //Description replacement
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/General%20Additions/Description.js'),
+    $.getScript('https://dl.dropboxusercontent.com/s/wz7cazphmwztkf4/Description.js?dl=1&token_hash=AAHYIBm9c88xSQ3p2QkDNHgG-24AtgRW1Qu-zJj281X1vw'),
 
 
     $.Deferred(function( deferred ){

@@ -23,16 +23,14 @@ function loadDescription(){
     descr += "	<span style=\"color:#003399;\"><strong style=\"font-size: 20pt; \">Bibbytube<\/strong><\/span><\/p>";
     descr += "<p style=\"font-family: Palatino; font-size: 16pt; text-align: center; \">";
     descr += "	<strong>synchtube&#39;s most <img src=\"http:\/\/i.imgur.com\/L1Nuk.gif\" \/> room<\/strong><\/p>";
-    descr += "<p style=\"font-family: Palatino; font-size: 16pt; text-align: center; \">";
-    descr += "	▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂<\/p>";
+    descr += "<hr noshade color='black' width='550' size='5' align='center'>";
     descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
     descr += "	<span style=\"font-size: 14pt; \">Playlist is always unlocked, so add videos for everyone to watch.<\/span><\/p>";
     descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
     descr += "	<span style=\"color:#003399;\">New content\/OC is appreciated.<\/span><\/p>";
     descr += "<p style=\"font-family: Palatino; font-size: 12pt; text-align: center; \">";
     descr += "	Note: Many of our videos are NSFW.<\/p>";
-    descr += "<p style=\"font-family: Palatino; font-size: 16pt; text-align: center; \">";
-    descr += "	▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂<\/p>";
+    descr += "<hr noshade color='black' width='550' size='5' align='center'>";
     descr += "<p style=\"font-family: Palatino; font-size: 18pt; text-align: center; \">";
     descr += "	<span style=\"color:#003399;\"><strong>Rules&nbsp;<\/strong><\/span><\/p>";
     descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
