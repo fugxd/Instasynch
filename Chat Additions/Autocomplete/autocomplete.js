@@ -102,6 +102,9 @@ function loadAutoComplete() {
         delay: 0,
         minLength: 0,
         source: function (request, response) {
+            if(inputHistoryIndex != 0){
+                return;
+            }
             var message = request.term.split(' '),
                 match = message[message.length-1].match(/((\[.*?\])*)(.*)/),
                 partToComplete = match[3],
@@ -118,9 +121,7 @@ function loadAutoComplete() {
             //show only 7 responses
             response(matches.slice(0, 7));
         },
-        autoFocus: function(){
-            return inputHistoryIndex == 0;
-        },
+        autoFocus: true,
         focus: function()  {
             return false; // prevent value inserted on focus
         },
