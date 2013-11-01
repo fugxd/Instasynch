@@ -168,7 +168,8 @@ function parseMessage(message,isChatMessage){
 
 var filteredwords = {
     "skip": "UPVOTE",
-    "club": "PARTY" //Etc ...
+    "club": "PARTY",
+    "gay" : "hetero"
 },
     tags = {
     '\\[black\\]': '<span style="color:black">',
