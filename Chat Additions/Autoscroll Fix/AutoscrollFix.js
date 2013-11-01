@@ -49,9 +49,10 @@ function loadAutoscrollFix(){
         var scrollHeight = $(this)[0].scrollHeight, 
             scrollTop = $(this).scrollTop(),   
             height = $(this).height();
+            //console.log($('#chat_list')[0].scrollHeight + " " + $('#chat_list').scrollTop() + " " +$('#chat_list').height() );
         //scrollHeight - scrollTop will be 290 when the scrollbar is at the bottom
         //height of the chat window is 280, not sure where the 10 is from
-        if ((scrollHeight - scrollTop) === height + 10){
+        if ((scrollHeight - scrollTop) === 290){
             autoscroll = true;
         }else{
             autoscroll = false;
