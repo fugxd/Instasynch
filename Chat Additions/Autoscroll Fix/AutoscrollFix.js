@@ -29,7 +29,19 @@ function loadAutoscrollFix(){
     var old_element = document.getElementById("chat_list"),
         new_element = old_element.cloneNode(true);
     old_element.parentNode.replaceChild(new_element, old_element);
-    //$('#chat_list').unbind('hover');//not working
+
+    //all not working
+    // var eventListeners = jQuery._data( chat_list, "events" );
+    // for(var e in eventListeners){
+    //     if(e === 'mouseover' || e === 'mouseout'){
+    //         $('#chat_list')[0].removeEventListener(e,eventListeners[e][0]['handler']);
+    //         $('#chat_list').unbind(e,eventListeners[e][0]['handler']);
+    //     }
+    // }
+    // $('#chat_list').unbind('mouseover');
+    // $('#chat_list').unbind('mouseout');
+    // $('#chat_list').unbind('hover');
+
 
     //add a scrolling event to the chat
     $('#chat_list').on('scroll',function()
