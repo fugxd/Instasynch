@@ -49,7 +49,13 @@ function loadAutoscrollFix(){
     //overwrite cleanChat Function so it won't clean when autoscroll is off
     //,also clean all the messages until messages === MAXMESSAGES
     cleanChat = function cleanChat(){
-        while(messages > MAXMESSAGES && autoscroll){
+        var max = MAXMESSAGES;
+        //increasing the maximum messages by 2 so messages won't get cleared 
+        //and won't pile up if the user goes afk with autoscroll off
+        if(!autoscroll){
+            max = max*2;
+        }
+        while(messages > max){
             $('#chat_list > :first-child').remove(); //span user
             $('#chat_list > :first-child').remove(); //span message
             $('#chat_list > :first-child').remove(); //<br>
