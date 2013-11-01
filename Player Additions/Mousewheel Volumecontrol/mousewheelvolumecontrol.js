@@ -29,9 +29,9 @@ function loadMouseWheelVolumecontrol(){
     //prevent the site from scrolling while over the player
     function preventScroll(event)
     {
-        event.preventDefault();
-        event.returnValue=!mouserOverPlayer;
         if(mouserOverPlayer){
+            event.preventDefault();
+            event.returnValue=!mouserOverPlayer;
             if(event.wheelDeltaY < 0){
                 globalVolume-=2;
             }else if(event.wheelDeltaY > 0){
