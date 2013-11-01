@@ -33,10 +33,9 @@ function loadAutoscrollFix(){
     //add a scrolling event to the chat
     $('#chat_list').on('scroll',function()
     {
-        var div = document.getElementById("chat_list"), 
-            scrollHeight = div.scrollHeight, 
-            scrollTop = div.scrollTop,   
-            height = $('#chat_list').height();
+        var scrollHeight = $(this)[0].scrollHeight, 
+            scrollTop = $(this).scrollTop(),   
+            height = $(this).height();
         //scrollHeight - scrollTop will be 290 when the scrollbar is at the bottom
         //height of the chat window is 280, not sure where the 10 is from
         if ((scrollHeight - scrollTop) === height + 10){
