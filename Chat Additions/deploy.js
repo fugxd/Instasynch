@@ -45,7 +45,6 @@ $.when(
     //Description replacement
     $.getScript('https://dl.dropboxusercontent.com/s/wz7cazphmwztkf4/Description.js?dl=1&token_hash=AAHYIBm9c88xSQ3p2QkDNHgG-24AtgRW1Qu-zJj281X1vw'),
 
-
     $.Deferred(function( deferred ){
         $( deferred.resolve );
     })
