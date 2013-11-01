@@ -118,7 +118,9 @@ function loadAutoComplete() {
             //show only 7 responses
             response(matches.slice(0, 7));
         },
-        autoFocus:true,
+        autoFocus: function(){
+            return inputHistoryIndex == 0;
+        },
         focus: function()  {
             return false; // prevent value inserted on focus
         },
