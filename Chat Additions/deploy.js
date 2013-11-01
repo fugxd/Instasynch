@@ -33,6 +33,9 @@ $.when(
     //OnClick kick&ban
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/OnClickKickBan/OnClickKickBan.js'),
 
+    //Autoscroll Fix
+    $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Chat%20Additions/Autoscroll Fix/AutoscrollFix.js'),
+    
     //wallcounter
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Playlist%20Additions/Wallcounter/wallcounter.js'),
     
