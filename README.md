@@ -23,7 +23,7 @@ Name Autocomplete (tab)
 
 <img src="Chat Additions/Name Autocomplete/nameautocompleteexample.gif" >
 
-Onclick kick and ban (ctrl + click = kick, ctrl + alt + click = ban / leaverban)
+Onclick kick, ban and automatic leaverban (ctrl + click = kick, ctrl + alt + click = ban / leaverban)
 
 <img src="Chat Additions/OnClickKickBan/onclickkickbanexample.gif" >
 
