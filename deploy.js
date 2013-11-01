@@ -18,6 +18,7 @@ function beforeConnect(){
     }
 }
 $.when(
+    //messagefilter
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/test/Chat%20Additions/Messagefilter/messagefilter.js'),
     
     //autocomplete

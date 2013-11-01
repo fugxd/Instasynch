@@ -102,6 +102,9 @@ function loadAutoComplete() {
         delay: 0,
         minLength: 0,
         source: function (request, response) {
+            if(inputHistoryIndex != 0){
+                return;
+            }
             var message = request.term.split(' '),
                 match = message[message.length-1].match(/((\[.*?\])*)(.*)/),
                 partToComplete = match[3],
