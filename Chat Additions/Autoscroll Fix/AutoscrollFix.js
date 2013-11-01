@@ -54,8 +54,10 @@ function loadAutoscrollFix(){
         //height of the chat window is 280, not sure where the 10 is from
         if ((scrollHeight - scrollTop) === 290){
             autoscroll = true;
+            console.log('scrolling on');
         }else{
             autoscroll = false;
+            console.log('scrolling off');
         }
     });
 
