@@ -57,7 +57,7 @@ function loadWallCounter(){
         if(value > 0){
             wallCounter[video.addedby] = value;
         }else{
-            delete wallCounter[video.addedby];
+            delete wallCounter[video.addedby.toLowerCase()];
         }
 
 
