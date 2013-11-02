@@ -42,6 +42,9 @@ $.when(
     //Mousewheel Volumecontrol
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Player%20Additions/Mousewheel%20Volumecontrol/mousewheelvolumecontrol.js'),
     
+    //Mousewheel Volumecontrol
+    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Player%20Additions/Toggle%20Player/TogglePlayer.js'),
+
     //Description replacement
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/Description.js'),
 
