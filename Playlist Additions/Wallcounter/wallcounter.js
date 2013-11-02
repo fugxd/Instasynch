@@ -71,7 +71,7 @@ function printWallCounter(){
     var string = "",
         key;
     for(key in wallCounter){
-        string += key + ": "+secondsToTime(wallCounter[key])+"\n";
+        string += key + ": "+secondsToTime(wallCounter[key])+", ";
     }
     addMessage('', string, '', 'hashtext');
 }
