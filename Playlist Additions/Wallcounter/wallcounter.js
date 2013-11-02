@@ -42,7 +42,7 @@ function loadWallCounter(){
 
         value = wallCounter[vidinfo.addedby.toLowerCase()];
         value =((value)?value:0) + vidinfo.duration;
-        wallCounter[vidinfo.addedby] = value;
+        wallCounter[vidinfo.addedby.toLowerCase()] = value;
 
         oldAddVideo(vidinfo);
     };
