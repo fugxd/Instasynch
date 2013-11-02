@@ -39,7 +39,8 @@ function loadAutoComplete() {
             "'toggleplaylistlock",
             "'togglefilter",
             "'toggleautosynch",
-            "'toggleplayer"
+            "'toggleplayer",
+            "'printwallcounter"
         ],
         modCommands = [
             "'ready",

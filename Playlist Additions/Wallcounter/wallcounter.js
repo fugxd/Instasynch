@@ -68,7 +68,7 @@ function printWallCounter(){
     for(key in wallCounter){
         string += key + ": "+secondsToTime(wallCounter[key])+"\n";
     }
-    console.log(string);
+    addMessage('', string, '', 'hashtext');
 }
 
 beforeConnectFunctions.push(loadWallCounter);

@@ -25,6 +25,7 @@ function loadAdditionalCommands(){
         if (event.keyCode === $.ui.keyCode.ENTER) {
             switch($(this).val()){
                 case "'toggleplayer":togglePlayer();break;
+                case "'printwallcounter":printWallCounter();break;
                 default: break;
             }
             
