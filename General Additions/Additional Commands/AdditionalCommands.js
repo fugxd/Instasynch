@@ -23,7 +23,6 @@
 function loadAdditionalCommands(){
     $("#chat input").bind("keypress", function(event) {
         if (event.keyCode === $.ui.keyCode.ENTER) {
-            console.log($(this).val());
             switch($(this).val()){
                 case "'toggleplayer":togglePlayer();break;
                 case "'printwallcounter":printWallCounter();break;
