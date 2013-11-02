@@ -23,14 +23,7 @@
 
 
 function loadTogglePlayer(){
-    $("#chat input").bind("keydown", function(event) {
-        if (event.keyCode === $.ui.keyCode.ENTER && $(this).val() === "'toggleplayer") {
-            togglePlayer();
-        }
-    });
-
     var oldPlayVideo = playVideo;
-
     playVideo = function playVideo(vidinfo, time, playing){
         if(playerActive){
             oldPlayVideo(vidinfo, time, playing);

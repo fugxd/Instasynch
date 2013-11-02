@@ -48,6 +48,9 @@ $.when(
     //Description replacement
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/Description.js'),
 
+    //Description replacement
+    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/Additional%20Commands/AdditionalCommands.js'),
+
     $.Deferred(function( deferred ){
         $( deferred.resolve );
     })
