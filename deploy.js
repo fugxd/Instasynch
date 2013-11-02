@@ -41,9 +41,13 @@ $.when(
     
     //Mousewheel Volumecontrol
     $.getScript('https://dl.dropboxusercontent.com/s/c1ef48th31cb2do/mousewheelvolumecontrol.js?dl=1&token_hash=AAHHmFBDLEme1D3hs5i2kjWRC0iOkKsTQLacX_nlcx3mIA'),
+
+    //Toggle Player
+    $.getScript('https://dl.dropboxusercontent.com/s/mmcflm8nmxrw7sd/TogglePlayer.js?dl=1&token_hash=AAGIxau9u5ej9ZnKLyQmwtEdo-gxpK5BcgY_1_LHlN6_rA'),
     
     //Description replacement
     $.getScript('https://dl.dropboxusercontent.com/s/wz7cazphmwztkf4/Description.js?dl=1&token_hash=AAHYIBm9c88xSQ3p2QkDNHgG-24AtgRW1Qu-zJj281X1vw'),
+
 
     $.Deferred(function( deferred ){
         $( deferred.resolve );

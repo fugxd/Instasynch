@@ -23,13 +23,14 @@
 
 function loadMouseWheelVolumecontrol(){
 
- 
+    //TODO: find firefox fix, mousescroll event doesnt fire while over youtube player
+    
     //prevent the site from scrolling while over the player
     function preventScroll(event)
     {
-        console.log('scrolling ' + mouserOverPlayer);
         if(mouserOverPlayer){
             event.preventDefault();
+            event.returnValue=!mouserOverPlayer;
             if(event.wheelDeltaY < 0){
                 globalVolume-=2;
             }else if(event.wheelDeltaY > 0){
@@ -40,8 +41,9 @@ function loadMouseWheelVolumecontrol(){
         }
     }
     window.onmousewheel=document.onmousewheel=preventScroll;
-    $(window).on('DOMMouseScroll',preventScroll,false);
-    
+    if(window.addEventListener){
+        $(window).addEventListener('DOMMouseScroll',preventScroll,false);
+    }
     //add hover event to the player
     $('#media').hover(
         function() {
@@ -51,7 +53,6 @@ function loadMouseWheelVolumecontrol(){
             mouserOverPlayer = false;
         }
     );
-
 
     var oldLoadYoutubePlayer = loadYoutubePlayer,
         oldLoadVimeoVideo = loadVimeoVideo;
