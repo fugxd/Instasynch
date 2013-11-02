@@ -23,15 +23,13 @@
 
 function loadMouseWheelVolumecontrol(){
 
-    if(window.addEventListener){
-        window.addEventListener('DOMMouseScroll',preventScroll,false);
-    }
+ 
     //prevent the site from scrolling while over the player
     function preventScroll(event)
     {
+        console.log('scrolling ' + mouserOverPlayer);
         if(mouserOverPlayer){
             event.preventDefault();
-            event.returnValue=!mouserOverPlayer;
             if(event.wheelDeltaY < 0){
                 globalVolume-=2;
             }else if(event.wheelDeltaY > 0){
@@ -42,7 +40,8 @@ function loadMouseWheelVolumecontrol(){
         }
     }
     window.onmousewheel=document.onmousewheel=preventScroll;
-
+    $(window).on('DOMMouseScroll',preventScroll,false);
+    
     //add hover event to the player
     $('#media').hover(
         function() {
