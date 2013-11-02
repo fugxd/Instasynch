@@ -103,7 +103,7 @@ function parseMessage(message,isChatMessage){
     }
     //filter words
     for (word in filteredwords) {
-        message = message.replace(new RegExp(word, 'gi'), filteredwords[word]);
+        message = message.replace(new RegExp(word, 'g'), filteredwords[word]);
     }
     //filter tags
     for (word in tags) {
@@ -136,7 +136,7 @@ function parseMessage(message,isChatMessage){
             exactMatches = [];
             emote = '';
             for(i = emoteStart+1; i< message.length;i++){
-                emote += message[i].toLowerCase();
+                emote += message[i];
 
                 for(j = 0; j < possibleEmotes.length;j++){
                     if(emote.indexOf(possibleEmotes[j]) == 0 ){
@@ -167,9 +167,12 @@ function parseMessage(message,isChatMessage){
 }
 
 var filteredwords = {
-    "skip": "UPVOTE",
-    "club": "PARTY",
-    "gay" : "hetero"
+    "skip": "upvote",
+    "SKIP": "UPVOTE",
+    "club": "party",
+    "CLUB": "PARTY",
+    "gay" : "hetero",
+    "GAY" : "HETERO"
 },
     tags = {
     '\\[black\\]': '<span style="color:black">',
