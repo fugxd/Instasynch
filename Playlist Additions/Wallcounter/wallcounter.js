@@ -33,16 +33,16 @@ function loadWallCounter(){
 
     for(i = 0; i < playlist.length;i++){
         video = playlist[i];
-        value = wallCounter[video.addedby.toLowerCase()];
+        value = wallCounter[video.addedby];
         value =((value)?value:0) + video.duration;
-        wallCounter[video.addedby.toLowerCase()] = value;
+        wallCounter[video.addedby] = value;
     }
     //overwrite InstaSynch's addVideo
     addVideo = function addVideo(vidinfo) {
 
-        value = wallCounter[vidinfo.addedby.toLowerCase()];
+        value = wallCounter[vidinfo.addedby];
         value =((value)?value:0) + vidinfo.duration;
-        wallCounter[vidinfo.addedby.toLowerCase()] = value;
+        wallCounter[vidinfo.addedby] = value;
 
         oldAddVideo(vidinfo);
     };
@@ -51,13 +51,13 @@ function loadWallCounter(){
     removeVideo = function removeVideo(vidinfo){
         var indexOfVid = getVideoIndex(vidinfo);
         video = playlist[indexOfVid];
-        value = wallCounter[video.addedby.toLowerCase()];
+        value = wallCounter[video.addedby];
         value -= video.duration;
 
         if(value > 0){
-            wallCounter[video.addedby.toLowerCase()] = value;
+            wallCounter[video.addedby] = value;
         }else{
-            delete wallCounter[video.addedby.toLowerCase()];
+            delete wallCounter[video.addedby];
         }
 
 
