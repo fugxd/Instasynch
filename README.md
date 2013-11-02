@@ -10,7 +10,7 @@ How to install
 <img src="/install.gif">
 
 
-Messagefilter (for chat, polls and the footer)
+Messagefilter (for chat and polls)
 
 <img src="/Chat Additions/Messagefilter/messagefilterexample.gif">
 
