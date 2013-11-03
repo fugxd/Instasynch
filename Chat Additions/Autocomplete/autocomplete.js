@@ -51,7 +51,7 @@ function loadAutoComplete() {
     }else{
         settings.set('autocompleteAddonSettings',true);
     }
-    
+
     var emotes = (function () {
         var arr = Object.keys($codes);
 
@@ -146,7 +146,7 @@ function loadAutoComplete() {
                 matches = [];
 
             match[1] = (match[1])?match[1]:'';
-            if(partToComplete.length>0){ta, function (item) {
+            if(partToComplete.length>0){
                 if(!autocompleteEmotes && partToComplete[0] === '/'){
                     return;
                 }
