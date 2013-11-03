@@ -1,4 +1,3 @@
-
 var afterConnectFunctions = [];
 var beforeConnectFunctions = [];
 
@@ -18,16 +17,16 @@ function beforeConnect(){
     }
 }
 $.when(
-    //messagefilter
+    //Messagefilter
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Messagefilter/messagefilter.js'),
     
-    //autocomplete
+    //Autocomplete
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Autocomplete/autocomplete.js'),
     
-    //inputhistory
+    //Inputhistory
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Input%20History/inputhistory.js'),
     
-    //name autocomplete
+    //Name Autocomplete
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Chat%20Additions/Name%20Autocomplete/nameautocomplete.js'),
     
     //OnClick kick&ban
@@ -42,13 +41,13 @@ $.when(
     //Mousewheel Volumecontrol
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Player%20Additions/Mousewheel%20Volumecontrol/mousewheelvolumecontrol.js'),
     
-    //Mousewheel Volumecontrol
+    //Toggle Player
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/Player%20Additions/Toggle%20Player/TogglePlayer.js'),
 
     //Description replacement
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/Description.js'),
 
-    //Description replacement
+    //Additional Commands
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/Additional%20Commands/AdditionalCommands.js'),
 
     $.Deferred(function( deferred ){
