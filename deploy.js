@@ -44,13 +44,21 @@ $.when(
 
     //Toggle Player
     $.getScript('https://dl.dropboxusercontent.com/s/mmcflm8nmxrw7sd/TogglePlayer.js?dl=1&token_hash=AAGIxau9u5ej9ZnKLyQmwtEdo-gxpK5BcgY_1_LHlN6_rA'),
+
+    //Mirror Player
+    $.getScript('https://dl.dropboxusercontent.com/s/snjvu6stfc4v4gj/MirrorPlayer.js?dl=1&token_hash=AAGeu73598AF-NVGeeCWVk5F2mfefElHkibZzna6M0m0Bw'),
     
     //Description replacement
     $.getScript('https://dl.dropboxusercontent.com/s/wz7cazphmwztkf4/Description.js?dl=1&token_hash=AAHYIBm9c88xSQ3p2QkDNHgG-24AtgRW1Qu-zJj281X1vw'),
 
+    //Settings Loader
+    $.getScript('https://dl.dropboxusercontent.com/s/m6jgf2d96197khh/SettingsLoader.js?dl=1&token_hash=AAF_0qD8n_ooqHL83yhm9bUmSV2xUTvLS-d4-QQpO9YnRw'),
+
     //Additional Commands
     $.getScript('https://dl.dropboxusercontent.com/s/om5pyp41xns45hb/AdditionalCommands.js?dl=1&token_hash=AAG_O_1GEi4nzMP8k51lr4FzSwibZXm9PS3xQ6tiWE7fvg'),
 
+
+    
     $.Deferred(function( deferred ){
         $( deferred.resolve );
     })
