@@ -23,7 +23,35 @@
 
 
 function loadAutoComplete() {
+    //load settings
+    var setting = settings.get('autocompleteEmotes');
+    if(setting){
+        autocompleteEmotes = setting ==='false'?false:true;
+    }else{
+        settings.set('autocompleteEmotes',true);
+    }
 
+    setting = settings.get('autocompleteTags');
+    if(setting){
+        autocompleteTags = setting ==='false'?false:true;
+    }else{
+        settings.set('autocompleteTags',true);
+    }
+
+    setting = settings.get('autocompleteCommands');
+    if(setting){
+        autocompleteCommands = setting ==='false'?false:true;
+    }else{
+        settings.set('autocompleteCommands',true);
+    }
+    
+    setting = settings.get('autocompleteAddonSettings');
+    if(setting){
+        autocompleteAddonSettings = setting ==='false'?false:true;
+    }else{
+        settings.set('autocompleteAddonSettings',true);
+    }
+    
     var emotes = (function () {
         var arr = Object.keys($codes);
 
@@ -36,11 +64,13 @@ function loadAutoComplete() {
             "'skip",
             "'reload",
             "'resynch",
-            "'toggleplaylistlock",
-            "'togglefilter",
-            "'toggleautosynch",
-            "'toggleplayer",
-            "'printwallcounter"
+            "'togglePlaylistLock",
+            "'toggleFilter",
+            "'toggleAutosynch",
+            "'togglePlayer",
+            "'printWallCounter",
+            "'mirrorPlayer",
+            "'printAddonSettings"
         ],
         modCommands = [
             "'ready",
@@ -61,6 +91,7 @@ function loadAutoComplete() {
             "'modlist",
             "'save",
             "'leaverban ",
+            //commented those so you can't accidently use them
             //"'clearbans",
             //"'motd ",
             //"'mod ",
@@ -68,29 +99,31 @@ function loadAutoComplete() {
             //"'description ",
             "'next"
         ],
-        tagKeys = Object.keys(tags),
-        data = [];
+        tagKeys = Object.keys(tags);
 
+    addOnSettings = [
+        ":toggleAutocompleteTags",
+        ":toggleAutocompleteEmotes",
+        ":toggleAutocompleteCommands",
+        ":toggleAutocompleteAddOnSettings",
+        ":toggleAutomaticPlayerMirror",
+        ":toggleTags",
+        ":toggleNSFWEmotes"
+    ];
     if (window.isMod) {
-        //add mod commands
         commands = commands.concat(modCommands);
     }
 
     for (var i = 0; i < tagKeys.length; i++) {
         tagKeys[i] = tagKeys[i].replace(/\\/g,'');
     }
+    autocompleteData = autocompleteData.concat(emotes);
+    autocompleteData = autocompleteData.concat(commands);
+    autocompleteData = autocompleteData.concat(addOnSettings);
+    autocompleteData = autocompleteData.concat(tagKeys);
+    
 
-    if(autocompleteEmotes){
-        data = data.concat(emotes);
-    } 
-    if(autocompleteCommands){
-        data =  data.concat(commands);
-    }
-    if(autocompleteTags){
-        data = data.concat(tagKeys);
-    }
-
-    data.sort();
+    autocompleteData.sort();
     //add the jquery autcomplete widget to InstaSynch's input field
     $("#chat input")    
     .bind("keydown", function(event) {
@@ -104,7 +137,7 @@ function loadAutoComplete() {
         delay: 0,
         minLength: 0,
         source: function (request, response) {
-            if(inputHistoryIndex != 0){
+            if(!autocomplete){
                 return;
             }
             var message = request.term.split(' '),
@@ -113,8 +146,20 @@ function loadAutoComplete() {
                 matches = [];
 
             match[1] = (match[1])?match[1]:'';
-            if(partToComplete.length>0){
-                matches = $.map(data, function (item) {
+            if(partToComplete.length>0){ta, function (item) {
+                if(!autocompleteEmotes && partToComplete[0] === '/'){
+                    return;
+                }
+                if(!autocompleteCommands && partToComplete[0] === '\''){
+                    return;
+                }
+                if(!autocompleteTags && partToComplete[0] === '['){
+                    return;
+                }
+                if(!autocompleteAddonSettings && partToComplete[0] === ':'){
+                    return;
+                }
+                matches = $.map(autocompleteData, function (item) {
                     if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
                         return item;
                     }
@@ -135,7 +180,7 @@ function loadAutoComplete() {
             this.value = message.join(' ');
 
             //if the selected item is a emote trigger a fake enter event
-            if((ui.item.value[0] === '/') || (ui.item.value[0] === '\'' && ui.item.value[ui.item.value.length-1] !== ' ')){
+            if((ui.item.value[0] === '/') || ((ui.item.value[0] === '\''|| ui.item.value[0] === ':') && ui.item.value[ui.item.value.length-1] !== ' ')){
                 $(this).trigger($.Event( 'keypress', { which: 13,keyCode : 13 })); 
             }
             return false;
@@ -150,9 +195,11 @@ function loadAutoComplete() {
 }
 
 var isAutocompleteMenuActive = false,
-//change to false to exlude from autocomplete
+    autocomplete = true,
     autocompleteEmotes = true,
     autocompleteCommands = true,
-    autocompleteTags = true;
+    autocompleteTags = true,
+    autocompleteAddonSettings = true,
+    autocompleteData = [];
 
 afterConnectFunctions.push(loadAutoComplete);

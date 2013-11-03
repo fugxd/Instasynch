@@ -23,6 +23,21 @@
 
 
 function loadTogglePlayer(){
+    //load settings
+    var setting = settings.get('playerActive');
+    if(setting){
+        playerActive = setting ==='false'?false:true;
+    }else{
+        settings.set('playerActive',true);
+    }
+    
+    //toggle the player once if the stored setting was false
+    if(!playerActive){
+        playerActive = true;
+        //adding a little delay because it won't reload when destroying it immediately
+        setTimeout(togglePlayer,1000);
+    }
+
     var oldPlayVideo = playVideo;
     playVideo = function playVideo(vidinfo, time, playing){
         if(playerActive){
@@ -55,4 +70,4 @@ function togglePlayer(){
 
 var playerActive = true;
 
-beforeConnectFunctions.push(loadTogglePlayer);
+afterConnectFunctions.push(loadTogglePlayer);

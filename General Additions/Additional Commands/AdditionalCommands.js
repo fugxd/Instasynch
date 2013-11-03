@@ -23,9 +23,18 @@
 function loadAdditionalCommands(){
     $("#chat input").bind("keypress", function(event) {
         if (event.keyCode === $.ui.keyCode.ENTER) {
-            switch($(this).val()){
-                case "'toggleplayer":togglePlayer();break;
+            switch($(this).val().toLowerCase()){
+                case "'toggleplayer":togglePlayer(); settings.set('playerActive',playerActive);break;
                 case "'printwallcounter":printWallCounter();break;
+                case "'mirrorplayer":toggleMirrorPlayer();break;
+                case "'printaddonsettings":printAddonSettings();break;
+                case ":toggleautocompletetags": autocompleteTags = !autocompleteTags; settings.set('autocompleteTags',autocompleteTags);break;
+                case ":toggleautocompleteemotes": autocompleteEmotes = !autocompleteEmotes; settings.set('autocompleteEmotes',autocompleteEmotes);break;
+                case ":toggleautocompletecommands": autocompleteCommands = !autocompleteCommands; settings.set('autocompleteCommands',autocompleteCommands);break;
+                case ":toggleautocompleteaddonsettings": autocompleteAddonSettings = !autocompleteAddonSettings; settings.set('autocompleteAddonSettings',autocompleteAddonSettings);break;
+                case ":toggleautomaticplayermirror": automaticMirror = !automaticMirror; settings.set('automaticMirror',automaticMirror);break;
+                case ":toggletags": filterTags = !filterTags; settings.set('filterTags',filterTags);break;
+                case ":togglensfwemotes": toggleNSFWEmotes(); settings.set('NSFWEmotes',NSFWEmotes);break;
                 default: break;
             }
             

@@ -68,12 +68,12 @@ function loadWallCounter(){
 var wallCounter = {};
 
 function printWallCounter(){
-    var string = "",
+    var output = "",
         key;
     for(key in wallCounter){
-        string += key + ": "+secondsToTime(wallCounter[key])+", ";
+        output += "["+key + ": "+secondsToTime(wallCounter[key])+"] ";
     }
-    addMessage('', string, '', 'hashtext');
+    addMessage('', output, '', 'hashtext');
 }
 
 afterConnectFunctions.push(loadWallCounter);

@@ -39,8 +39,10 @@ function loadInputHistory(){
                     //delete the last
                     inputHistory.splice(inputHistory.length-1,1);
                 }
-                inputHistoryIndex = 0;
+                setInputHistoryIndex(0);
             }
+        }else{
+            autocomplete = true;
         }
     });    
 
@@ -50,24 +52,33 @@ function loadInputHistory(){
         }
         if(event.keyCode === 38){//upkey
             if(inputHistoryIndex < inputHistory.length){
-                inputHistoryIndex++;
+                setInputHistoryIndex(inputHistoryIndex+1);
             }else{
-                inputHistoryIndex = 0;
+                setInputHistoryIndex(0);
             }   
             //insert the string into the text field
             $(this).val(inputHistory[inputHistoryIndex]);         
 
         }else if(event.keyCode === 40){//downkey
             if(inputHistoryIndex > 0){
-                inputHistoryIndex--;
+                setInputHistoryIndex(inputHistoryIndex-1);
             }else{
-                inputHistoryIndex = inputHistory.length-1;
+                setInputHistoryIndex(inputHistory.length-1);
             }            
             //insert the string into the text field
             $(this).val(inputHistory[inputHistoryIndex]);
         }
     });
 }
+function setInputHistoryIndex(index){
+    inputHistoryIndex = index;
+    if(index === 0){
+        autocomplete = true;
+    }else{
+        autocomplete = false;
+    }
+}
+
 var inputHistory = [""],
     inputHistoryIndex = 0;
 

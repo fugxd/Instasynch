@@ -23,9 +23,25 @@
 
 
 function loadWordfilter() {
+    //load settings
+    var setting = settings.get('filterTags');
+    if(setting){
+        filterTags = setting ==='false'?false:true;
+    }else{
+        settings.set('filterTags',true);
+    }
 
-    //wait until we got a connection to the server
-    //needs to be replaced with something better
+    setting = settings.get('NSFWEmotes');
+    if(setting){
+        NSFWEmotes = setting ==='false'?false:true;
+    }else{
+        settings.set('NSFWEmotes',false);
+    }
+    //init
+    if(NSFWEmotes){
+        $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        $codes['meatspin'] = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+    }
     var oldLinkify = linkify,
         oldAddMessage = addMessage,
         oldCreatePoll = createPoll;
@@ -107,7 +123,7 @@ function parseMessage(message,isChatMessage){
     }
     //filter tags
     for (word in tags) {
-        message = message.replace(new RegExp(word, 'gi'), tags[word]);
+        message = message.replace(new RegExp(word, 'gi'),function(){return (filterTags)?tags[word]:'';});
     }
     //remove unnused tags [asd] if there is a emote
     if(emoteFound && isChatMessage){
@@ -165,8 +181,25 @@ function parseMessage(message,isChatMessage){
     }
     return message;
 }
+function toggleNSFWEmotes(){
+    if(!NSFWEmotes){
+        $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        $codes['meatspin'] = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        autocompleteData.push('/boobies');
+        autocompleteData.push('/meatspin');
+        autocompleteData.sort();
+    }else{
+        delete $codes['boobies'];
+        delete $codes['meatspin'];
+        autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1); 
+        autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1); 
+    }
+    NSFWEmotes = !NSFWEmotes;
+}
 
-var filteredwords = {
+var filterTags = true,
+    NSFWEmotes = false,
+    filteredwords = {
     "skip": "upvote",
     "SKIP": "UPVOTE",
     "club": "party",
