@@ -126,7 +126,8 @@ function loadAutoComplete() {
     autocompleteData.sort();
     //add the jquery autcomplete widget to InstaSynch's input field
     $("#chat input")    
-    .bind("keypress", function(event) {
+    .bind("keydown", function(event) {
+        console.log(event);
         // don't navigate away from the field on tab when selecting an item
         if (event.keyCode === $.ui.keyCode.TAB && isAutocompleteMenuActive) {
             event.keyCode = $.ui.keyCode.ENTER;  // fake select the item
