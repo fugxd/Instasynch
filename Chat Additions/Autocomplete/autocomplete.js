@@ -39,27 +39,28 @@ function loadAutoComplete() {
             "'toggleplaylistlock",
             "'togglefilter",
             "'toggleautosynch",
-            "'toggleplayer"
+            "'toggleplayer",
+            "'printwallcounter"
         ],
         modCommands = [
             "'ready",
-            "'kick",
-            "'ban",
-            "'unban",
+            "'kick ",
+            "'ban ",
+            "'unban ",
             "'clean",
-            "'remove",
-            "'purge",
-            "'move",
-            "'play",
+            "'remove ",
+            "'purge ",
+            "'move ",
+            "'play ",
             "'pause",
             "'resume",
-            "'seekto",
-            "'seekfrom",
-            "'setskip",
+            "'seekto ",
+            "'seekfrom ",
+            "'setskip ",
             "'banlist",
             "'modlist",
             "'save",
-            "'leaverban",
+            "'leaverban ",
             //"'clearbans",
             //"'motd ",
             //"'mod ",
@@ -134,8 +135,8 @@ function loadAutoComplete() {
             this.value = message.join(' ');
 
             //if the selected item is a emote trigger a fake enter event
-            if(ui.item.value[0] === '/'){
-                $(this).trigger($.Event( "keypress", { which: 13,keyCode : 13 })); 
+            if((ui.item.value[0] === '/') || (ui.item.value[0] === '\'' && ui.item.value[ui.item.value.length-1] !== ' ')){
+                $(this).trigger($.Event( 'keypress', { which: 13,keyCode : 13 })); 
             }
             return false;
         },

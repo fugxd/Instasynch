@@ -48,6 +48,8 @@ $.when(
     //Description replacement
     $.getScript('https://dl.dropboxusercontent.com/s/wz7cazphmwztkf4/Description.js?dl=1&token_hash=AAHYIBm9c88xSQ3p2QkDNHgG-24AtgRW1Qu-zJj281X1vw'),
 
+    //Additional Commands
+    $.getScript('https://dl.dropboxusercontent.com/s/om5pyp41xns45hb/AdditionalCommands.js?dl=1&token_hash=AAG_O_1GEi4nzMP8k51lr4FzSwibZXm9PS3xQ6tiWE7fvg'),
 
     $.Deferred(function( deferred ){
         $( deferred.resolve );

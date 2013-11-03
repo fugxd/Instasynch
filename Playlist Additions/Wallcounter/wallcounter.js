@@ -25,18 +25,23 @@
 function loadWallCounter(){
 
     var oldAddVideo = addVideo,
-        oldRemoveVideo = removeVideo;
+        oldRemoveVideo = removeVideo,
+        i,
+        video,
+        value;
 
+
+    for(i = 0; i < playlist.length;i++){
+        video = playlist[i];
+        value = wallCounter[video.addedby];
+        value =((value)?value:0) + video.duration;
+        wallCounter[video.addedby] = value;
+    }
     //overwrite InstaSynch's addVideo
     addVideo = function addVideo(vidinfo) {
 
-        var value = wallCounter[vidinfo.addedby.toLowerCase()];
-
-        if(value){
-            value += vidinfo.duration;
-        }else{
-            value = vidinfo.duration;
-        }
+        value = wallCounter[vidinfo.addedby];
+        value =((value)?value:0) + vidinfo.duration;
         wallCounter[vidinfo.addedby] = value;
 
         oldAddVideo(vidinfo);
@@ -44,9 +49,9 @@ function loadWallCounter(){
 
     //overwrite InstaSynch's removeVideo
     removeVideo = function removeVideo(vidinfo){
-        var indexOfVid = getVideoIndex(vidinfo),
-            video = playlist[indexOfVid],
-            value = wallCounter[video.addedby.toLowerCase()];
+        var indexOfVid = getVideoIndex(vidinfo);
+        video = playlist[indexOfVid];
+        value = wallCounter[video.addedby];
         value -= video.duration;
 
         if(value > 0){
@@ -66,9 +71,9 @@ function printWallCounter(){
     var string = "",
         key;
     for(key in wallCounter){
-        string += key + ": "+secondsToTime(wallCounter[key])+"\n";
+        string += key + ": "+secondsToTime(wallCounter[key])+", ";
     }
-    console.log(string);
+    addMessage('', string, '', 'hashtext');
 }
 
-beforeConnectFunctions.push(loadWallCounter);
+afterConnectFunctions.push(loadWallCounter);

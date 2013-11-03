@@ -10,7 +10,7 @@ How to install
 <img src="/install.gif">
 
 
-Messagefilter (for chat, polls and the footer)
+Messagefilter (for chat and polls)
 
 <img src="/Chat Additions/Messagefilter/messagefilterexample.gif">
 
@@ -37,6 +37,9 @@ Input History (up and down keys)
 
 <img src="Chat Additions/Input History/inputhistoryexample.gif" >
 
+Toggle Player
+
+<img src="Player Additions/Toggle Player/toggleplayerexample.gif" >
 
 Mousewheel Volumecontrol (and global volume over youtube and vimeo)
 

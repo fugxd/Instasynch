@@ -52,7 +52,7 @@ function loadAutoscrollFix(){
 
         //scrollHeight - scrollTop will be 290 when the scrollbar is at the bottom
         //height of the chat window is 280, not sure where the 10 is from
-        if ((scrollHeight - scrollTop) === 290){
+        if ((scrollHeight - scrollTop) < height*1.05){
             autoscroll = true;
         }else{
             autoscroll = false;

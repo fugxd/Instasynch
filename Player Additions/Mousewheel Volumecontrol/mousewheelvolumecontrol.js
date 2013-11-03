@@ -42,7 +42,7 @@ function loadMouseWheelVolumecontrol(){
     }
     window.onmousewheel=document.onmousewheel=preventScroll;
     if(window.addEventListener){
-        $(window).addEventListener('DOMMouseScroll',preventScroll,false);
+        window.addEventListener('DOMMouseScroll',preventScroll,false);
     }
     //add hover event to the player
     $('#media').hover(
@@ -56,7 +56,7 @@ function loadMouseWheelVolumecontrol(){
 
     var oldLoadYoutubePlayer = loadYoutubePlayer,
         oldLoadVimeoVideo = loadVimeoVideo;
-
+        
      //overwrite InstaSynch's loadYoutubePlayer
     loadYoutubePlayer = function loadYoutubePlayer(id, time, playing) {
         oldLoadYoutubePlayer(id, time, playing);
