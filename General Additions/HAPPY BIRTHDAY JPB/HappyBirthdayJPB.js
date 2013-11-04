@@ -27,7 +27,7 @@ function loadHappyBirthdayJPB() {
 
 	
 	addUser = function addUser(user, css, sort){
-		if(user === 'JustPassinBby'){
+		if(user === 'JustPassingBy'){
             if (ie4up||ns6up){
                 animation();
                 if (time>0)
@@ -37,6 +37,12 @@ function loadHappyBirthdayJPB() {
 		}
 		oldAddUser(user,css,sort);
 	};
+    for(i = 0; i< users.length;i++){
+        if(users[i].username === 'JustPassingBy' ) {
+            animation();
+            break;
+        }
+    }       
 }
 
-loadHappyBirthdayJPB();
+afterConnectFunctions.push(loadHappyBirthdayJPB);
