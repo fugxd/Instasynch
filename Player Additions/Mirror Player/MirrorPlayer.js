@@ -54,11 +54,11 @@ function loadMirrorPlayer(){
     };
 
     //checking the current video after loading the first time
-    if(containsMirrored(playlist[$('.active').index()].title)){
-        toggleMirrorPlayer();
-    }
-        
-    
+    setTimeout(function(){
+        if(containsMirrored(playlist[$('.active').index()].title)){
+            toggleMirrorPlayer();
+        }
+    },1000);
     
 }
 function containsMirrored(title){
