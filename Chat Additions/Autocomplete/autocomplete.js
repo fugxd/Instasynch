@@ -70,7 +70,7 @@ function loadAutoComplete() {
             "'togglePlayer",
             "'printWallCounter",
             "'mirrorPlayer",
-            "'printAddonSettings"
+            "'printAddonSettings",
             "'clearChat"
         ],
         modCommands = [
