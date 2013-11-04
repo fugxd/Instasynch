@@ -56,10 +56,6 @@ $.when(
     //Settings Loader
     $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/Settings%20Loader/SettingsLoader.js'),
 
-    //pekaface
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/HAPPY%20BIRTHDAY%20JPB/HappyBirthdayJPB.js'),
-    $.getScript('https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/HAPPY%20BIRTHDAY%20JPB/picture-fall.js'),
-
     $.Deferred(function( deferred ){
         $( deferred.resolve );
     })
