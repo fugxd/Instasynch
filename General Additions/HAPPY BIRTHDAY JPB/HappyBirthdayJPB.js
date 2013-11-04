@@ -27,7 +27,7 @@ function loadHappyBirthdayJPB() {
 
 	
 	addUser = function addUser(user, css, sort){
-		if(user.toLowerCase() === 'justpassingby'){
+		if(user === 'JustPassinBby'){
             if (ie4up||ns6up){
                 animation();
                 if (time>0)
