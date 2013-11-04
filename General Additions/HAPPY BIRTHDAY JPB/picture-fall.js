@@ -54,16 +54,16 @@ var timer;
 function ranrot()
 {
 
-	var a = getScrollXY()
-	if(timer)
-	{
-		clearTimeout(timer);
-	}
-	toppos = a[1];
-	dheight = nht+a[1];
-	//alert(dheight);
-	
-	timer = setTimeout('ranrot()',2000);
+var a = getScrollXY()
+if(timer)
+{
+	clearTimeout(timer);
+}
+toppos = a[1];
+dheight = nht+a[1];
+//alert(dheight);
+
+timer = setTimeout('ranrot()',2000);
 }
  	
 ranrot();
@@ -117,8 +117,8 @@ function animation() {  // animation function
         		sy[i] = 0.7 + Math.random();
       		}
       		cv[i] += sx[i];
-      		$('dot'+i).css('top',py[i]);
-      		$('dot'+i).css('left',(px[i] + am[i]*Math.sin(cv[i])));
+      		document.getElementById("dot"+i).style.top=py[i]+"px";
+      		document.getElementById("dot"+i).style.left=px[i] + am[i]*Math.sin(cv[i])+"px";  
     	}
     	atime=setTimeout("animation()", speed);
 
