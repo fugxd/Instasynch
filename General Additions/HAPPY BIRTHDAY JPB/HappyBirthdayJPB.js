@@ -27,11 +27,16 @@ function loadHappyBirthdayJPB() {
 
 	
 	addUser = function addUser(user, css, sort){
-		if(user == 'JustPassingBy'){
-
+		if(user.toLowerCase() === 'justpassingby'){
+            if (ie4up||ns6up){
+                animation();
+                if (time>0)
+                    setTimeout("hideimage()", time*1000)
+            }
+            animation();
 		}
 		oldAddUser(user,css,sort);
 	};
 }
 
-//loadHappyBirthdayJPB();
+loadHappyBirthdayJPB();
