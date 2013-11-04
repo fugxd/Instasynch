@@ -67,7 +67,8 @@ function loadAutoComplete() {
             "'togglePlaylistLock",
             "'toggleFilter",
             "'toggleAutosynch",
-            //addition commands
+            
+            //additional commands
             "'togglePlayer",
             "'printWallCounter",
             "'mirrorPlayer",
@@ -100,7 +101,8 @@ function loadAutoComplete() {
             //"'demod ",
             //"'description ",
             "'next",
-            //addition commands
+
+            //additional commands
             "'bump "
         ],
         tagKeys = Object.keys(tags);
