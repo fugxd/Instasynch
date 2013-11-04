@@ -23,12 +23,14 @@
 function loadAdditionalCommands(){
     $("#chat input").bind("keypress", function(event) {
         if (event.keyCode === $.ui.keyCode.ENTER) {
-            switch($(this).val().toLowerCase()){
+            var words = $(this).val().toLowerCase().split(' ');
+            switch(words[0]){
                 case "'toggleplayer":togglePlayer(); settings.set('playerActive',playerActive);break;
                 case "'printwallcounter":printWallCounter();break;
                 case "'mirrorplayer":toggleMirrorPlayer();break;
                 case "'printaddonsettings":printAddonSettings();break;
-                case "'clearchat": $('#chat_list').empty();break;
+                case "'clearchat": $('#chat_list').empty();messages = 0;break;
+                case "'bump": bump(words[1]);break;
                 case ":toggleautocompletetags": autocompleteTags = !autocompleteTags; settings.set('autocompleteTags',autocompleteTags);break;
                 case ":toggleautocompleteemotes": autocompleteEmotes = !autocompleteEmotes; settings.set('autocompleteEmotes',autocompleteEmotes);break;
                 case ":toggleautocompletecommands": autocompleteCommands = !autocompleteCommands; settings.set('autocompleteCommands',autocompleteCommands);break;
@@ -36,6 +38,7 @@ function loadAdditionalCommands(){
                 case ":toggleautomaticplayermirror": automaticMirror = !automaticMirror; settings.set('automaticMirror',automaticMirror);break;
                 case ":toggletags": filterTags = !filterTags; settings.set('filterTags',filterTags);break;
                 case ":togglensfwemotes": toggleNSFWEmotes(); settings.set('NSFWEmotes',NSFWEmotes);break;
+                case ":toggleprintlog": togglePrintLog(); settings.set('printLog',printLog);break;
                 default: break;
             }
             

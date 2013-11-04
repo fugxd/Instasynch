@@ -67,6 +67,7 @@ function loadAutoComplete() {
             "'togglePlaylistLock",
             "'toggleFilter",
             "'toggleAutosynch",
+            //addition commands
             "'togglePlayer",
             "'printWallCounter",
             "'mirrorPlayer",
@@ -98,7 +99,9 @@ function loadAutoComplete() {
             //"'mod ",
             //"'demod ",
             //"'description ",
-            "'next"
+            "'next",
+            //addition commands
+            "'bump "
         ],
         tagKeys = Object.keys(tags);
 
@@ -109,7 +112,8 @@ function loadAutoComplete() {
         ":toggleAutocompleteAddOnSettings",
         ":toggleAutomaticPlayerMirror",
         ":toggleTags",
-        ":toggleNSFWEmotes"
+        ":toggleNSFWEmotes",
+        ":togglePrintLog"
     ];
     if (window.isMod) {
         commands = commands.concat(modCommands);
