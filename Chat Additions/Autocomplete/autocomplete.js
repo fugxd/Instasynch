@@ -71,6 +71,7 @@ function loadAutoComplete() {
             "'printWallCounter",
             "'mirrorPlayer",
             "'printAddonSettings"
+            "'clearChat"
         ],
         modCommands = [
             "'ready",
