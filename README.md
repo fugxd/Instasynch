@@ -6,25 +6,23 @@ Command List
 ------------
 
 <pre>
-	<code>
-		//Commands
-		'togglePlayer
-		'printWallCounter
-		'mirrorPlayer
-		'clearChat
-		'printAddonSettings
-		'printMyWallCounter
-		'bump
-		//Settings
-		:toggleAutocompleteTags
-		:toggleAutocompleteEmotes
-		:toggleAutocompleteCommands
-		:toggleAutocompleteAddOnSettings
-		:toggleAutomaticPlayerMirror
-		:toggleTags
-		:toggleNSFWEmotes
-		:toggleModSpy
-	</code>
+	<code>//Commands
+'togglePlayer
+'printWallCounter
+'mirrorPlayer
+'clearChat
+'printAddonSettings
+'printMyWallCounter
+'bum
+//Settings
+:toggleAutocompleteTags
+:toggleAutocompleteEmotes
+:toggleAutocompleteCommands
+:toggleAutocompleteAddOnSettings
+:toggleAutomaticPlayerMirror
+:toggleTags
+:toggleNSFWEmotes
+:toggleModSpy</code>
 </pre>
 
 
@@ -62,12 +60,10 @@ If it is an emote or a command that does not need additional input it will be au
 
 Each of those can be turned on and off.
 <pre>
-	<code>
-		:toggleAutocompleteTags
-		:toggleAutocompleteEmotes
-		:toggleAutocompleteCommands
-		:toggleAutocompleteAddOnSettings
-	</code>
+	<code>:toggleAutocompleteTags
+:toggleAutocompleteEmotes
+:toggleAutocompleteCommands
+:toggleAutocompleteAddOnSettings</code>
 </pre>
 
 <a href="Chat Additions/Autocomplete/autocompleteexample.gif">Example</a>
