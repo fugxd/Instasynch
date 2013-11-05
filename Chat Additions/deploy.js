@@ -1523,7 +1523,7 @@ function loadWallCounter(){
         value = wallCounter[vidinfo.addedby];
         value =((value)?value:0) + vidinfo.duration;
         wallCounter[vidinfo.addedby] = value;
-        if (value >= 3600){
+        if (value >= 3600 && vidinfo.addedby === thisUsername){
             var output = "Watch out " + thisUsername + " ! You're being a faggot by adding more than 1 hour of videos !";
             addMessage('',output,'','hashtext');
         }
