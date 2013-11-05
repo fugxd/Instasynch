@@ -6,7 +6,7 @@ Command List
 ------------
 
 <pre>
-	<code>//Commands
+<code>//Commands
 'togglePlayer
 'printWallCounter
 'mirrorPlayer
@@ -60,7 +60,7 @@ If it is an emote or a command that does not need additional input it will be au
 
 Each of those can be turned on and off.
 <pre>
-	<code>:toggleAutocompleteTags
+<code>:toggleAutocompleteTags
 :toggleAutocompleteEmotes
 :toggleAutocompleteCommands
 :toggleAutocompleteAddOnSettings</code>
