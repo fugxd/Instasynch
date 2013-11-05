@@ -1568,7 +1568,7 @@ function printWallCounter(){
 function printMyWallCounter()
 {
     var output = "";
-    output = "["+ thisUsername " : "+ secondsToTime(wallCounter[thisUsername])+"]";
+    output = "["+ thisUsername +" : "+ secondsToTime(wallCounter[thisUsername])+"]";
     addMessage('', output, '', 'hashtext');
 }
 
