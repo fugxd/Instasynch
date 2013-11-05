@@ -27,6 +27,7 @@ function loadAdditionalCommands(){
             switch(words[0]){
                 case "'toggleplayer":togglePlayer(); settings.set('playerActive',playerActive);break;
                 case "'printwallcounter":printWallCounter();break;
+                case "'printmywallcounter":printMyWallCounter();break;
                 case "'mirrorplayer":toggleMirrorPlayer();break;
                 case "'printaddonsettings":printAddonSettings();break;
                 case "'clearchat": $('#chat_list').empty();messages = 0;break;

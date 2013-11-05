@@ -90,7 +90,8 @@ function loadAutoComplete() {
             "'printWallCounter",
             "'mirrorPlayer",
             "'clearChat",
-            "'printAddonSettings"
+            "'printAddonSettings",
+            "'printMyWallCounter"
         ],
         modCommands = [
             "'ready",
@@ -970,6 +971,7 @@ function loadAdditionalCommands(){
             switch(words[0]){
                 case "'toggleplayer":togglePlayer(); settings.set('playerActive',playerActive);break;
                 case "'printwallcounter":printWallCounter();break;
+                case "'printmywallcounter":printMyWallCounter();break;
                 case "'mirrorplayer":toggleMirrorPlayer();break;
                 case "'printaddonsettings":printAddonSettings();break;
                 case "'clearchat": $('#chat_list').empty();messages = 0;break;
@@ -1480,7 +1482,7 @@ afterConnectFunctions.push(loadTogglePlayer);
     Copyright (C) 2013  InstaSynch
 
     <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    Copyright (C) 2013  Faqqq, Rollermiam
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1503,6 +1505,7 @@ function loadWallCounter(){
 
     var oldAddVideo = addVideo,
         oldRemoveVideo = removeVideo,
+        oldAddMessage = addMessage,
         i,
         video,
         value;
@@ -1520,7 +1523,10 @@ function loadWallCounter(){
         value = wallCounter[vidinfo.addedby];
         value =((value)?value:0) + vidinfo.duration;
         wallCounter[vidinfo.addedby] = value;
-
+        if (value >= 3600){
+            var output = "Watch out " + thisUsername + " ! You're being a faggot by more than 1 hour of videos !";
+            addMessage('',output,'','hashtext');
+        }
         oldAddVideo(vidinfo);
     };
 
@@ -1537,8 +1543,14 @@ function loadWallCounter(){
             delete wallCounter[video.addedby];
         }
 
-
         oldRemoveVideo(vidinfo);
+    };    
+
+    addMessage = function addMessage(username, message, userstyle, textstyle) {
+        if(username === '' && message === 'Video added succesfully.'){
+            message +='WallCounter: ['+wallCounter[thisUsername]+']';
+        }
+        oldAddMessage(username, message, userstyle, textstyle);
     };
 
 }
@@ -1550,6 +1562,13 @@ function printWallCounter(){
     for(key in wallCounter){
         output += "["+key + ": "+secondsToTime(wallCounter[key])+"] ";
     }
+    addMessage('', output, '', 'hashtext');
+}
+
+function printMyWallCounter()
+{
+    var output = "";
+    output = "["+ thisUsername " : "+ secondsToTime(wallCounter[thisUsername])+"]";
     addMessage('', output, '', 'hashtext');
 }
 
