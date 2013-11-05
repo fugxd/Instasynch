@@ -55,7 +55,7 @@ function loadMirrorPlayer(){
 
     //checking the current video after loading the first time
     setTimeout(function(){
-        if(containsMirrored(playlist[$('.active').index()].title)){
+        if(containsMirrored(playlist[getActiveVideoIndex()].title)){
             toggleMirrorPlayer();
         }
     },1000);

@@ -134,7 +134,7 @@ function loadAutoComplete() {
         ":toggleNSFWEmotes",
         ":toggleModSpy"
     ];
-    if (window.isMod) {
+    if (isMod()) {
         commands = commands.concat(modCommands);
     }
 
@@ -722,12 +722,12 @@ function loadModSpy(){
         // We don't want the cleaning messages in the chat (Ok in the console) .
         if (!message.match(/cleaned the playlist/g) && modSpy)
         {
-           if (message.match(/moved a video/g) && bumpCheck)
-           {
-               message = message.replace("moved","bumped");
-               bumpCheck = false;
-           }
-           addMessage('', message, '','hashtext');   
+            if (message.match(/moved a video/g) && bumpCheck)
+            {
+                message = message.replace("moved","bumped");
+                bumpCheck = false;
+            }
+            addMessage('', message, '','hashtext');   
         }
         oldLog.apply(console,arguments);
     };
@@ -736,7 +736,7 @@ function loadModSpy(){
     moveVideo = function(vidinfo, position) {
         oldMoveVideo(vidinfo,position);
         
-        if ( Math.abs($('.active').index()-position) <= 10){ // "It's a bump ! " - Amiral Ackbar
+        if ( Math.abs(getActiveVideoIndex()-position) <= 10){ // "It's a bump ! " - Amiral Ackbar
             bumpCheck = true;
         }
     }
@@ -859,7 +859,7 @@ function loadOnClickKickBan(){
         
         oldAddMessage(username, message, userstyle, textstyle);
         //only add the onclick events if the user is a mod and its not a system message
-        if(username != '' && window.isMod){
+        if(username != '' && isMod()){
             var currentElement,
                 //the cursor doesnt need to be changed if the key is still held down
                 isCtrlKeyDown = false,
@@ -1102,6 +1102,45 @@ function loadDescription(){
  
  
 beforeConnectFunctions.push(loadDescription);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+
+function loadGeneralStuff(){
+    //get Username
+    thisUsername = $.cookie(username);
+
+}
+var thisUsername;
+
+function getActiveVideoIndex(){
+    return $('.active').index();
+}
+
+function isMod(){
+    return window.isMod;
+}
+beforeConnectFunctions.splice(0,0,loadGeneralStuff);
 
 
 function loadSettingsLoader(){
@@ -1223,7 +1262,7 @@ function loadMirrorPlayer(){
 
     //checking the current video after loading the first time
     setTimeout(function(){
-        if(containsMirrored(playlist[$('.active').index()].title)){
+        if(containsMirrored(playlist[getActiveVideoIndex()].title)){
             toggleMirrorPlayer();
         }
     },1000);

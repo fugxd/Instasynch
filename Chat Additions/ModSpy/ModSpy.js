@@ -52,7 +52,7 @@ function loadModSpy(){
 	moveVideo = function(vidinfo, position) {
 		oldMoveVideo(vidinfo,position);
 		
-		if ( Math.abs($('.active').index()-position) <= 10){ // "It's a bump ! " - Amiral Ackbar
+		if ( Math.abs(getActiveVideoIndex()-position) <= 10){ // "It's a bump ! " - Amiral Ackbar
 			bumpCheck = true;
 		}
 	}
