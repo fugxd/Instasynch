@@ -38,10 +38,12 @@ Create a new userscript and copy the contents of <a href="https://github.com/Bib
 
 Newest Stuff
 ------------
+<pre>
 <a href="#bump-command">Bump Command</a>
 <a href="#mod-spy">Mod Spy</a>
 <a href="#clear-chat-command">Clear Chat Command</a>
 <a href="#mirror-player">Mirror Player</a>
+</pre>
 
 Scripts
 =======
