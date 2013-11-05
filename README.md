@@ -6,21 +6,25 @@ Command List
 ------------
 
 <pre>
-<code>'togglePlayer</code>
-<code>'printWallCounter</code>
-<code>'mirrorPlayer</code>
-<code>'clearChat</code>
-<code>'printAddonSettings</code>
-<code>'printMyWallCounter</code>
-<code>'bump</code>
-<code>:toggleAutocompleteTags</code>
-<code>:toggleAutocompleteEmotes</code>
-<code>:toggleAutocompleteCommands</code>
-<code>:toggleAutocompleteAddOnSettings</code>
-<code>:toggleAutomaticPlayerMirror</code>
-<code>:toggleTags</code>
-<code>:toggleNSFWEmotes</code>
-<code>:toggleModSpy</code>
+	<code>
+		//Commands
+		'togglePlayer
+		'printWallCounter
+		'mirrorPlayer
+		'clearChat
+		'printAddonSettings
+		'printMyWallCounter
+		'bump
+		//Settings
+		:toggleAutocompleteTags
+		:toggleAutocompleteEmotes
+		:toggleAutocompleteCommands
+		:toggleAutocompleteAddOnSettings
+		:toggleAutomaticPlayerMirror
+		:toggleTags
+		:toggleNSFWEmotes
+		:toggleModSpy
+	</code>
 </pre>
 
 
@@ -58,10 +62,12 @@ If it is an emote or a command that does not need additional input it will be au
 
 Each of those can be turned on and off.
 <pre>
-<code>:toggleAutocompleteTags</code>
-<code>:toggleAutocompleteEmotes</code>
-<code>:toggleAutocompleteCommands</code>
-<code>:toggleAutocompleteAddOnSettings</code>
+	<code>
+		:toggleAutocompleteTags
+		:toggleAutocompleteEmotes
+		:toggleAutocompleteCommands
+		:toggleAutocompleteAddOnSettings
+	</code>
 </pre>
 
 <a href="Chat Additions/Autocomplete/autocompleteexample.gif">Example</a>
