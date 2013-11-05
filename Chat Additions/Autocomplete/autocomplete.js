@@ -117,7 +117,7 @@ function loadAutoComplete() {
         ":toggleNSFWEmotes",
         ":toggleModSpy"
     ];
-    if (isMod()) {
+    if (isUserMod()) {
         commands = commands.concat(modCommands);
     }
 

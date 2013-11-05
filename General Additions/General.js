@@ -33,7 +33,7 @@ function getActiveVideoIndex(){
     return $('.active').index();
 }
 
-function isMod(){
+function isUserMod(){
     return window.isMod;
 }
 beforeConnectFunctions.splice(0,0,loadGeneralStuff);

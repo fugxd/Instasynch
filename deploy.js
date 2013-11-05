@@ -134,7 +134,7 @@ function loadAutoComplete() {
         ":toggleNSFWEmotes",
         ":toggleModSpy"
     ];
-    if (isMod()) {
+    if (isUserMod()) {
         commands = commands.concat(modCommands);
     }
 
@@ -859,7 +859,7 @@ function loadOnClickKickBan(){
         
         oldAddMessage(username, message, userstyle, textstyle);
         //only add the onclick events if the user is a mod and its not a system message
-        if(username != '' && isMod()){
+        if(username != '' && isUserMod()){
             var currentElement,
                 //the cursor doesnt need to be changed if the key is still held down
                 isCtrlKeyDown = false,
@@ -1137,7 +1137,7 @@ function getActiveVideoIndex(){
     return $('.active').index();
 }
 
-function isMod(){
+function isUserMod(){
     return window.isMod;
 }
 beforeConnectFunctions.splice(0,0,loadGeneralStuff);
