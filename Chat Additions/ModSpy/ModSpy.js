@@ -35,7 +35,6 @@ function loadModSpy(){
 		oldMoveVideo = moveVideo;
 
 	console.log = function (message) {
-	    oldLog.apply(console,arguments);
 		// We don't want the cleaning messages in the chat (Ok in the console) .
 		if (!message.match(/cleaned the playlist/g) && modSpy)
 		{
@@ -46,6 +45,7 @@ function loadModSpy(){
 		   }
 		   addMessage('', message, '','hashtext');   
 		}
+	    oldLog.apply(console,arguments);
 	};
 
 	// Overwriting moveVideo to differentiate bump and move
