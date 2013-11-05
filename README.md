@@ -100,7 +100,7 @@ Chat Autoscroll Fix
 
 Automatic scrolling in the chat can be turned off by scrolling up in the chat window now rather then hovering over the chat window with the mouse.
 The maximum of messages will be increased while automatic scrolling is off to make sure it won't start scrolling again because messages get deleted.
-To turn automatic scrolling back on simply scroll completely down.
+To turn automatic scrolling back on simply scroll down completely.
 
 
 Mod Spy
@@ -124,7 +124,7 @@ Mirror Player
 -------------
 
 The player can be mirrored by using the command <code>'mirrorPlayer</code>.
-Videos containing words like 'Mirrored' or 'Mirror' in the title will be automatically be mirrored.
+Videos containing words like 'Mirrored' or 'Mirror' in the title will be automatically mirrored.
 This can be turned off using <code>:toggleAutomaticPlayerMirror</code>
 
 
