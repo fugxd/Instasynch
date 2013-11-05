@@ -69,7 +69,7 @@ function loadWallCounter(){
 
     addMessage = function addMessage(username, message, userstyle, textstyle) {
         if(username === '' && message === 'Video added succesfully.'){
-            message +='WallCounter: ['+wallCounter[thisUsername]+']';
+            message +='WallCounter: ['+secondsToTime(wallCounter[thisUsername])+']';
         }
         oldAddMessage(username, message, userstyle, textstyle);
     };
@@ -88,13 +88,13 @@ function printWallCounter(){
 
 function printMyWallCounter()
 {   
-    if(!wallCounter[thisUsername]){
-        var output = "";
+    var output = "";
+    if(wallCounter[thisUsername]){
         output = "["+ thisUsername +" : "+ secondsToTime(wallCounter[thisUsername])+"]";
-        addMessage('', output, '', 'hashtext');
     }else{
         output = "["+ thisUsername +" : 00:00]";
     }
+    addMessage('', output, '', 'hashtext');
 }
 
 afterConnectFunctions.push(loadWallCounter);
