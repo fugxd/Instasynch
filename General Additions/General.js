@@ -24,7 +24,7 @@
 
 function loadGeneralStuff(){
     //get Username
-    thisUsername = $.cookie(username);
+    thisUsername = $.cookie('username');
 
 }
 var thisUsername;
