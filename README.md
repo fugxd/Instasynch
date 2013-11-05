@@ -6,7 +6,6 @@ Command List
 ------------
 
 <code>
-	//Commands
 	'togglePlayer
 	'printWallCounter
 	'mirrorPlayer
@@ -14,8 +13,6 @@ Command List
 	'printAddonSettings
 	'printMyWallCounter
 	'bump
-
-	//Settings
 	:toggleAutocompleteTags
 	:toggleAutocompleteEmotes
 	:toggleAutocompleteCommands
@@ -109,7 +106,7 @@ Mod Spy
 The logs in the console can be redirected to the chat window. Clean commands will be filtered out
 To turn it on and off use <code>:toggleModSpy</code>
 
-<a href="Chat Additions/Input History/inputhistoryexample.gif">Example</a>
+<a href="Chat Additions/ModSpy/modspyexample.gif">Example</a>
 
 
 Toggle Player
