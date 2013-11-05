@@ -22,13 +22,13 @@
 */
 
 function loadModSpy(){
-    //load settings
-    var setting = settings.get('modSpy');
-    if(setting){
-        modSpy = setting ==='false'?false:true;
-    }else{
-        settings.set('modSpy',false);
-    }
+	//load settings
+	var setting = settings.get('modSpy');
+	if(setting){
+		modSpy = setting ==='false'?false:true;
+	}else{
+		settings.set('modSpy',false);
+	}
 	
 	// Overwriting console.log
 	var oldLog = console.log, 
@@ -38,14 +38,14 @@ function loadModSpy(){
 		// We don't want the cleaning messages in the chat (Ok in the console) .
 		if (!message.match(/cleaned the playlist/g) && modSpy)
 		{
-		   if (message.match(/moved a video/g) && bumpCheck)
-		   {
-		       message = message.replace("moved","bumped");
-		       bumpCheck = false;
-		   }
-		   addMessage('', message, '','hashtext');   
+			if (message.match(/moved a video/g) && bumpCheck)
+			{
+				message = message.replace("moved","bumped");
+				bumpCheck = false;
+			}
+			addMessage('', message, '','hashtext');   
 		}
-	    oldLog.apply(console,arguments);
+		oldLog.apply(console,arguments);
 	};
 
 	// Overwriting moveVideo to differentiate bump and move
