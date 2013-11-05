@@ -13,7 +13,8 @@ Command List
 'clearChat
 'printAddonSettings
 'printMyWallCounter
-'bum
+'bump
+
 //Settings
 :toggleAutocompleteTags
 :toggleAutocompleteEmotes
