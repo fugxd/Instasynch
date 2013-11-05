@@ -87,10 +87,14 @@ function printWallCounter(){
 }
 
 function printMyWallCounter()
-{
-    var output = "";
-    output = "["+ thisUsername +" : "+ secondsToTime(wallCounter[thisUsername])+"]";
-    addMessage('', output, '', 'hashtext');
+{   
+    if(!wallCounter[thisUsername]){
+        var output = "";
+        output = "["+ thisUsername +" : "+ secondsToTime(wallCounter[thisUsername])+"]";
+        addMessage('', output, '', 'hashtext');
+    }else{
+        output = "["+ thisUsername +" : 00:00]";
+    }
 }
 
 afterConnectFunctions.push(loadWallCounter);
