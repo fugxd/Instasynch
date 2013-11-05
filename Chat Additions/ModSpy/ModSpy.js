@@ -34,9 +34,8 @@ function loadModSpy(){
 	var oldLog = console.log, 
 		oldMoveVideo = moveVideo;
 
-	console.log = function (message) {	
-		oldLog(message);
-	       
+	console.log = function (message) {
+	    oldLog.apply(console,message);
 		// We don't want the cleaning messages in the chat (Ok in the console) .
 		if (!message.match(/cleaned the playlist/g) && modSpy)
 		{
