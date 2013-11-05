@@ -5,23 +5,23 @@ Instasynch
 Command List
 ------------
 
-
-*<code>'togglePlayer</code>
-*<code>'printWallCounter</code>
-*<code>'mirrorPlayer</code>
-*<code>'clearChat</code>
-*<code>'printAddonSettings</code>
-*<code>'printMyWallCounter</code>
-*<code>'bump</code>
-*<code>:toggleAutocompleteTags</code>
-*<code>:toggleAutocompleteEmotes</code>
-*<code>:toggleAutocompleteCommands</code>
-*<code>:toggleAutocompleteAddOnSettings</code>
-*<code>:toggleAutomaticPlayerMirror</code>
-*<code>:toggleTags</code>
-*<code>:toggleNSFWEmotes</code>
-*<code>:toggleModSpy</code>
-
+<pre>
+<code>'togglePlayer</code>
+<code>'printWallCounter</code>
+<code>'mirrorPlayer</code>
+<code>'clearChat</code>
+<code>'printAddonSettings</code>
+<code>'printMyWallCounter</code>
+<code>'bump</code>
+<code>:toggleAutocompleteTags</code>
+<code>:toggleAutocompleteEmotes</code>
+<code>:toggleAutocompleteCommands</code>
+<code>:toggleAutocompleteAddOnSettings</code>
+<code>:toggleAutomaticPlayerMirror</code>
+<code>:toggleTags</code>
+<code>:toggleNSFWEmotes</code>
+<code>:toggleModSpy</code>
+</pre>
 
 
 Installing
@@ -57,12 +57,12 @@ By hitting tab or enter the selected item will be added to the input field.
 If it is an emote or a command that does not need additional input it will be automatically sent to the chat.
 
 Each of those can be turned on and off.
-
-*<code>:toggleAutocompleteTags</code>
-*<code>:toggleAutocompleteEmotes</code>
-*<code>:toggleAutocompleteCommands</code>
-*<code>:toggleAutocompleteAddOnSettings</code>
-
+<pre>
+<code>:toggleAutocompleteTags</code>
+<code>:toggleAutocompleteEmotes</code>
+<code>:toggleAutocompleteCommands</code>
+<code>:toggleAutocompleteAddOnSettings</code>
+</pre>
 
 <a href="Chat Additions/Autocomplete/autocompleteexample.gif">Example</a>
 
