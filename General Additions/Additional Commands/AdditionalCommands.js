@@ -38,7 +38,7 @@ function loadAdditionalCommands(){
                 case ":toggleautomaticplayermirror": automaticMirror = !automaticMirror; settings.set('automaticMirror',automaticMirror);break;
                 case ":toggletags": filterTags = !filterTags; settings.set('filterTags',filterTags);break;
                 case ":togglensfwemotes": toggleNSFWEmotes(); settings.set('NSFWEmotes',NSFWEmotes);break;
-                case ":toggleprintlog": togglePrintLog(); settings.set('printLog',printLog);break;
+                case ":togglemodspy": modSpy = !modSpy; settings.set('modSpy',modSpy);break;
                 default: break;
             }
             

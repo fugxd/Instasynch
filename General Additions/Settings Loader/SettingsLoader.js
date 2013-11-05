@@ -60,4 +60,5 @@ function printAddonSettings(){
     }
     addMessage('', output, '', 'hashtext');
 }
+//settings need to be loaded first
 beforeConnectFunctions.splice(0,0,loadSettingsLoader);

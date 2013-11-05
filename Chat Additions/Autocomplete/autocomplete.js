@@ -67,7 +67,7 @@ function loadAutoComplete() {
             "'togglePlaylistLock",
             "'toggleFilter",
             "'toggleAutosynch",
-            
+
             //additional commands
             "'togglePlayer",
             "'printWallCounter",
@@ -115,7 +115,7 @@ function loadAutoComplete() {
         ":toggleAutomaticPlayerMirror",
         ":toggleTags",
         ":toggleNSFWEmotes",
-        ":togglePrintLog"
+        ":toggleModSpy"
     ];
     if (window.isMod) {
         commands = commands.concat(modCommands);

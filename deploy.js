@@ -1,3 +1,21 @@
+var afterConnectFunctions = [];
+var beforeConnectFunctions = [];
+
+function afterConnect(){
+    if (messages < 3) {
+        setTimeout(function () {afterConnect();}, 100);
+        return;
+    }
+
+    for(var i = 0; i< afterConnectFunctions.length;i++){
+        afterConnectFunctions[i]();
+    }
+}
+function beforeConnect(){
+    for(var i = 0; i< beforeConnectFunctions.length;i++){
+        beforeConnectFunctions[i]();
+    }
+}
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -20,25 +38,6 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-var afterConnectFunctions = [];
-var beforeConnectFunctions = [];
-
-function afterConnect(){
-	if (messages < 3) {
-	    setTimeout(function () {afterConnect();}, 100);
-	    return;
-	}
-
-	for(var i = 0; i< afterConnectFunctions.length;i++){
-		afterConnectFunctions[i]();
-	}
-}
-function beforeConnect(){
-	for(var i = 0; i< beforeConnectFunctions.length;i++){
-		beforeConnectFunctions[i]();
-	}
-}
-
 
 
 function loadAutoComplete() {
@@ -86,7 +85,8 @@ function loadAutoComplete() {
             "'togglePlaylistLock",
             "'toggleFilter",
             "'toggleAutosynch",
-            //addition commands
+
+            //additional commands
             "'togglePlayer",
             "'printWallCounter",
             "'mirrorPlayer",
@@ -119,7 +119,8 @@ function loadAutoComplete() {
             //"'demod ",
             //"'description ",
             "'next",
-            //addition commands
+
+            //additional commands
             "'bump "
         ],
         tagKeys = Object.keys(tags);
@@ -132,7 +133,7 @@ function loadAutoComplete() {
         ":toggleAutomaticPlayerMirror",
         ":toggleTags",
         ":toggleNSFWEmotes",
-        ":togglePrintLog"
+        ":toggleModSpy"
     ];
     if (window.isMod) {
         commands = commands.concat(modCommands);
@@ -227,7 +228,28 @@ var isAutocompleteMenuActive = false,
     autocompleteData = [];
 
 afterConnectFunctions.push(loadAutoComplete);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
 
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
 
 
 function loadAutoscrollFix(){
@@ -287,7 +309,28 @@ function loadAutoscrollFix(){
 
 
 afterConnectFunctions.push(loadAutoscrollFix);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
 
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
 
 
 function loadInputHistory(){
@@ -351,7 +394,28 @@ var inputHistory = [""],
     inputHistoryIndex = 0;
 
 beforeConnectFunctions.push(loadInputHistory);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
 
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
 
 
 function loadWordfilter() {
@@ -619,7 +683,94 @@ var filterTags = true,
 
 
 beforeConnectFunctions.push(loadWordfilter);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
 
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Rollermiam
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadModSpy(){
+    //load settings
+    var setting = settings.get('modSpy');
+    if(setting){
+        modSpy = setting ==='false'?false:true;
+    }else{
+        settings.set('modSpy',false);
+    }
+    
+    // Overwriting console.log
+    var oldLog = console.log, 
+        oldMoveVideo = moveVideo;
+
+    console.log = function (message) {  
+        oldLog(message);
+           
+        // We don't want the cleaning messages in the chat (Ok in the console) .
+        if (!message.match(/cleaned the playlist/g) && modSpy)
+        {
+           if (message.match(/moved a video/g) && bumpCheck)
+           {
+               message = message.replace("moved","bumped");
+               bumpCheck = false;
+           }
+           addMessage('', message, '','hashtext');   
+        }
+    };
+
+    // Overwriting moveVideo to differentiate bump and move
+    moveVideo = function(vidinfo, position) {
+        oldMoveVideo(vidinfo,position);
+        
+        if ( Math.abs($('.active').index()-position) <= 10){ // "It's a bump ! " - Amiral Ackbar
+            bumpCheck = true;
+        }
+    }
+
+}   
+
+var modSpy = false,
+    bumpCheck = false;
+
+beforeConnectFunctions.push(loadModSpy);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
 
 
 function loadAutocomplete() {
@@ -679,7 +830,28 @@ function loadAutocomplete() {
 }
 
 beforeConnectFunctions.push(loadAutocomplete);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
 
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
 function loadOnClickKickBan(){
 
     var oldAddMessage = addMessage;
@@ -771,7 +943,28 @@ function loadOnClickKickBan(){
 
 
 beforeConnectFunctions.push(loadOnClickKickBan);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
 
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
 function loadAdditionalCommands(){
     $("#chat input").bind("keypress", function(event) {
         if (event.keyCode === $.ui.keyCode.ENTER) {
@@ -790,7 +983,7 @@ function loadAdditionalCommands(){
                 case ":toggleautomaticplayermirror": automaticMirror = !automaticMirror; settings.set('automaticMirror',automaticMirror);break;
                 case ":toggletags": filterTags = !filterTags; settings.set('filterTags',filterTags);break;
                 case ":togglensfwemotes": toggleNSFWEmotes(); settings.set('NSFWEmotes',NSFWEmotes);break;
-                case ":toggleprintlog": togglePrintLog(); settings.set('printLog',printLog);break;
+                case ":togglemodspy": modSpy = !modSpy; settings.set('modSpy',modSpy);break;
                 default: break;
             }
             
@@ -799,7 +992,28 @@ function loadAdditionalCommands(){
 }
 
 beforeConnectFunctions.push(loadAdditionalCommands);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
 
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
 
 function bump(user){
     if(!user){
@@ -952,8 +1166,30 @@ function printAddonSettings(){
     }
     addMessage('', output, '', 'hashtext');
 }
+//settings need to be loaded first
 beforeConnectFunctions.splice(0,0,loadSettingsLoader);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
 
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
 
 
 function loadMirrorPlayer(){
@@ -1024,7 +1260,28 @@ function toggleMirrorPlayer(){
 }
 
 afterConnectFunctions.push(loadMirrorPlayer);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
 
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
 
 function loadMouseWheelVolumecontrol(){
 
@@ -1108,7 +1365,28 @@ function setVol(){
 }
 
 beforeConnectFunctions.push(loadMouseWheelVolumecontrol);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
 
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
 
 
 function loadTogglePlayer(){
@@ -1160,7 +1438,28 @@ function togglePlayer(){
 var playerActive = true;
 
 afterConnectFunctions.push(loadTogglePlayer);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
 
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
 
 
 function loadWallCounter(){
