@@ -36,7 +36,7 @@ function loadModSpy(){
 
 	console.log = function (message) {
 		// We don't want the cleaning messages in the chat (Ok in the console) .
-		if (!message.match(/cleaned the playlist/g) && modSpy)
+		if (message.match && !message.match(/cleaned the playlist/g) && modSpy)
 		{
 			if (message.match(/moved a video/g) && bumpCheck)
 			{
