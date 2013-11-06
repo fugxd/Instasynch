@@ -2,19 +2,19 @@ var afterConnectFunctions = [];
 var beforeConnectFunctions = [];
 
 function afterConnect(){
-    if (messages < 3) {
-        setTimeout(function () {afterConnect();}, 100);
-        return;
-    }
+	if (messages < 3) {
+	    setTimeout(function () {afterConnect();}, 100);
+	    return;
+	}
 
-    for(var i = 0; i< afterConnectFunctions.length;i++){
-        afterConnectFunctions[i]();
-    }
+	for(var i = 0; i< afterConnectFunctions.length;i++){
+		afterConnectFunctions[i]();
+	}
 }
 function beforeConnect(){
-    for(var i = 0; i< beforeConnectFunctions.length;i++){
-        beforeConnectFunctions[i]();
-    }
+	for(var i = 0; i< beforeConnectFunctions.length;i++){
+		beforeConnectFunctions[i]();
+	}
 }/*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -40,6 +40,10 @@ function beforeConnect(){
 
 
 function loadAutoComplete() {
+    if(afterConnectFunctions.lastIndexOf(loadAutoComplete) != afterConnectFunctions.length-1){
+        afterConnectFunctions.push(loadAutoComplete);
+        return;
+    }
     //load settings
     var setting = settings.get('autocompleteEmotes');
     if(setting){
@@ -69,84 +73,31 @@ function loadAutoComplete() {
         settings.set('autocompleteAddonSettings',true);
     }
 
+    //add the commands
+    commands.set('addOnSettings',":toggleAutoCompleteTags",toggleAutocompleteTags);
+    commands.set('addOnSettings',":toggleAutoCompleteEmotes",toggleAutocompleteEmotes);
+    commands.set('addOnSettings',":toggleAutoCompleteCommands",toggleAutocompleteCommands);
+    commands.set('addOnSettings',":toggleAutoCompleteAddonSettings",toggleAutocompleteAddonSettings);
+
     var emotes = (function () {
         var arr = Object.keys($codes);
-
         for (var i = 0; i < arr.length; i++) {
             arr[i] = '/' + arr[i];
         }
         return arr;
-        })(),
-        commands = [
-            "'skip",
-            "'reload",
-            "'resynch",
-            "'togglePlaylistLock",
-            "'toggleFilter",
-            "'toggleAutosynch",
-
-            //additional commands
-            "'togglePlayer",
-            "'printWallCounter",
-            "'mirrorPlayer",
-            "'clearChat",
-            "'printAddonSettings",
-            "'printMyWallCounter"
-        ],
-        modCommands = [
-            "'ready",
-            "'kick ",
-            "'ban ",
-            "'unban ",
-            "'clean",
-            "'remove ",
-            "'purge ",
-            "'move ",
-            "'play ",
-            "'pause",
-            "'resume",
-            "'seekto ",
-            "'seekfrom ",
-            "'setskip ",
-            "'banlist",
-            "'modlist",
-            "'save",
-            "'leaverban ",
-            //commented those so you can't accidently use them
-            //"'clearbans",
-            //"'motd ",
-            //"'mod ",
-            //"'demod ",
-            //"'description ",
-            "'next",
-
-            //additional commands
-            "'bump "
-        ],
+    })(),
         tagKeys = Object.keys(tags);
-
-    addOnSettings = [
-        ":toggleAutocompleteTags",
-        ":toggleAutocompleteEmotes",
-        ":toggleAutocompleteCommands",
-        ":toggleAutocompleteAddOnSettings",
-        ":toggleAutomaticPlayerMirror",
-        ":toggleTags",
-        ":toggleNSFWEmotes",
-        ":toggleModSpy"
-    ];
-    if (isUserMod()) {
-        commands = commands.concat(modCommands);
-    }
 
     for (var i = 0; i < tagKeys.length; i++) {
         tagKeys[i] = tagKeys[i].replace(/\\/g,'');
     }
     autocompleteData = autocompleteData.concat(emotes);
-    autocompleteData = autocompleteData.concat(commands);
-    autocompleteData = autocompleteData.concat(addOnSettings);
+    autocompleteData = autocompleteData.concat(commands.get('regularCommands'));
+    autocompleteData = autocompleteData.concat(commands.get('addOnSettings'));
     autocompleteData = autocompleteData.concat(tagKeys);
-    
+    if (isUserMod()) {
+        autocompleteData = autocompleteData.concat(commands.get('modCommands'));
+    }
 
     autocompleteData.sort();
     //add the jquery autcomplete widget to InstaSynch's input field
@@ -226,6 +177,23 @@ var isAutocompleteMenuActive = false,
     autocompleteTags = true,
     autocompleteAddonSettings = true,
     autocompleteData = [];
+
+function toggleAutocompleteTags(){
+    autocompleteTags = !autocompleteTags; 
+    settings.set('autocompleteTags',autocompleteTags);
+}
+function toggleAutocompleteEmotes(){
+    autocompleteEmotes = !autocompleteEmotes; 
+    settings.set('autocompleteEmotes',autocompleteEmotes);
+}
+function toggleAutocompleteCommands(){
+    autocompleteCommands = !autocompleteCommands; 
+    settings.set('autocompleteCommands',autocompleteCommands);
+}
+function toggleAutocompleteAddonSettings(){
+    autocompleteAddonSettings = !autocompleteAddonSettings; 
+    settings.set('autocompleteAddonSettings',autocompleteAddonSettings);
+}
 
 afterConnectFunctions.push(loadAutoComplete);
 /*
@@ -396,29 +364,26 @@ var inputHistory = [""],
 beforeConnectFunctions.push(loadInputHistory);
 /*
     <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2013  InstaSynch
-
+    Copyright (C) 2013 InstaSynch
+    
     <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
-
+    Copyright (C) 2013 Faqqq
+    
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
-    
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
     http://opensource.org/licenses/GPL-3.0
 */
 
 
-function loadWordfilter() {
+function loadMessageFilter() {
     //load settings
     var setting = settings.get('filterTags');
     if(setting){
@@ -433,6 +398,11 @@ function loadWordfilter() {
     }else{
         settings.set('NSFWEmotes',false);
     }
+
+    //add the commands
+    commands.set('addOnSettings',":toggleTags",toggleTags);
+    commands.set('addOnSettings',":toggleNSFWEmotes",toggleNSFWEmotes);
+
     //init
     if(NSFWEmotes){
         $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
@@ -456,8 +426,12 @@ function loadWordfilter() {
 
     //overwrite InstaSynch's addMessage function
     addMessage = function addMessage(username, message, userstyle, textstyle) {
-        //continue with InstaSynch's  addMessage function
-        oldAddMessage(username, parseMessage(message,true), userstyle, textstyle);
+        var isChatMessage = true;
+        if(username === ''){
+            isChatMessage = false;
+        }
+        oldAddMessage(username, parseMessage(message,isChatMessage), userstyle, textstyle);
+        //continue with InstaSynch's addMessage function
     };
 
     createPoll = function createPoll(poll){
@@ -469,12 +443,26 @@ function loadWordfilter() {
         oldCreatePoll(poll);
     };
 
-    //parse and linkify footer
-    /*
-    var about = $('#roomFooter .roomFooter').children('p')[0];
-    about = linkify(parseMessage(about.textContent,false), false, true);
-    $('#roomFooter .roomFooter').children('p').html(about);
-    */
+}
+function toggleTags(){
+    filterTags = !filterTags; 
+    settings.set('filterTags',filterTags);
+}
+function toggleNSFWEmotes(){
+    if(!NSFWEmotes){
+        $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        $codes['meatspin'] = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        autocompleteData.push('/boobies');
+        autocompleteData.push('/meatspin');
+        autocompleteData.sort();
+    }else{
+        delete $codes['boobies'];
+        delete $codes['meatspin'];
+        autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1);
+        autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1);
+    }
+    NSFWEmotes = !NSFWEmotes;
+    settings.set('NSFWEmotes',NSFWEmotes);
 }
 
 function parseMessage(message,isChatMessage){
@@ -525,6 +513,7 @@ function parseMessage(message,isChatMessage){
     if(emoteFound && isChatMessage){
         message = message.replace(/\[.*?\]/, '');
     }
+    
     return message;
 }
 
@@ -576,21 +565,6 @@ function parseMessage(message,isChatMessage){
         }
     }
     return message;
-}
-function toggleNSFWEmotes(){
-    if(!NSFWEmotes){
-        $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
-        $codes['meatspin'] = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
-        autocompleteData.push('/boobies');
-        autocompleteData.push('/meatspin');
-        autocompleteData.sort();
-    }else{
-        delete $codes['boobies'];
-        delete $codes['meatspin'];
-        autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1); 
-        autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1); 
-    }
-    NSFWEmotes = !NSFWEmotes;
 }
 
 var filterTags = true,
@@ -682,7 +656,7 @@ var filterTags = true,
 };
 
 
-beforeConnectFunctions.push(loadWordfilter);
+beforeConnectFunctions.push(loadMessageFilter);
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -707,45 +681,50 @@ beforeConnectFunctions.push(loadWordfilter);
 */
 
 function loadModSpy(){
-    //load settings
-    var setting = settings.get('modSpy');
-    if(setting){
-        modSpy = setting ==='false'?false:true;
-    }else{
-        settings.set('modSpy',false);
-    }
-    
-    // Overwriting console.log
-    var oldLog = console.log, 
-        oldMoveVideo = moveVideo;
+	//load settings
+	var setting = settings.get('modSpy');
+	if(setting){
+		modSpy = setting ==='false'?false:true;
+	}else{
+		settings.set('modSpy',false);
+	}
+	//add command
+    commands.set('addOnSettings',":toggleModSpy",toggleModSpy);
 
-    console.log = function (message) {
-        // We don't want the cleaning messages in the chat (Ok in the console) .
-        if (message.match && !message.match(/cleaned the playlist/g) && modSpy)
-        {
-            if (message.match(/moved a video/g) && bumpCheck)
-            {
-                message = message.replace("moved","bumped");
-                bumpCheck = false;
-            }
-            addMessage('', message, '','hashtext');   
-        }
-        oldLog.apply(console,arguments);
-    };
+	// Overwriting console.log
+	var oldLog = console.log, 
+		oldMoveVideo = moveVideo;
 
-    // Overwriting moveVideo to differentiate bump and move
-    moveVideo = function(vidinfo, position) {
-        oldMoveVideo(vidinfo,position);
-        
-        if ( Math.abs(getActiveVideoIndex()-position) <= 10){ // "It's a bump ! " - Amiral Ackbar
-            bumpCheck = true;
-        }
-    }
+	console.log = function (message) {
+		// We don't want the cleaning messages in the chat (Ok in the console) .
+		if (message.match && !message.match(/cleaned the playlist/g) && modSpy)
+		{
+			if (message.match(/moved a video/g) && bumpCheck)
+			{
+				message = message.replace("moved","bumped");
+				bumpCheck = false;
+			}
+			addMessage('', message, '','hashtext');   
+		}
+		oldLog.apply(console,arguments);
+	};
 
-}   
+	// Overwriting moveVideo to differentiate bump and move
+	moveVideo = function(vidinfo, position) {
+		oldMoveVideo(vidinfo,position);
+		
+		if ( Math.abs(getActiveVideoIndex()-position) <= 10){ // "It's a bump ! " - Amiral Ackbar
+			bumpCheck = true;
+		}
+	}
 
+}	
+function toggleModSpy(){
+	modSpy = !modSpy; 
+	settings.set('modSpy',modSpy);
+}
 var modSpy = false,
-    bumpCheck = false;
+	bumpCheck = false;
 
 beforeConnectFunctions.push(loadModSpy);
 /*
@@ -964,34 +943,66 @@ beforeConnectFunctions.push(loadOnClickKickBan);
     
     http://opensource.org/licenses/GPL-3.0
 */
-function loadAdditionalCommands(){
-    $("#chat input").bind("keypress", function(event) {
-        if (event.keyCode === $.ui.keyCode.ENTER) {
-            var words = $(this).val().toLowerCase().split(' ');
-            switch(words[0]){
-                case "'toggleplayer":togglePlayer(); settings.set('playerActive',playerActive);break;
-                case "'printwallcounter":printWallCounter();break;
-                case "'printmywallcounter":printMyWallCounter();break;
-                case "'mirrorplayer":toggleMirrorPlayer();break;
-                case "'printaddonsettings":printAddonSettings();break;
-                case "'clearchat": $('#chat_list').empty();messages = 0;break;
-                case "'bump": bump(words[1]);break;
-                case ":toggleautocompletetags": autocompleteTags = !autocompleteTags; settings.set('autocompleteTags',autocompleteTags);break;
-                case ":toggleautocompleteemotes": autocompleteEmotes = !autocompleteEmotes; settings.set('autocompleteEmotes',autocompleteEmotes);break;
-                case ":toggleautocompletecommands": autocompleteCommands = !autocompleteCommands; settings.set('autocompleteCommands',autocompleteCommands);break;
-                case ":toggleautocompleteaddonsettings": autocompleteAddonSettings = !autocompleteAddonSettings; settings.set('autocompleteAddonSettings',autocompleteAddonSettings);break;
-                case ":toggleautomaticplayermirror": automaticMirror = !automaticMirror; settings.set('automaticMirror',automaticMirror);break;
-                case ":toggletags": filterTags = !filterTags; settings.set('filterTags',filterTags);break;
-                case ":togglensfwemotes": toggleNSFWEmotes(); settings.set('NSFWEmotes',NSFWEmotes);break;
-                case ":togglemodspy": modSpy = !modSpy; settings.set('modSpy',modSpy);break;
-                default: break;
-            }
-            
-        }
-    });
+
+function loadBumpCommand(){
+    commands.set('modCommands',"'bump ",bump);
 }
 
-beforeConnectFunctions.push(loadAdditionalCommands);
+function bump(params){
+    var user = params[1];
+        bumpIndex = -1,
+        i;
+    
+    if(!user){
+        return;
+    }
+    for (i = playlist.length - 1; i >= 0; i--) {
+        if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
+            bumpIndex = i;
+            break;
+        }
+    }
+    if (bumpIndex === -1){
+        addMessage('',"The user didn't add any video",'','hashtext');
+    }else{
+        sendcmd('move', {info: playlist[bumpIndex].info, position: getActiveVideoIndex()+1});
+    }
+}
+
+
+beforeConnectFunctions.push(loadBumpCommand);
+/*
+	<InstaSynch - Watch Videos with friends.>
+	Copyright (C) 2013 InstaSynch
+	
+	<Faqqq- Modified InstaSynch client code>
+	Copyright (C) 2013 Rollermiam, Faqqq
+	
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+	http://opensource.org/licenses/GPL-3.0
+*/
+
+
+function loadClearChatCommand(){
+    commands.set('regularCommands',"'clearChat",clearChat);
+}
+
+function clearChat(){
+	$('#chat_list').empty();
+	messages = 0;
+}
+
+
+beforeConnectFunctions.push(loadClearChatCommand);
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1014,25 +1025,80 @@ beforeConnectFunctions.push(loadAdditionalCommands);
     
     http://opensource.org/licenses/GPL-3.0
 */
-
-function bump(user){
-    if(!user){
-        return;
-    }
-    var activeIndex = $('.active').index()+1,
-        bumpIndex = -1,
-        i;
-
-    for (i = playlist.length - 1; i >= 0; i--) {
-        if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
-            bumpIndex = i;
-            break;
+function loadCommandLoader(){
+    commands = new function() {
+        var items = {};
+        items['regularCommands'] = [
+            "'skip",
+            "'reload",
+            "'resynch",
+            "'togglePlaylistLock",
+            "'toggleFilter",
+            "'toggleAutosynch"
+        ]; 
+        items['modCommands'] = [
+            "'ready",
+            "'kick ",
+            "'ban ",
+            "'unban ",
+            "'clean",
+            "'remove ",
+            "'purge ",
+            "'move ",
+            "'play ",
+            "'pause",
+            "'resume",
+            "'seekto ",
+            "'seekfrom ",
+            "'setskip ",
+            "'banlist",
+            "'modlist",
+            "'save",
+            "'leaverban ",
+            //commented those so you can't accidently use them
+            //"'clearbans",
+            //"'motd ",
+            //"'mod ",
+            //"'demod ",
+            //"'description ",
+            "'next"
+        ];
+        items['addOnSettings'] = [];
+        items['commandFunctionMap'] = {};
+        return {
+            "set": function(arrayName, funcName, func) {
+                items[arrayName].push(funcName);
+                items['commandFunctionMap'][funcName.toLowerCase()] = func;
+            },
+            "get": function(arrayName) {
+                return items[arrayName];
+            },
+            "getAll":function(){
+                return items;
+            },
+            "execute":function(funcName, params){
+                funcName = funcName.toLowerCase();
+                if(items['commandFunctionMap'].hasOwnProperty(funcName)){
+                    items['commandFunctionMap'][funcName](params);
+                }
+                funcName = funcName +' ';
+                if(items['commandFunctionMap'].hasOwnProperty(funcName)){
+                    items['commandFunctionMap'][funcName](params);
+                }
+            }
         }
-    }
-    if(bumpIndex !== -1){
-        sendcmd('move', {info: playlist[bumpIndex].info, position: activeIndex});
-    }
+    };    
+
+    $("#chat input").bind("keypress", function(event) {
+        if (event.keyCode === $.ui.keyCode.ENTER) {
+            var params = $(this).val().split(' ');
+            commands.execute(params[0],params);
+        }
+    });
 }
+var commands;
+
+beforeConnectFunctions.splice(0,0,loadCommandLoader);
 /*
     Copyright (C) 2013  Bibbytube
    
@@ -1133,8 +1199,6 @@ function loadGeneralStuff(){
     thisUsername = $.cookie('username');
 
 }
-var thisUsername;
-
 function getActiveVideoIndex(){
     return $('.active').index();
 }
@@ -1142,7 +1206,60 @@ function getActiveVideoIndex(){
 function isUserMod(){
     return window.isMod;
 }
+var thisUsername;
+
 beforeConnectFunctions.splice(0,0,loadGeneralStuff);
+/*
+	<InstaSynch - Watch Videos with friends.>
+	Copyright (C) 2013 InstaSynch
+	
+	<Faqqq- Modified InstaSynch client code>
+	Copyright (C) 2013 Rollermiam, Faqqq
+	
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+	http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadRemoveLast(){
+    commands.set('modCommands',"'removeLast ",removeLast);
+}
+
+
+// Remove the last video from the user 
+function removeLast(params){
+	var user = params[1],
+		removeIndex = -1,
+    	i;
+
+	if(!user){
+        return;
+    }
+	// Look for the user last added video
+    for (i = playlist.length - 1; i >= 0; i--) {
+        if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
+            removeIndex = i;
+            break;
+        }
+    }
+	
+	if (removeIndex === -1){
+		addMessage('',"The user didn't add any video",'','hashtext');
+	}else{
+		sendcmd('remove', {info: playlist[removeIndex].info});
+	}
+		
+}
+		
+beforeConnectFunctions.push(loadRemoveLast);
 
 
 function loadSettingsLoader(){
@@ -1198,6 +1315,10 @@ function loadSettingsLoader(){
 }
 var settings;
 
+function loadSettingsLoaderCommand(){
+    commands.set('regularCommands',"'printAddOnSettings",printAddonSettings);
+}
+
 function printAddonSettings(){
     var output ="";
     for(var key in settings.getAll()){
@@ -1207,6 +1328,33 @@ function printAddonSettings(){
 }
 //settings need to be loaded first
 beforeConnectFunctions.splice(0,0,loadSettingsLoader);
+beforeConnectFunctions.push(loadSettingsLoaderCommand);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Faqqq- Modified InstaSynch client code>
+    Copyright (C) 2013  Faqqq
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function trimWall(params){
+    
+}
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1239,6 +1387,9 @@ function loadMirrorPlayer(){
     }else{
         settings.set('automaticMirror',true);
     }
+    //add the command
+    commands.set('addOnSettings',":toggleAutomaticPlayerMirror",toggleAutomaticMirrorPlayer);
+    commands.set('regularCommands',"'mirrorPlayer",toggleMirrorPlayer);
 
     //appening the class until we got our css files
     //http://stackoverflow.com/a/3434665
@@ -1292,6 +1443,10 @@ function containsMirrored(title){
 
 var automaticMirror = true,
     isPlayerMirrored = false;
+function toggleAutomaticMirrorPlayer(){
+    automaticMirror = !automaticMirror; 
+    settings.set('automaticMirror',automaticMirror);
+}
 
 function toggleMirrorPlayer(){
     $('#media').toggleClass('mirror');
@@ -1436,12 +1591,14 @@ function loadTogglePlayer(){
     }else{
         settings.set('playerActive',true);
     }
-    
+    //add the command
+    commands.set('regularCommands',"'togglePlayer",togglePlayer);
+
     //toggle the player once if the stored setting was false
     if(!playerActive){
         playerActive = true;
         //adding a little delay because it won't reload when destroying it immediately
-        setTimeout(togglePlayer,1000);
+        setTimeout(togglePlayer,1500);
     }
 
     var oldPlayVideo = playVideo;
@@ -1472,6 +1629,7 @@ function togglePlayer(){
         sendcmd('reload', null);
     }
     playerActive = !playerActive;
+    settings.set('playerActive',playerActive);
 }
 
 var playerActive = true;
@@ -1499,6 +1657,10 @@ afterConnectFunctions.push(loadTogglePlayer);
     
     http://opensource.org/licenses/GPL-3.0
 */
+function loadExportPlaylist(){
+    commands.set('regularCommands',"'exportPlaylist",exportPlaylist);
+}
+
 
 function exportPlaylist(){
     var output='',
@@ -1510,10 +1672,11 @@ function exportPlaylist(){
             case 'vimeo':output+='http://vimeo.com/';break;
             default: continue;
         }
-        output += playlist[i].info.id+'\n\r ';
+        output += playlist[i].info.id+'\n ';
     };
     window.prompt ("Copy to clipboard: Ctrl+C, Enter", output);
 }
+beforeConnectFunctions.push(loadExportPlaylist);
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1546,6 +1709,10 @@ function loadWallCounter(){
         i,
         video,
         value;
+
+    //add commands
+    commands.set('regularCommands',"'printWallCounter",printWallCounter);
+    commands.set('regularCommands',"'printMyWallCounter",printMyWallCounter);
 
 
     for(i = 0; i < playlist.length;i++){

@@ -53,6 +53,10 @@ function loadSettingsLoader(){
 }
 var settings;
 
+function loadSettingsLoaderCommand(){
+    commands.set('regularCommands',"'printAddOnSettings",printAddonSettings);
+}
+
 function printAddonSettings(){
     var output ="";
     for(var key in settings.getAll()){
@@ -62,3 +66,4 @@ function printAddonSettings(){
 }
 //settings need to be loaded first
 beforeConnectFunctions.splice(0,0,loadSettingsLoader);
+beforeConnectFunctions.push(loadSettingsLoaderCommand);

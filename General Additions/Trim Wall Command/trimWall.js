@@ -21,21 +21,6 @@
     http://opensource.org/licenses/GPL-3.0
 */
 
-function bump(user){
-    if(!user){
-        return;
-    }
-    var activeIndex = $('.active').index()+1,
-        bumpIndex = -1,
-        i;
-
-    for (i = playlist.length - 1; i >= 0; i--) {
-        if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
-            bumpIndex = i;
-            break;
-        }
-    }
-    if(bumpIndex !== -1){
-        sendcmd('move', {info: playlist[bumpIndex].info, position: activeIndex});
-    }
+function trimWall(params){
+    
 }

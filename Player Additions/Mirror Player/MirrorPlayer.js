@@ -30,6 +30,9 @@ function loadMirrorPlayer(){
     }else{
         settings.set('automaticMirror',true);
     }
+    //add the command
+    commands.set('addOnSettings',":toggleAutomaticPlayerMirror",toggleAutomaticMirrorPlayer);
+    commands.set('regularCommands',"'mirrorPlayer",toggleMirrorPlayer);
 
     //appening the class until we got our css files
     //http://stackoverflow.com/a/3434665
@@ -83,6 +86,10 @@ function containsMirrored(title){
 
 var automaticMirror = true,
     isPlayerMirrored = false;
+function toggleAutomaticMirrorPlayer(){
+    automaticMirror = !automaticMirror; 
+    settings.set('automaticMirror',automaticMirror);
+}
 
 function toggleMirrorPlayer(){
     $('#media').toggleClass('mirror');

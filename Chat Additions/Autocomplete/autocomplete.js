@@ -23,6 +23,10 @@
 
 
 function loadAutoComplete() {
+    if(afterConnectFunctions.lastIndexOf(loadAutoComplete) != afterConnectFunctions.length-1){
+        afterConnectFunctions.push(loadAutoComplete);
+        return;
+    }
     //load settings
     var setting = settings.get('autocompleteEmotes');
     if(setting){
@@ -52,84 +56,31 @@ function loadAutoComplete() {
         settings.set('autocompleteAddonSettings',true);
     }
 
+    //add the commands
+    commands.set('addOnSettings',":toggleAutoCompleteTags",toggleAutocompleteTags);
+    commands.set('addOnSettings',":toggleAutoCompleteEmotes",toggleAutocompleteEmotes);
+    commands.set('addOnSettings',":toggleAutoCompleteCommands",toggleAutocompleteCommands);
+    commands.set('addOnSettings',":toggleAutoCompleteAddonSettings",toggleAutocompleteAddonSettings);
+
     var emotes = (function () {
         var arr = Object.keys($codes);
-
         for (var i = 0; i < arr.length; i++) {
             arr[i] = '/' + arr[i];
         }
         return arr;
-        })(),
-        commands = [
-            "'skip",
-            "'reload",
-            "'resynch",
-            "'togglePlaylistLock",
-            "'toggleFilter",
-            "'toggleAutosynch",
-
-            //additional commands
-            "'togglePlayer",
-            "'printWallCounter",
-            "'mirrorPlayer",
-            "'clearChat",
-            "'printAddonSettings",
-            "'printMyWallCounter"
-        ],
-        modCommands = [
-            "'ready",
-            "'kick ",
-            "'ban ",
-            "'unban ",
-            "'clean",
-            "'remove ",
-            "'purge ",
-            "'move ",
-            "'play ",
-            "'pause",
-            "'resume",
-            "'seekto ",
-            "'seekfrom ",
-            "'setskip ",
-            "'banlist",
-            "'modlist",
-            "'save",
-            "'leaverban ",
-            //commented those so you can't accidently use them
-            //"'clearbans",
-            //"'motd ",
-            //"'mod ",
-            //"'demod ",
-            //"'description ",
-            "'next",
-
-            //additional commands
-            "'bump "
-        ],
+    })(),
         tagKeys = Object.keys(tags);
-
-    addOnSettings = [
-        ":toggleAutocompleteTags",
-        ":toggleAutocompleteEmotes",
-        ":toggleAutocompleteCommands",
-        ":toggleAutocompleteAddOnSettings",
-        ":toggleAutomaticPlayerMirror",
-        ":toggleTags",
-        ":toggleNSFWEmotes",
-        ":toggleModSpy"
-    ];
-    if (isUserMod()) {
-        commands = commands.concat(modCommands);
-    }
 
     for (var i = 0; i < tagKeys.length; i++) {
         tagKeys[i] = tagKeys[i].replace(/\\/g,'');
     }
     autocompleteData = autocompleteData.concat(emotes);
-    autocompleteData = autocompleteData.concat(commands);
-    autocompleteData = autocompleteData.concat(addOnSettings);
+    autocompleteData = autocompleteData.concat(commands.get('regularCommands'));
+    autocompleteData = autocompleteData.concat(commands.get('addOnSettings'));
     autocompleteData = autocompleteData.concat(tagKeys);
-    
+    if (isUserMod()) {
+        autocompleteData = autocompleteData.concat(commands.get('modCommands'));
+    }
 
     autocompleteData.sort();
     //add the jquery autcomplete widget to InstaSynch's input field
@@ -209,5 +160,22 @@ var isAutocompleteMenuActive = false,
     autocompleteTags = true,
     autocompleteAddonSettings = true,
     autocompleteData = [];
+
+function toggleAutocompleteTags(){
+    autocompleteTags = !autocompleteTags; 
+    settings.set('autocompleteTags',autocompleteTags);
+}
+function toggleAutocompleteEmotes(){
+    autocompleteEmotes = !autocompleteEmotes; 
+    settings.set('autocompleteEmotes',autocompleteEmotes);
+}
+function toggleAutocompleteCommands(){
+    autocompleteCommands = !autocompleteCommands; 
+    settings.set('autocompleteCommands',autocompleteCommands);
+}
+function toggleAutocompleteAddonSettings(){
+    autocompleteAddonSettings = !autocompleteAddonSettings; 
+    settings.set('autocompleteAddonSettings',autocompleteAddonSettings);
+}
 
 afterConnectFunctions.push(loadAutoComplete);

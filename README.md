@@ -13,7 +13,9 @@ Command List
 'clearChat
 'printAddonSettings
 'printMyWallCounter
-'bump
+'bump [user]
+'removeLast [user]
+'exportPlaylist
 
 //Settings
 :toggleAutocompleteTags
@@ -39,6 +41,8 @@ Create a new userscript and copy the contents of <a href="https://github.com/Bib
 Newest Stuff
 ------------
 
+<a href="#removelast-command">Remove last Command</a><br>
+<a href="#exportplaylist-command">Export Playlist Command</a><br>
 <a href="#bump-command">Bump Command</a><br>
 <a href="#mod-spy">Mod Spy</a><br>
 <a href="#clear-chat-command">Clear Chat Command</a><br>
@@ -159,10 +163,21 @@ To bump a users last added video simply use the command <code>'bump [user]</code
 The video will be moved right under the active video.
 
 
+Remove Last Command
+------------
+
+To remove the last video of a user use the command <code>'removeLast [user]</code>.
+
 Clear Chat Command
 ------------
 
 To clear all the messages from the chat use the command <code>'clearChat</code>.
+
+Export Playlist Command
+------------
+
+To export all the videos in the playlist use the command <code>'exportPlaylist</code>.
+A popup with all the links will open. Just copy them and close it.
 
 
 Settings

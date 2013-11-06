@@ -20,23 +20,31 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-function loadExportPlaylist(){
-    commands.set('regularCommands',"'exportPlaylist",exportPlaylist);
+
+function loadBumpCommand(){
+    commands.set('modCommands',"'bump ",bump);
 }
 
-
-function exportPlaylist(){
-    var output='',
+function bump(params){
+    var user = params[1];
+        bumpIndex = -1,
         i;
-
-    for (i = 0; i < playlist.length; i++) {
-        switch(playlist[i].info.provider){
-            case 'youtube': output+='http://youtu.be/';break;
-            case 'vimeo':output+='http://vimeo.com/';break;
-            default: continue;
+    
+    if(!user){
+        return;
+    }
+    for (i = playlist.length - 1; i >= 0; i--) {
+        if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
+            bumpIndex = i;
+            break;
         }
-        output += playlist[i].info.id+'\n ';
-    };
-    window.prompt ("Copy to clipboard: Ctrl+C, Enter", output);
+    }
+    if (bumpIndex === -1){
+        addMessage('',"The user didn't add any video",'','hashtext');
+    }else{
+        sendcmd('move', {info: playlist[bumpIndex].info, position: getActiveVideoIndex()+1});
+    }
 }
-beforeConnectFunctions.push(loadExportPlaylist);
+
+
+beforeConnectFunctions.push(loadBumpCommand);

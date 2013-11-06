@@ -31,6 +31,10 @@ function loadWallCounter(){
         video,
         value;
 
+    //add commands
+    commands.set('regularCommands',"'printWallCounter",printWallCounter);
+    commands.set('regularCommands',"'printMyWallCounter",printMyWallCounter);
+
 
     for(i = 0; i < playlist.length;i++){
         video = playlist[i];

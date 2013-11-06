@@ -27,8 +27,6 @@ function loadGeneralStuff(){
     thisUsername = $.cookie('username');
 
 }
-var thisUsername;
-
 function getActiveVideoIndex(){
     return $('.active').index();
 }
@@ -36,4 +34,6 @@ function getActiveVideoIndex(){
 function isUserMod(){
     return window.isMod;
 }
+var thisUsername;
+
 beforeConnectFunctions.splice(0,0,loadGeneralStuff);

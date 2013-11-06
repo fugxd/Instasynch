@@ -29,7 +29,9 @@ function loadModSpy(){
 	}else{
 		settings.set('modSpy',false);
 	}
-	
+	//add command
+    commands.set('addOnSettings',":toggleModSpy",toggleModSpy);
+
 	// Overwriting console.log
 	var oldLog = console.log, 
 		oldMoveVideo = moveVideo;
@@ -58,7 +60,10 @@ function loadModSpy(){
 	}
 
 }	
-
+function toggleModSpy(){
+	modSpy = !modSpy; 
+	settings.set('modSpy',modSpy);
+}
 var modSpy = false,
 	bumpCheck = false;
 
