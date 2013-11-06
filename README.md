@@ -41,8 +41,8 @@ Create a new userscript and copy the contents of <a href="https://github.com/Bib
 Newest Stuff
 ------------
 
-<a href="#removelast-command">Remove last Command</a><br>
-<a href="#exportplaylist-command">Export Playlist Command</a><br>
+<a href="#remove-last-command">Remove last Command</a><br>
+<a href="#export-playlist-command">Export Playlist Command</a><br>
 <a href="#bump-command">Bump Command</a><br>
 <a href="#mod-spy">Mod Spy</a><br>
 <a href="#clear-chat-command">Clear Chat Command</a><br>
