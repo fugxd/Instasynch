@@ -25,7 +25,6 @@
 function loadGeneralStuff(){
     //get Username
     thisUsername = $.cookie('username');
-    isBibby = ($.cookie('_otpe').match(/bibby/i))?;
 }
 function getActiveVideoIndex(){
     return $('.active').index();
@@ -35,7 +34,9 @@ function isUserMod(){
     return window.isMod;
 }
 
-var thisUsername
-    isBibby = false;
+function isBibbyRoom(){
+    return ROOMNAME.match(/bibby/i)?true:false;
+}
+var thisUsername;
 
 beforeConnectFunctions.splice(0,0,loadGeneralStuff);
