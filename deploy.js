@@ -1032,11 +1032,11 @@ function loadCommandLoader(){
             "'skip",
             "'reload",
             "'resynch",
-            "'togglePlaylistLock",
             "'toggleFilter",
             "'toggleAutosynch"
         ]; 
         items['modCommands'] = [
+            "'togglePlaylistLock",
             "'ready",
             "'kick ",
             "'ban ",
@@ -1352,9 +1352,42 @@ beforeConnectFunctions.push(loadSettingsLoaderCommand);
     http://opensource.org/licenses/GPL-3.0
 */
 
-function trimWall(params){
-    
+function loadTrimWallCommand(){
+    commands.set('modCommands',"'trimWall ",trimWall);
 }
+
+function trimWall(params){
+    var user = params[1],
+        maxTimeLimit = parseInt(params[2]),
+        currentTime = wallCounter[user],
+        videos = [];
+
+    if(currentTime < maxTimeLimit){
+        addMessage('',"The wall was smaller than the timelimit",'','hashtext');
+        return;
+    }
+    for (var i = 0; i < playlist.length; i++) {
+        if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
+            videos.push({info:playlist[i].info, duration:playlist[i].duration});
+        }
+    }  
+
+    function compareVideos(a,b){
+        return b.duration - a.duration;
+    };
+
+    videos.sort(compareVideos);
+
+    for (var i = 0; i < videos.length && currentTime > maxTimeLimit; i++) {
+        currentTime-= videos[i].duration;
+        setTimeout(
+            function(){
+                sendcmd('remove', {info: videos[i].info});
+            }, (i+1) * 750);
+    }
+}
+
+//beforeConnectFunctions.push(loadTrimWallCommand);
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch

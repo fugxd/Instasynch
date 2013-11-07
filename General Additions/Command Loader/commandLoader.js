@@ -27,11 +27,11 @@ function loadCommandLoader(){
             "'skip",
             "'reload",
             "'resynch",
-            "'togglePlaylistLock",
             "'toggleFilter",
             "'toggleAutosynch"
         ]; 
         items['modCommands'] = [
+            "'togglePlaylistLock",
             "'ready",
             "'kick ",
             "'ban ",
