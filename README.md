@@ -48,6 +48,7 @@ Newest Stuff
 <a href="#clear-chat-command">Clear Chat Command</a><br>
 <a href="#mirror-player">Mirror Player</a><br>
 
+Just send a <a href="mailto:megafaqqq@gmail.com">mail</a> if you got suggestions or found a bug.
 
 Scripts
 =======
