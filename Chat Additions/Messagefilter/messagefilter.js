@@ -1,28 +1,25 @@
 /*
     <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2013  InstaSynch
-
+    Copyright (C) 2013 InstaSynch
+    
     <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
-
+    Copyright (C) 2013 Faqqq
+    
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
     GNU General Public License for more details.
-    
     You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
+    along with this program. If not, see <http://www.gnu.org/licenses/>.
     http://opensource.org/licenses/GPL-3.0
 */
 
 
-function loadWordfilter() {
+function loadMessageFilter() {
     //load settings
     var setting = settings.get('filterTags');
     if(setting){
@@ -37,6 +34,11 @@ function loadWordfilter() {
     }else{
         settings.set('NSFWEmotes',false);
     }
+
+    //add the commands
+    commands.set('addOnSettings',":toggleTags",toggleTags);
+    commands.set('addOnSettings',":toggleNSFWEmotes",toggleNSFWEmotes);
+
     //init
     if(NSFWEmotes){
         $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
@@ -60,8 +62,12 @@ function loadWordfilter() {
 
     //overwrite InstaSynch's addMessage function
     addMessage = function addMessage(username, message, userstyle, textstyle) {
-        //continue with InstaSynch's  addMessage function
-        oldAddMessage(username, parseMessage(message,true), userstyle, textstyle);
+        var isChatMessage = true;
+        if(username === ''){
+            isChatMessage = false;
+        }
+        oldAddMessage(username, parseMessage(message,isChatMessage), userstyle, textstyle);
+        //continue with InstaSynch's addMessage function
     };
 
     createPoll = function createPoll(poll){
@@ -73,12 +79,26 @@ function loadWordfilter() {
         oldCreatePoll(poll);
     };
 
-    //parse and linkify footer
-    /*
-    var about = $('#roomFooter .roomFooter').children('p')[0];
-    about = linkify(parseMessage(about.textContent,false), false, true);
-    $('#roomFooter .roomFooter').children('p').html(about);
-    */
+}
+function toggleTags(){
+    filterTags = !filterTags; 
+    settings.set('filterTags',filterTags);
+}
+function toggleNSFWEmotes(){
+    if(!NSFWEmotes){
+        $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        $codes['meatspin'] = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        autocompleteData.push('/boobies');
+        autocompleteData.push('/meatspin');
+        autocompleteData.sort();
+    }else{
+        delete $codes['boobies'];
+        delete $codes['meatspin'];
+        autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1);
+        autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1);
+    }
+    NSFWEmotes = !NSFWEmotes;
+    settings.set('NSFWEmotes',NSFWEmotes);
 }
 
 function parseMessage(message,isChatMessage){
@@ -129,6 +149,7 @@ function parseMessage(message,isChatMessage){
     if(emoteFound && isChatMessage){
         message = message.replace(/\[.*?\]/, '');
     }
+    
     return message;
 }
 
@@ -286,4 +307,4 @@ var filterTags = true,
 };
 
 
-beforeConnectFunctions.push(loadWordfilter);
+beforeConnectFunctions.push(loadMessageFilter);

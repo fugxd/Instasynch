@@ -3,7 +3,7 @@
     Copyright (C) 2013  InstaSynch
 
     <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    Copyright (C) 2013  Faqqq, Rollermiam
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,9 +26,14 @@ function loadWallCounter(){
 
     var oldAddVideo = addVideo,
         oldRemoveVideo = removeVideo,
+        oldAddMessage = addMessage,
         i,
         video,
         value;
+
+    //add commands
+    commands.set('regularCommands',"'printWallCounter",printWallCounter);
+    commands.set('regularCommands',"'printMyWallCounter",printMyWallCounter);
 
 
     for(i = 0; i < playlist.length;i++){
@@ -43,7 +48,10 @@ function loadWallCounter(){
         value = wallCounter[vidinfo.addedby];
         value =((value)?value:0) + vidinfo.duration;
         wallCounter[vidinfo.addedby] = value;
-
+        if (isBibbyRoom() && value >= 3600 && vidinfo.addedby === thisUsername){
+            var output = "Watch out " + thisUsername + " ! You're being a faggot by adding more than 1 hour of videos !";
+            addMessage('',output,'','hashtext');
+        }
         oldAddVideo(vidinfo);
     };
 
@@ -60,8 +68,14 @@ function loadWallCounter(){
             delete wallCounter[video.addedby];
         }
 
-
         oldRemoveVideo(vidinfo);
+    };    
+
+    addMessage = function addMessage(username, message, userstyle, textstyle) {
+        if(username === '' && message === 'Video added succesfully.'){
+            message +='WallCounter: ['+secondsToTime(wallCounter[thisUsername])+']';
+        }
+        oldAddMessage(username, message, userstyle, textstyle);
     };
 
 }
@@ -72,6 +86,17 @@ function printWallCounter(){
         key;
     for(key in wallCounter){
         output += "["+key + ": "+secondsToTime(wallCounter[key])+"] ";
+    }
+    addMessage('', output, '', 'hashtext');
+}
+
+function printMyWallCounter()
+{   
+    var output = "";
+    if(wallCounter[thisUsername]){
+        output = "["+ thisUsername +" : "+ secondsToTime(wallCounter[thisUsername])+"]";
+    }else{
+        output = "["+ thisUsername +" : 00:00]";
     }
     addMessage('', output, '', 'hashtext');
 }

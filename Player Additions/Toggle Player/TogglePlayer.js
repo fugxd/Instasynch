@@ -30,12 +30,14 @@ function loadTogglePlayer(){
     }else{
         settings.set('playerActive',true);
     }
-    
+    //add the command
+    commands.set('regularCommands',"'togglePlayer",togglePlayer);
+
     //toggle the player once if the stored setting was false
     if(!playerActive){
         playerActive = true;
         //adding a little delay because it won't reload when destroying it immediately
-        setTimeout(togglePlayer,1000);
+        setTimeout(togglePlayer,1500);
     }
 
     var oldPlayVideo = playVideo;
@@ -66,6 +68,7 @@ function togglePlayer(){
         sendcmd('reload', null);
     }
     playerActive = !playerActive;
+    settings.set('playerActive',playerActive);
 }
 
 var playerActive = true;

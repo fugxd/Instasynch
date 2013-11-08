@@ -24,6 +24,7 @@ function loadSettingsLoader(){
                     array[i+1] = val; 
                 }
                 items[key] = val;
+                addMessage('', "["+key+": "+val+"] ", '', 'hashtext');
                 $.cookie(cookieName, array.join(','),expire);
             },
             "remove": function (key) { 
@@ -52,6 +53,10 @@ function loadSettingsLoader(){
 }
 var settings;
 
+function loadSettingsLoaderCommand(){
+    commands.set('regularCommands',"'printAddOnSettings",printAddonSettings);
+}
+
 function printAddonSettings(){
     var output ="";
     for(var key in settings.getAll()){
@@ -59,4 +64,6 @@ function printAddonSettings(){
     }
     addMessage('', output, '', 'hashtext');
 }
+//settings need to be loaded first
 beforeConnectFunctions.splice(0,0,loadSettingsLoader);
+beforeConnectFunctions.push(loadSettingsLoaderCommand);

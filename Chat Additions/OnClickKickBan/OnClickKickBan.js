@@ -29,7 +29,7 @@ function loadOnClickKickBan(){
         
         oldAddMessage(username, message, userstyle, textstyle);
         //only add the onclick events if the user is a mod and its not a system message
-        if(username != '' && window.isMod){
+        if(username != '' && isUserMod()){
             var currentElement,
                 //the cursor doesnt need to be changed if the key is still held down
                 isCtrlKeyDown = false,
