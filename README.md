@@ -36,14 +36,6 @@ To use scripts install <a href=https://chrome.google.com/webstore/detail/tamperm
 
 Create a new userscript and copy the contents of <a href="https://github.com/Bibbytube/Instasynch/blob/master/loadAll.js">loadAll.js</a> in it.
 
-<<<<<<< HEAD
-How to install
-
-<img src="/install.gif">
-
-
-Messagefilter (for chat and polls)
-=======
 <a href="/install.gif">Chrome Example</a>
 
 Newest Stuff
@@ -67,7 +59,6 @@ Message Filter
 The message filter brings back the old tags from synchtube, wordfilters and NSFWEmotes.
 
 The command <code>:toggleTags</code> can be used to turn the tags on and off to reduce spam in the chat.
->>>>>>> origin/master
 
 <code>:toggleNSFWEmotes</code> can be used to turn the NSFWEmotes on and off.
 
@@ -128,15 +119,8 @@ To turn automatic scrolling back on simply scroll down completely.
 Mod Spy
 -------
 
-<<<<<<< HEAD
-Onclick kick, ban and automatic leaverban (ctrl + click = kick, ctrl + alt + click = ban / leaverban)
-
-<img src="Chat Additions/OnClickKickBan/onclickkickbanexample.gif" >
-
-=======
 The logs in the console can be redirected to the chat window. Clean commands will be filtered out
 To turn it on and off use <code>:toggleModSpy</code>
->>>>>>> origin/master
 
 <a href="Chat Additions/ModSpy/modspyexample.gif">Example</a>
 
