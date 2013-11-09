@@ -36,7 +36,6 @@ To use scripts install <a href=https://chrome.google.com/webstore/detail/tamperm
 
 Create a new userscript and copy the contents of <a href="https://github.com/Bibbytube/Instasynch/blob/master/loadAll.js">loadAll.js</a> in it.
 
-<a href=>Chrome Example</a>
 Click <a href="/install.gif">here</a> for Chrome example.
 
 Newest Stuff
