@@ -36,7 +36,8 @@ To use scripts install <a href=https://chrome.google.com/webstore/detail/tamperm
 
 Create a new userscript and copy the contents of <a href="https://github.com/Bibbytube/Instasynch/blob/master/loadAll.js">loadAll.js</a> in it.
 
-<a href="/install.gif">Chrome Example</a>
+<a href=>Chrome Example</a>
+Click <a href="/install.gif">here</a> for Chrome example.
 
 Newest Stuff
 ------------
@@ -87,7 +88,7 @@ Name Autocomplete
 
 By starting to type a name and hitting the tab key the name will be autocompleted.
 
-Click<a href="Chat Additions/Name Autocomplete/nameautocompleteexample.gif">here</a> for the example.
+Click <a href="Chat Additions/Name Autocomplete/nameautocompleteexample.gif">here</a> for the example.
 
 OnClick Kick,Ban
 ----------------
