@@ -62,7 +62,7 @@ The command <code>:toggleTags</code> can be used to turn the tags on and off to 
 
 <code>:toggleNSFWEmotes</code> can be used to turn the NSFWEmotes on and off.
 
-Click<a href="/Chat Additions/Messagefilter/messagefilterexample.gif">here</a> for the example.
+Click <a href="/Chat Additions/Messagefilter/messagefilterexample.gif">here</a> for the example.
 
 
 Autocomplete
@@ -80,7 +80,7 @@ Each of those can be turned on and off.
 :toggleAutocompleteAddOnSettings</code>
 </pre>
 
-Click<a href="Chat Additions/Autocomplete/autocompleteexample.gif">here</a> for the example.
+Click <a href="Chat Additions/Autocomplete/autocompleteexample.gif">here</a> for the example.
 
 Name Autocomplete
 -----------------
@@ -95,15 +95,15 @@ OnClick Kick,Ban
 A user can be kicked by holding ctrl and clicking on the username in the chat window.
 He will be banned by holding ctrl + alt and clicking. If the user is not around anymore he will automatically be leaverbanned
 
-Click<a href="Chat Additions/OnClickKickBan/onclickkickbanexample.gif">here</a> for the example.
+Click <a href="Chat Additions/OnClickKickBan/onclickkickbanexample.gif">here</a> for the example.
 
 
 Input History
 -------------
 
 All the sent messages will be saved in a local history and can be accessed by using the up and down arrow keys
-
-Click<a href="Chat Additions/Input History/inputhistoryexample.gif">here</a> for the example.
+ 
+Click <a href="Chat Additions/Input History/inputhistoryexample.gif">here</a> for the example.
 
 
 Chat Autoscroll Fix
@@ -120,7 +120,7 @@ Mod Spy
 The logs in the console can be redirected to the chat window. Clean commands will be filtered out
 To turn it on and off use <code>:toggleModSpy</code>
 
-Click<a href="Chat Additions/ModSpy/modspyexample.gif">here</a> for the example.
+Click <a href="Chat Additions/ModSpy/modspyexample.gif">here</a> for the example.
 
 
 Toggle Player
@@ -128,7 +128,7 @@ Toggle Player
 
 The player can be turned off by using the command <code>'togglePlayer</code>.
 
-Click<a href="Player Additions/Toggle Player/toggleplayerexample.gif">here</a> for the example.
+Click <a href="Player Additions/Toggle Player/toggleplayerexample.gif">here</a> for the example.
 
 
 Mirror Player
@@ -144,7 +144,7 @@ Mousewheel Volumecontrol
 
 The volume of the Youtube and Vimeo can be controlled by hovering over it with the mouse and scrolling up and down with the mousewheel.
 
-Click<a href="Player Additions/Mousewheel Volumecontrol/mousewheelvolumecontrolexample.gif">here</a> for the example.
+Click <a href="Player Additions/Mousewheel Volumecontrol/mousewheelvolumecontrolexample.gif">here</a> for the example.
 
 
 Wallcounter
