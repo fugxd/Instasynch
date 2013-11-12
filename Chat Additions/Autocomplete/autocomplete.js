@@ -2,9 +2,9 @@
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
-    
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -20,7 +20,6 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-
 
 function loadAutoComplete() {
     if(afterConnectFunctions.lastIndexOf(loadAutoComplete) != afterConnectFunctions.length-1){
@@ -57,10 +56,10 @@ function loadAutoComplete() {
     }
 
     //add the commands
-    commands.set('addOnSettings',":toggleAutoCompleteTags",toggleAutocompleteTags);
-    commands.set('addOnSettings',":toggleAutoCompleteEmotes",toggleAutocompleteEmotes);
-    commands.set('addOnSettings',":toggleAutoCompleteCommands",toggleAutocompleteCommands);
-    commands.set('addOnSettings',":toggleAutoCompleteAddonSettings",toggleAutocompleteAddonSettings);
+    commands.set('addOnSettings',"TagsAutoComplete",toggleTagsAutocomplete);
+    commands.set('addOnSettings',"EmotesAutoComplete",toggleEmotesAutocomplete);
+    commands.set('addOnSettings',"CommandsAutoComplete",toggleCommandsAutocomplete);
+    commands.set('addOnSettings',"AddOnSettingsAutoComplete",toggleAddonSettingsAutocomplete);
 
     setting = settings.get('autocompleteCommands');
     if(setting){
@@ -89,18 +88,13 @@ function loadAutoComplete() {
     }
     autocompleteData = autocompleteData.concat(emotes);
     autocompleteData = autocompleteData.concat(commands.get('regularCommands'));
-    autocompleteData = autocompleteData.concat(commands.get('addOnSettings'));
     autocompleteData = autocompleteData.concat(tagKeys);
     if (isUserMod()) {
         autocompleteData = autocompleteData.concat(commands.get('modCommands'));
     }
-    autocompleteData = autocompleteData.concat(emotes);
-    autocompleteData = autocompleteData.concat(commands);
-    autocompleteData = autocompleteData.concat(addOnSettings);
-    autocompleteData = autocompleteData.concat(tagKeys);
-    
 
     autocompleteData.sort();
+    autocompleteData = autocompleteData.concat(commands.get('addOnSettings').sort());
     //add the jquery autcomplete widget to InstaSynch's input field
     $("#chat input")    
     .bind("keydown", function(event) {
@@ -117,24 +111,18 @@ function loadAutoComplete() {
             if(!autocomplete){
                 return;
             }
-            var message = request.term.split(' '),
-                match = message[message.length-1].match(/((\[.*?\])*)(.*)/),
-                partToComplete = match[3],
+            var message = request.term,
+                caretPosition = doGetCaretPosition(cin),
+                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~']),
+                partToComplete = message.substring(lastIndex,caretPosition),
                 matches = [];
 
-            match[1] = (match[1])?match[1]:'';
             if(partToComplete.length>0){
-                if(!autocompleteEmotes && partToComplete[0] === '/'){
-                    return;
-                }
-                if(!autocompleteCommands && partToComplete[0] === '\''){
-                    return;
-                }
-                if(!autocompleteTags && partToComplete[0] === '['){
-                    return;
-                }
-                if(!autocompleteAddonSettings && partToComplete[0] === ':'){
-                    return;
+                switch(partToComplete[0]){
+                    case '/': if(!autocompleteEmotes) return;
+                    case "'": if(!autocompleteCommands) return;
+                    case '[': if(!autocompleteTags) return;
+                    case '~': if(!autocompleteAddonSettings) return;
                 }
                 matches = $.map(autocompleteData, function (item) {
                     if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
@@ -150,14 +138,20 @@ function loadAutoComplete() {
             return false; // prevent value inserted on focus
         },
         select: function(event, ui) {
-            var message = this.value.split(' '),
-                match = message[message.length-1].match(/((\[.*?\])*)(.*)/);
-            match[1] = (match[1])?match[1]:'';
-            message[message.length-1] = match[1] + ui.item.value;
-            this.value = message.join(' ');
 
+            var message = this.value,
+                caretPosition = doGetCaretPosition(cin),
+                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~']);
+            //prevent it from autocompleting when a little changed has been made and its already there
+            if(message.indexOf(ui.item.value) === lastIndex){
+                doSetCaretPosition(cin,lastIndex+ui.item.value.length);
+                return false;
+            }
+            //insert the autocompleted text and set the cursor position after it
+            this.value = message.substring(0,lastIndex) + ui.item.value + message.substring(caretPosition,message.length);
+            doSetCaretPosition(cin,lastIndex+ui.item.value.length);
             //if the selected item is a emote trigger a fake enter event
-            if((ui.item.value[0] === '/') || ((ui.item.value[0] === '\''|| ui.item.value[0] === ':') && ui.item.value[ui.item.value.length-1] !== ' ')){
+            if(lastIndex === 0 && ((ui.item.value[0] === '/') || ((ui.item.value[0] === '\''|| ui.item.value[0] === '~') && ui.item.value[ui.item.value.length-1] !== ' '))){
                 $(this).trigger($.Event( 'keypress', { which: 13,keyCode : 13 })); 
             }
             return false;
@@ -170,7 +164,13 @@ function loadAutoComplete() {
         }
     });
 }
-
+function lastIndexOfSet(input, set){
+    var index = -1;
+    for (var i = 0; i < set.length; i++) {
+        index = Math.max(index, input.lastIndexOf(set[i]));
+    }
+    return index;
+}
 var isAutocompleteMenuActive = false,
     autocomplete = true,
     autocompleteEmotes = true,
@@ -179,19 +179,19 @@ var isAutocompleteMenuActive = false,
     autocompleteAddonSettings = true,
     autocompleteData = [];
 
-function toggleAutocompleteTags(){
+function toggleTagsAutocomplete(){
     autocompleteTags = !autocompleteTags; 
     settings.set('autocompleteTags',autocompleteTags);
 }
-function toggleAutocompleteEmotes(){
+function toggleEmotesAutocomplete(){
     autocompleteEmotes = !autocompleteEmotes; 
     settings.set('autocompleteEmotes',autocompleteEmotes);
 }
-function toggleAutocompleteCommands(){
+function toggleCommandsAutocomplete(){
     autocompleteCommands = !autocompleteCommands; 
     settings.set('autocompleteCommands',autocompleteCommands);
 }
-function toggleAutocompleteAddonSettings(){
+function toggleAddonSettingsAutocomplete(){
     autocompleteAddonSettings = !autocompleteAddonSettings; 
     settings.set('autocompleteAddonSettings',autocompleteAddonSettings);
 }

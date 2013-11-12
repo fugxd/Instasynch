@@ -2,8 +2,8 @@
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,8 +20,9 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
+
 function loadExportPlaylist(){
-    commands.set('regularCommands',"'exportPlaylist",exportPlaylist);
+    commands.set('regularCommands',"exportPlaylist",exportPlaylist);
 }
 
 

@@ -21,28 +21,17 @@
     http://opensource.org/licenses/GPL-3.0
 */
 
-function loadTrimWallCommand(){
-    commands.set('modCommands',"trimWall ",trimWall);
+function loadPurgeTooLongCommand(){
+    commands.set('modCommands',"purgeTooLong ",purgeTooLong);
 }
 
-function trimWall(params){
-    if(!params[1]){
-        addMessage('','No user specified: \'trimWall [user] [maxMinutes]','','hashtext');
-        return;
-    }
-    resetWallCounter();
-    var user = params[1],
-        maxTimeLimit = params[2]?parseInt(params[2])*60:60*60,
-        currentTime = wallCounter[user],
+function purgeTooLong(params){
+    var maxTimeLimit = params[1]?parseInt(params[1])*60:60*60,
         videos = [];
 
-    if(currentTime < maxTimeLimit){
-        addMessage('','The wall is smaller than the timelimit','','hashtext');
-        return;
-    }
-    //get all Videos for the user
+    //get all Videos longer than maxTimeLimit
     for (var i = 0; i < playlist.length; i++) {
-        if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
+        if(playlist[i].duration >= maxTimeLimit){
             videos.push({info:playlist[i].info, duration:playlist[i].duration});
         }
     }  
@@ -50,22 +39,11 @@ function trimWall(params){
     function compareVideos(a,b){
         return b.duration - a.duration;
     };
-    // function rmVideo(index, vidinfo){
-    //     setTimeout(
-    //         function(){
-    //             sendcmd('remove', {info: vidinfo});
-    //         }, 
-    //         (index+1) * 750);
-    // }
-    //sort the array so we will get the longest first
     videos.sort(compareVideos);
 
-    for (var i = 0; i < videos.length && currentTime > maxTimeLimit; i++) {
-        currentTime-= videos[i].duration;
-        // rmVideo(i,videos[i].info);
-        //delay via commandFloodProtect.js
+    for (var i = 0; i < videos.length; i++) {
         sendcmd('remove', {info: videos[i].info});
     }
 }
 
-beforeConnectFunctions.push(loadTrimWallCommand);
+beforeConnectFunctions.push(loadPurgeTooLongCommand);

@@ -21,36 +21,30 @@
     http://opensource.org/licenses/GPL-3.0
 */
 
-
-function loadRemoveLast(){
-    commands.set('modCommands',"removeLast ",removeLast);
-}
-
-
-// Remove the last video from the user 
-function removeLast(params){
-    if(!params[1]){
-        addMessage('','No user specified: \'removeLast [user]','','hashtext');
-        return;
-    }
-	var user = params[1],
-		removeIndex = -1,
-    	i;
-
-	// Look for the user last added video
-    for (i = playlist.length - 1; i >= 0; i--) {
-        if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
-            removeIndex = i;
-            break;
+function loadCommandFloodProtect(){
+    var oldsendcmd = sendcmd;
+    sendcmd = function sendcmd(command, data){
+        if(command){
+            //add the command to the cache
+            commandCache.push({command:command,data:data});
+        }
+        //are we ready to send a command?
+        if(sendcmdReady){
+            if(commandCache.length !== 0){
+                //set not ready
+                sendcmdReady = false;
+                //send the command
+                oldsendcmd(commandCache[0].command,commandCache[0].data);
+                //remove the sent command
+                commandCache.splice(0,1);
+                //after 750ms send the next command
+                setTimeout(function(){sendcmdReady = true;sendcmd();},750);
+            }
         }
     }
-	
-	if (removeIndex === -1){
-		addMessage('',"The user didn't add any video",'','hashtext');
-	}else{
-		sendcmd('remove', {info: playlist[removeIndex].info});
-	}
-		
 }
-		
-beforeConnectFunctions.push(loadRemoveLast);
+
+var sendcmdReady = true,
+    commandCache = [];
+    
+beforeConnectFunctions.push(loadCommandFloodProtect);

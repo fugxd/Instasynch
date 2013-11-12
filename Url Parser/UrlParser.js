@@ -1,5 +1,5 @@
 /*
-    Copyright (C) 2013  Faqqq
+    Copyright (C) 2013  faqqq @Bibbytube
     
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,10 +26,10 @@ function parseUrl(URL){
 		/*error*/
 		return false;
 	}
-	var provider = match[3]; //the provider e.g. youtube,twitch ...
-	var mediaType; // stream or video (this can't be determined for youtube streams, since the url is the same for a video)
-	var id; //the video-id 
-	var channel; //for twitch and livestream
+	var provider = match[3], //the provider e.g. youtube,twitch ...
+		mediaType, // stream or video (this can't be determined for youtube streams, since the url is the same for a video)
+		id, //the video-id 
+		channel; //for twitch and livestream
 	switch(provider){
 		case 'youtu':
 		case 'youtube':{ 

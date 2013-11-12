@@ -21,36 +21,29 @@
     http://opensource.org/licenses/GPL-3.0
 */
 
-
-function loadRemoveLast(){
-    commands.set('modCommands',"removeLast ",removeLast);
+function loadVotePurgeCommand(){
+    commands.set('modCommands',"votepurge ",votePurge);
 }
 
-
-// Remove the last video from the user 
-function removeLast(params){
-    if(!params[1]){
-        addMessage('','No user specified: \'removeLast [user]','','hashtext');
-        return;
-    }
+function votePurge(params)
+{
 	var user = params[1],
-		removeIndex = -1,
-    	i;
-
-	// Look for the user last added video
-    for (i = playlist.length - 1; i >= 0; i--) {
-        if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
-            removeIndex = i;
-            break;
-        }
-    }
-	
-	if (removeIndex === -1){
-		addMessage('',"The user didn't add any video",'','hashtext');
-	}else{
-		sendcmd('remove', {info: playlist[removeIndex].info});
+		poll = new Object(),
+		option;
+				
+	if (!user){
+        addMessage('','No user specified: \'votePurge [user]','','hashtext');
+		return;
 	}
-		
+	
+	poll.title = "Should we purge " + user + " ? /babyseal";
+	poll.options = new Array();
+	option = "Yes !";
+	poll.options.push(option);
+	option = "No !";
+	poll.options.push(option);
+	
+	sendcmd("poll-create", poll);
 }
-		
-beforeConnectFunctions.push(loadRemoveLast);
+
+beforeConnectFunctions.push(loadVotePurgeCommand);

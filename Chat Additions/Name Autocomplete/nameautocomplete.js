@@ -2,8 +2,8 @@
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,20 +31,20 @@ function loadAutocomplete() {
             //split the message
             var message = $(this).val().split(' '),
                 //make a regex out of the last part 
-                messagetags = message[message.length-1].match(/((\[.*?\])*\[?)(.*)/),
+                messagetags = message[message.length-1].match(/((\[.*?\])*\[?)([\w-]+)/),
                 name,
                 data,
-                autocomplete = '',
+                partToComplete = '',
                 username,
                 i,
                 j,
                 sub;
+            if(!messagetags || !messagetags[3]){
+                return;
+            }
             if(!messagetags[1]){
                  messagetags[1] = '';
             }
-            if(!messagetags[3]){
-                return;
-            }   
             
             //make a regex out of the name
             name = new RegExp('^'+messagetags[3],'i');
@@ -53,23 +53,23 @@ function loadAutocomplete() {
             for(i = 0; i< users.length;i++){
                 username = users[i].username;
                 if(username.match(name)){
-                    if(autocomplete == ''){
-                        autocomplete = username;
+                    if(partToComplete == ''){
+                        partToComplete = username;
                     }else{
                         //check for partial matches with other found users
-                        for(j = autocomplete.length; j>=0 ;j--){
-                            sub = autocomplete.substring(0,j);
+                        for(j = partToComplete.length; j>=0 ;j--){
+                            sub = partToComplete.substring(0,j);
                             if(username.indexOf(sub) == 0){
-                                autocomplete = sub;
+                                partToComplete = sub;
                                 break;
                             }
                         }
                     }
                 }
             }
-            if(autocomplete != ''){
+            if(partToComplete != ''){
                 //put messagetags and the autocompleted name back into the message
-                message[message.length-1] =messagetags[1] + autocomplete;
+                message[message.length-1] =messagetags[1] + partToComplete;
                 $(this).val(message.join(' '));
             }
 
