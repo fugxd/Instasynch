@@ -204,12 +204,12 @@ To remove the last video of a user use the command <code>'removeLast [user]</cod
 Trim Wall Command
 -----------------
 
-To trim a wall of a user use the command <code>'trimWall [user] [maxMinutes]</code>.
+To trim a wall of a user use the command <code>'trimWall [user] [maxMinutes]</code>. Not providing a parameter will use 60 minutes as the standard value
 
 Purge Too Long Command
 ----------------------
 
-To remove all videos longer than a specific length use the command <code>'purgeTooLong [maxMinutes]</code>.
+To remove all videos longer than a specific length use the command <code>'purgeTooLong [maxMinutes]</code>. Not providing a parameter will use 60 minutes as the standard value
 
 Vote Purge Command
 ------------------
