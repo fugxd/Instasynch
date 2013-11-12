@@ -49,8 +49,7 @@ Change Log
 
 <pre>
 • Added [alt] and [falt] tags
-• Added support for advanced tags that can take parameters.<br>
-  [marquee-10] [marquee99], [alt10] [alt99], [#7882BF] [#FFFF00]
+• Added support for advanced tags that can take parameters.[marquee-10][marquee99], [alt10][alt99],[#7882BF][#FFFF00]
 • Settings prefix changed from : to ~
 • Improved autocomplete so it will work anywhere in text. The message will now only be sent when the command is at the begging of the text field
 • Added <a href="#login-off-messages">Login-Off Messages</a>
