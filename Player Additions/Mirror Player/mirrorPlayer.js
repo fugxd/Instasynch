@@ -2,8 +2,8 @@
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,8 +31,8 @@ function loadMirrorPlayer(){
         settings.set('automaticMirror',true);
     }
     //add the command
-    commands.set('addOnSettings',":toggleAutomaticPlayerMirror",toggleAutomaticMirrorPlayer);
-    commands.set('regularCommands',"'mirrorPlayer",toggleMirrorPlayer);
+    commands.set('addOnSettings',"AutomaticPlayerMirror",toggleAutomaticMirrorPlayer);
+    commands.set('regularCommands',"mirrorPlayer",toggleMirrorPlayer);
 
     //appening the class until we got our css files
     //http://stackoverflow.com/a/3434665
@@ -57,12 +57,13 @@ function loadMirrorPlayer(){
     };
 
     //checking the current video after loading the first time
-    setTimeout(function(){
-        if(containsMirrored(playlist[getActiveVideoIndex()].title)){
-            toggleMirrorPlayer();
-        }
-    },1000);
-    
+    if(playlist.length != 0){
+        setTimeout(function(){
+            if(containsMirrored(playlist[getActiveVideoIndex()].title)){
+                toggleMirrorPlayer();
+            }
+        },1000);
+    }
 }
 function containsMirrored(title){
     if(!automaticMirror){

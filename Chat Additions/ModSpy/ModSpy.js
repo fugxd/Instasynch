@@ -2,8 +2,8 @@
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Rollermiam
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -30,7 +30,7 @@ function loadModSpy(){
 		settings.set('modSpy',false);
 	}
 	//add command
-    commands.set('addOnSettings',":toggleModSpy",toggleModSpy);
+    commands.set('addOnSettings',"ModSpy",toggleModSpy);
 
 	// Overwriting console.log
 	var oldLog = console.log, 
@@ -38,9 +38,9 @@ function loadModSpy(){
 
 	console.log = function (message) {
 		// We don't want the cleaning messages in the chat (Ok in the console) .
-		if (message.match && !message.match(/cleaned the playlist/g) && modSpy)
+		if (message && message.match && !message.match(/cleaned the playlist/g) && modSpy)
 		{
-			if (message.match(/moved a video/g) && bumpCheck)
+			if (message.match(/ moved a video/g) && bumpCheck)
 			{
 				message = message.replace("moved","bumped");
 				bumpCheck = false;

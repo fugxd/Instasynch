@@ -13,19 +13,25 @@ Command List
 'clearChat
 'printAddonSettings
 'printMyWallCounter
+
+//Mod Commands
 'bump [user]
 'removeLast [user]
+'trimWall [user] [maxMinutes]
+'purgeTooLong [maxMinutes]
 'exportPlaylist
+'votePurge [user]
 
 //Settings
-:toggleAutocompleteTags
-:toggleAutocompleteEmotes
-:toggleAutocompleteCommands
-:toggleAutocompleteAddOnSettings
-:toggleAutomaticPlayerMirror
-:toggleTags
-:toggleNSFWEmotes
-:toggleModSpy</code>
+~TagsAutocomplete
+~EmotesAutocomplete
+~CommandsAutocomplete
+~AddOnSettingsAutocomplete
+~AutomaticPlayerMirror
+~Tags
+~NSFWEmotes
+~ModSpy
+~LogInOffMessages</code>
 </pre>
 
 
@@ -38,15 +44,26 @@ Create a new userscript and copy the contents of <a href="https://github.com/Bib
 
 Click <a href="/install.gif">here</a> for Chrome example.
 
-Newest Stuff
+Changes
 ------------
+
+<pre>
+• Added [alt] and [falt] tags
+• Added support for advanced tags that can take parameters.[marquee-10][marquee99], [alt10][alt99],[#7882BF][#FFFF00]
+• Settings prefix changed from : to ~
+• Improved autocomplete so it will work anywhere in text. The message will now only be sent when the command is at the begging of the text field
+• Added <a href="#login-off-messages">Login-Off Messages</a>
+• Added <a href="#purge-too-long-command">Purge Too Long Command</a>
+• Added <a href="#trim-wall-command">Trim Wall Command</a>
+• Added <a href="#vote-purge-command">Vote Purge Command</a>
+• Added <a href="#youtube-search">YouTube Search</a>
+• Added <a href="#command-flood-protect">Command Flood Protect</a>
+</pre>
 
 <a href="#remove-last-command">Remove last Command</a><br>
 <a href="#export-playlist-command">Export Playlist Command</a><br>
 <a href="#bump-command">Bump Command</a><br>
 <a href="#mod-spy">Mod Spy</a><br>
-<a href="#clear-chat-command">Clear Chat Command</a><br>
-<a href="#mirror-player">Mirror Player</a><br>
 
 Just send a <a href="mailto:megafaqqq@gmail.com">mail</a> if you got suggestions or found a bug.
 
@@ -58,9 +75,9 @@ Message Filter
 
 The message filter brings back the old tags from synchtube, wordfilters and NSFWEmotes.
 
-The command <code>:toggleTags</code> can be used to turn the tags on and off to reduce spam in the chat.
+The command <code>~Tags</code> can be used to turn the tags on and off to reduce spam in the chat.
 
-<code>:toggleNSFWEmotes</code> can be used to turn the NSFWEmotes on and off.
+<code>~NSFWEmotes</code> can be used to turn the NSFWEmotes on and off.
 
 Click <a href="/Chat Additions/Messagefilter/messagefilterexample.gif">here</a> for the example.
 
@@ -74,20 +91,22 @@ If it is an emote or a command that does not need additional input it will be au
 
 Each of those can be turned on and off.
 <pre>
-<code>:toggleAutocompleteTags
-:toggleAutocompleteEmotes
-:toggleAutocompleteCommands
-:toggleAutocompleteAddOnSettings</code>
+<code>~TagsAutocomplete
+~EmotesAutocomplete
+~CommandsAutocomplete
+~AddOnSettingsAutocomplete</code>
 </pre>
 
 Click <a href="Chat Additions/Autocomplete/autocompleteexample.gif">here</a> for the example.
+
 
 Name Autocomplete
 -----------------
 
 By starting to type a name and hitting the tab key the name will be autocompleted.
 
-Click <a href="Chat Additions/Name Autocomplete/nameautocompleteexample.gif">here</a> for the example.
+Click <a href="Chat Additions/Name Autocomplete/nameautocompleteexample.gif">here</a>  for the example.
+
 
 OnClick Kick,Ban
 ----------------
@@ -102,7 +121,7 @@ Input History
 -------------
 
 All the sent messages will be saved in a local history and can be accessed by using the up and down arrow keys
- 
+
 Click <a href="Chat Additions/Input History/inputhistoryexample.gif">here</a> for the example.
 
 
@@ -118,7 +137,7 @@ Mod Spy
 -------
 
 The logs in the console can be redirected to the chat window. Clean commands will be filtered out
-To turn it on and off use <code>:toggleModSpy</code>
+To turn it on and off use <code>~ModSpy</code>
 
 Click <a href="Chat Additions/ModSpy/modspyexample.gif">here</a> for the example.
 
@@ -128,15 +147,14 @@ Toggle Player
 
 The player can be turned off by using the command <code>'togglePlayer</code>.
 
-Click <a href="Player Additions/Toggle Player/toggleplayerexample.gif">here</a> for the example.
-
+Click <a href="Player Additions/Toggle Player/toggleplayerexample.gif" >here</a> for the example.
 
 Mirror Player
 -------------
 
 The player can be mirrored by using the command <code>'mirrorPlayer</code>.
 Videos containing words like 'Mirrored' or 'Mirror' in the title will be automatically mirrored.
-This can be turned off using <code>:toggleAutomaticPlayerMirror</code>
+This can be turned off using <code>~AutomaticPlayerMirror</code>
 
 
 Mousewheel Volumecontrol
@@ -144,7 +162,7 @@ Mousewheel Volumecontrol
 
 The volume of the Youtube and Vimeo can be controlled by hovering over it with the mouse and scrolling up and down with the mousewheel.
 
-Click <a href="Player Additions/Mousewheel Volumecontrol/mousewheelvolumecontrolexample.gif">here</a> for the example.
+Click <a href="Player Additions/Mousewheel Volumecontrol/mousewheelvolumecontrolexample.gif" >here</a> for the example.
 
 
 Wallcounter
@@ -154,6 +172,22 @@ The wall length of every user will be saved and updated if a video has been adde
 The current wall length will be shown in the 'Video successfully added' message.
 To print your own wall length use <code>'printMyWallCounter</code> and too see it from all the users use <code>'printWallCounter</code>
 
+YouTube Search
+--------------
+
+Searching a YouTube video can be done directly from the site. Simply start typing in the add video url text field and the results will pop up in the poll section. By clicking on the thumbnail of the video the url will be added to the text field
+
+Click <a href="General Additions/Youtube Search/youtubesearchexample.gif" >here</a> for the example.
+
+Login-Off Messages
+------------------
+
+Messages can be recieved when a user logs in or off. To toggle the option use <code>~LogInOffMessages</code>
+
+Command Flood Protect
+---------------------
+
+To prevent getting kicked from flood protection the commands will be delayed when sending them too fast between each other
 
 Bump Command
 ------------
@@ -163,17 +197,32 @@ The video will be moved right under the active video.
 
 
 Remove Last Command
-------------
+-------------------
 
 To remove the last video of a user use the command <code>'removeLast [user]</code>.
 
+Trim Wall Command
+-----------------
+
+To trim a wall of a user use the command <code>'trimWall [user] [maxMinutes]</code>. Not providing a parameter will use 60 minutes as the standard value
+
+Purge Too Long Command
+----------------------
+
+To remove all videos longer than a specific length use the command <code>'purgeTooLong [maxMinutes]</code>. Not providing a parameter will use 60 minutes as the standard value
+
+Vote Purge Command
+------------------
+
+To create a poll about purging a user use the command <code>'votePurge [user]</code>.
+
 Clear Chat Command
-------------
+------------------
 
 To clear all the messages from the chat use the command <code>'clearChat</code>.
 
 Export Playlist Command
-------------
+-----------------------
 
 To export all the videos in the playlist use the command <code>'exportPlaylist</code>.
 A popup with all the links will open. Just copy them and close it.

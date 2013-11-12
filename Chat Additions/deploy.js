@@ -19,9 +19,9 @@ function beforeConnect(){
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
-    
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -37,7 +37,6 @@ function beforeConnect(){
     
     http://opensource.org/licenses/GPL-3.0
 */
-
 
 function loadAutoComplete() {
     if(afterConnectFunctions.lastIndexOf(loadAutoComplete) != afterConnectFunctions.length-1){
@@ -74,11 +73,24 @@ function loadAutoComplete() {
     }
 
     //add the commands
-    commands.set('addOnSettings',":toggleAutoCompleteTags",toggleAutocompleteTags);
-    commands.set('addOnSettings',":toggleAutoCompleteEmotes",toggleAutocompleteEmotes);
-    commands.set('addOnSettings',":toggleAutoCompleteCommands",toggleAutocompleteCommands);
-    commands.set('addOnSettings',":toggleAutoCompleteAddonSettings",toggleAutocompleteAddonSettings);
+    commands.set('addOnSettings',"TagsAutoComplete",toggleTagsAutocomplete);
+    commands.set('addOnSettings',"EmotesAutoComplete",toggleEmotesAutocomplete);
+    commands.set('addOnSettings',"CommandsAutoComplete",toggleCommandsAutocomplete);
+    commands.set('addOnSettings',"AddOnSettingsAutoComplete",toggleAddonSettingsAutocomplete);
 
+    setting = settings.get('autocompleteCommands');
+    if(setting){
+        autocompleteCommands = setting ==='false'?false:true;
+    }else{
+        settings.set('autocompleteCommands',true);
+    }
+    
+    setting = settings.get('autocompleteAddonSettings');
+    if(setting){
+        autocompleteAddonSettings = setting ==='false'?false:true;
+    }else{
+        settings.set('autocompleteAddonSettings',true);
+    }
     var emotes = (function () {
         var arr = Object.keys($codes);
         for (var i = 0; i < arr.length; i++) {
@@ -93,13 +105,13 @@ function loadAutoComplete() {
     }
     autocompleteData = autocompleteData.concat(emotes);
     autocompleteData = autocompleteData.concat(commands.get('regularCommands'));
-    autocompleteData = autocompleteData.concat(commands.get('addOnSettings'));
     autocompleteData = autocompleteData.concat(tagKeys);
     if (isUserMod()) {
         autocompleteData = autocompleteData.concat(commands.get('modCommands'));
     }
 
     autocompleteData.sort();
+    autocompleteData = autocompleteData.concat(commands.get('addOnSettings').sort());
     //add the jquery autcomplete widget to InstaSynch's input field
     $("#chat input")    
     .bind("keydown", function(event) {
@@ -116,24 +128,18 @@ function loadAutoComplete() {
             if(!autocomplete){
                 return;
             }
-            var message = request.term.split(' '),
-                match = message[message.length-1].match(/((\[.*?\])*)(.*)/),
-                partToComplete = match[3],
+            var message = request.term,
+                caretPosition = doGetCaretPosition(cin),
+                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~']),
+                partToComplete = message.substring(lastIndex,caretPosition),
                 matches = [];
 
-            match[1] = (match[1])?match[1]:'';
             if(partToComplete.length>0){
-                if(!autocompleteEmotes && partToComplete[0] === '/'){
-                    return;
-                }
-                if(!autocompleteCommands && partToComplete[0] === '\''){
-                    return;
-                }
-                if(!autocompleteTags && partToComplete[0] === '['){
-                    return;
-                }
-                if(!autocompleteAddonSettings && partToComplete[0] === ':'){
-                    return;
+                switch(partToComplete[0]){
+                    case '/': if(!autocompleteEmotes) return;
+                    case "'": if(!autocompleteCommands) return;
+                    case '[': if(!autocompleteTags) return;
+                    case '~': if(!autocompleteAddonSettings) return;
                 }
                 matches = $.map(autocompleteData, function (item) {
                     if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
@@ -149,14 +155,20 @@ function loadAutoComplete() {
             return false; // prevent value inserted on focus
         },
         select: function(event, ui) {
-            var message = this.value.split(' '),
-                match = message[message.length-1].match(/((\[.*?\])*)(.*)/);
-            match[1] = (match[1])?match[1]:'';
-            message[message.length-1] = match[1] + ui.item.value;
-            this.value = message.join(' ');
 
+            var message = this.value,
+                caretPosition = doGetCaretPosition(cin),
+                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~']);
+            //prevent it from autocompleting when a little changed has been made and its already there
+            if(message.indexOf(ui.item.value) === lastIndex && lastIndex+ui.item.value.length !== caretPosition){
+                doSetCaretPosition(cin,lastIndex+ui.item.value.length);
+                return false;
+            }
+            //insert the autocompleted text and set the cursor position after it
+            this.value = message.substring(0,lastIndex) + ui.item.value + message.substring(caretPosition,message.length);
+            doSetCaretPosition(cin,lastIndex+ui.item.value.length);
             //if the selected item is a emote trigger a fake enter event
-            if((ui.item.value[0] === '/') || ((ui.item.value[0] === '\''|| ui.item.value[0] === ':') && ui.item.value[ui.item.value.length-1] !== ' ')){
+            if(lastIndex === 0 && ((ui.item.value[0] === '/') || ((ui.item.value[0] === '\''|| ui.item.value[0] === '~') && ui.item.value[ui.item.value.length-1] !== ' '))){
                 $(this).trigger($.Event( 'keypress', { which: 13,keyCode : 13 })); 
             }
             return false;
@@ -169,7 +181,13 @@ function loadAutoComplete() {
         }
     });
 }
-
+function lastIndexOfSet(input, set){
+    var index = -1;
+    for (var i = 0; i < set.length; i++) {
+        index = Math.max(index, input.lastIndexOf(set[i]));
+    }
+    return index;
+}
 var isAutocompleteMenuActive = false,
     autocomplete = true,
     autocompleteEmotes = true,
@@ -178,19 +196,19 @@ var isAutocompleteMenuActive = false,
     autocompleteAddonSettings = true,
     autocompleteData = [];
 
-function toggleAutocompleteTags(){
+function toggleTagsAutocomplete(){
     autocompleteTags = !autocompleteTags; 
     settings.set('autocompleteTags',autocompleteTags);
 }
-function toggleAutocompleteEmotes(){
+function toggleEmotesAutocomplete(){
     autocompleteEmotes = !autocompleteEmotes; 
     settings.set('autocompleteEmotes',autocompleteEmotes);
 }
-function toggleAutocompleteCommands(){
+function toggleCommandsAutocomplete(){
     autocompleteCommands = !autocompleteCommands; 
     settings.set('autocompleteCommands',autocompleteCommands);
 }
-function toggleAutocompleteAddonSettings(){
+function toggleAddonSettingsAutocomplete(){
     autocompleteAddonSettings = !autocompleteAddonSettings; 
     settings.set('autocompleteAddonSettings',autocompleteAddonSettings);
 }
@@ -200,8 +218,8 @@ afterConnectFunctions.push(loadAutoComplete);
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -218,7 +236,6 @@ afterConnectFunctions.push(loadAutoComplete);
     
     http://opensource.org/licenses/GPL-3.0
 */
-
 
 function loadAutoscrollFix(){
 
@@ -281,8 +298,8 @@ afterConnectFunctions.push(loadAutoscrollFix);
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -321,7 +338,7 @@ function loadInputHistory(){
                 setInputHistoryIndex(0);
             }
         }else{
-            autocomplete = true;
+            setInputHistoryIndex(0);
         }
     });    
 
@@ -364,21 +381,94 @@ var inputHistory = [""],
 beforeConnectFunctions.push(loadInputHistory);
 /*
     <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2013 InstaSynch
-    
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013 Faqqq
-    
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
+    
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
+    
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadLogInOffMessages(){
+    //load settings
+    var setting = settings.get('logInOffMessages');
+    if(setting){
+        logInOffMessages = setting ==='false'?false:true;
+    }else{
+        settings.set('logInOffMessages',false);
+    }
+    //add the command
+    commands.set('addOnSettings',"LogInOffMessages",toggleLogInOffMessages);
+    
+    // Overwriting Adduser
+    var oldAddUser = addUser;
+
+    addUser = function(user, css, sort) {
+        // Only if blackname or mod
+        if (user.loggedin && logInOffMessages){
+            addMessage('', user.username + ' logged on.', '','hashtext');
+        }
+        oldAddUser(user,css,sort);
+    }
+
+    // Overwriting removeUser
+    var oldRemoveUser = removeUser;
+
+    removeUser = function(id) {
+        var user = users[getIndexOfUser(id)];
+        if (user.loggedin && logInOffMessages){
+            addMessage('',user.username + ' logged off.', '','hashtext');
+            if (user.username === 'JustPassingBy'){
+                addMessage('','Wish him a happy birthday !', '', 'hastext');
+            }
+        }
+        oldRemoveUser(id);
+    }
+}
+
+var logInOffMessages = false;
+
+function toggleLogInOffMessages(){
+    logInOffMessages = !logInOffMessages;
+    settings.set('logInOffMessages',logInOffMessages);
+}
+
+afterConnectFunctions.push(loadLogInOffMessages);
+
+
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
     http://opensource.org/licenses/GPL-3.0
 */
 
@@ -400,8 +490,8 @@ function loadMessageFilter() {
     }
 
     //add the commands
-    commands.set('addOnSettings',":toggleTags",toggleTags);
-    commands.set('addOnSettings',":toggleNSFWEmotes",toggleNSFWEmotes);
+    commands.set('addOnSettings',"Tags",toggleTags);
+    commands.set('addOnSettings',"NSFWEmotes",toggleNSFWEmotes);
 
     //init
     if(NSFWEmotes){
@@ -508,6 +598,19 @@ function parseMessage(message,isChatMessage){
     //filter tags
     for (word in tags) {
         message = message.replace(new RegExp(word, 'gi'),function(){return (filterTags)?tags[word]:'';});
+    }    
+    //filter advancedTags
+    for (word in advancedTags) {
+        message = message.replace(new RegExp(advancedTags[word], 'g'),
+            function(match, m1, m2){
+                var ret = '';
+                switch(word){
+                    case 'hexcolor': ret = '<span style="color:' +m1+ '">';break;
+                    case 'marquee' : ret = '<MARQUEE behavior="scroll" direction='+(m1?"left":"right")+' width="100%" scrollamount="'+ m2 +'">'; break;
+                    case 'alternate': ret = '<MARQUEE behavior="alternate" direction="right" width="100%" scrollamount="'+ m1 +'">'; break;
+                }
+                return (filterTags)?ret:'';
+            });
     }
     //remove unnused tags [asd] if there is a emote
     if(emoteFound && isChatMessage){
@@ -566,6 +669,22 @@ function parseMessage(message,isChatMessage){
     }
     return message;
 }
+function toggleNSFWEmotes(){
+    if(!NSFWEmotes){
+        $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        $codes['meatspin'] = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        autocompleteData.push('/boobies');
+        autocompleteData.push('/meatspin');
+        autocompleteData.sort();
+    }else{
+        delete $codes['boobies'];
+        delete $codes['meatspin'];
+        autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1); 
+        autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1); 
+    }
+    NSFWEmotes = !NSFWEmotes;
+    settings.set('NSFWEmotes',NSFWEmotes);
+}
 
 var filterTags = true,
     NSFWEmotes = false,
@@ -577,6 +696,11 @@ var filterTags = true,
     "gay" : "hetero",
     "GAY" : "HETERO"
 },
+    advancedTags = {
+       'hexcolor': '\\[(#[0-9A-F]{1,6})\\]',
+       'marquee': '\\[marquee(-)?(\\d{1,2})\\]',
+       'alternate': '\\[alt(\\d{1,2})\\]'
+    },
     tags = {
     '\\[black\\]': '<span style="color:black">',
     '\\[/black\\]': '</span>',
@@ -636,6 +760,10 @@ var filterTags = true,
 
     '\\[rmarquee\\]': '<marquee>',
     '\\[/rmarquee\\]': '</marquee>',
+    '\\[alt\\]': '<marquee behavior="alternate" direction="right">',
+    '\\[/alt\\]': '</marquee>',
+    '\\[falt\\]': '<marquee behavior="alternate" scrollamount="50" direction="right">',
+    '\\[/falt\\]': '</marquee>',
     '\\[marquee\\]': '<marquee direction="right">',
     '\\[/marquee\\]': '</marquee>',
     '\\[rsanic\\]': '<MARQUEE behavior="scroll" direction="left" width="100%" scrollamount="50">',
@@ -661,8 +789,8 @@ beforeConnectFunctions.push(loadMessageFilter);
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Rollermiam
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -689,7 +817,7 @@ function loadModSpy(){
 		settings.set('modSpy',false);
 	}
 	//add command
-    commands.set('addOnSettings',":toggleModSpy",toggleModSpy);
+    commands.set('addOnSettings',"ModSpy",toggleModSpy);
 
 	// Overwriting console.log
 	var oldLog = console.log, 
@@ -697,9 +825,9 @@ function loadModSpy(){
 
 	console.log = function (message) {
 		// We don't want the cleaning messages in the chat (Ok in the console) .
-		if (message.match && !message.match(/cleaned the playlist/g) && modSpy)
+		if (message && message.match && !message.match(/cleaned the playlist/g) && modSpy)
 		{
-			if (message.match(/moved a video/g) && bumpCheck)
+			if (message.match(/ moved a video/g) && bumpCheck)
 			{
 				message = message.replace("moved","bumped");
 				bumpCheck = false;
@@ -731,8 +859,8 @@ beforeConnectFunctions.push(loadModSpy);
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -760,20 +888,20 @@ function loadAutocomplete() {
             //split the message
             var message = $(this).val().split(' '),
                 //make a regex out of the last part 
-                messagetags = message[message.length-1].match(/((\[.*?\])*\[?)(.*)/),
+                messagetags = message[message.length-1].match(/((\[.*?\])*\[?)([\w-]+)/),
                 name,
                 data,
-                autocomplete = '',
+                partToComplete = '',
                 username,
                 i,
                 j,
                 sub;
+            if(!messagetags || !messagetags[3]){
+                return;
+            }
             if(!messagetags[1]){
                  messagetags[1] = '';
             }
-            if(!messagetags[3]){
-                return;
-            }   
             
             //make a regex out of the name
             name = new RegExp('^'+messagetags[3],'i');
@@ -782,23 +910,23 @@ function loadAutocomplete() {
             for(i = 0; i< users.length;i++){
                 username = users[i].username;
                 if(username.match(name)){
-                    if(autocomplete == ''){
-                        autocomplete = username;
+                    if(partToComplete == ''){
+                        partToComplete = username;
                     }else{
                         //check for partial matches with other found users
-                        for(j = autocomplete.length; j>=0 ;j--){
-                            sub = autocomplete.substring(0,j);
+                        for(j = partToComplete.length; j>=0 ;j--){
+                            sub = partToComplete.substring(0,j);
                             if(username.indexOf(sub) == 0){
-                                autocomplete = sub;
+                                partToComplete = sub;
                                 break;
                             }
                         }
                     }
                 }
             }
-            if(autocomplete != ''){
+            if(partToComplete != ''){
                 //put messagetags and the autocompleted name back into the message
-                message[message.length-1] =messagetags[1] + autocomplete;
+                message[message.length-1] =messagetags[1] + partToComplete;
                 $(this).val(message.join(' '));
             }
 
@@ -812,8 +940,8 @@ beforeConnectFunctions.push(loadAutocomplete);
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -830,6 +958,7 @@ beforeConnectFunctions.push(loadAutocomplete);
     
     http://opensource.org/licenses/GPL-3.0
 */
+
 function loadOnClickKickBan(){
 
     var oldAddMessage = addMessage;
@@ -925,8 +1054,8 @@ beforeConnectFunctions.push(loadOnClickKickBan);
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -945,15 +1074,16 @@ beforeConnectFunctions.push(loadOnClickKickBan);
 */
 
 function loadBumpCommand(){
-    commands.set('modCommands',"'bump ",bump);
+    commands.set('modCommands',"bump ",bump);
 }
 
 function bump(params){
-    var user = params[1];
+    var user = params[1],
         bumpIndex = -1,
         i;
     
     if(!user){
+        addMessage('','No user specified: \'bump [user]','','hashtext');
         return;
     }
     for (i = playlist.length - 1; i >= 0; i--) {
@@ -963,7 +1093,7 @@ function bump(params){
         }
     }
     if (bumpIndex === -1){
-        addMessage('',"The user didn't add any video",'','hashtext');
+        addMessage('',"The user didn't add any videos",'','hashtext');
     }else{
         sendcmd('move', {info: playlist[bumpIndex].info, position: getActiveVideoIndex()+1});
     }
@@ -972,43 +1102,11 @@ function bump(params){
 
 beforeConnectFunctions.push(loadBumpCommand);
 /*
-	<InstaSynch - Watch Videos with friends.>
-	Copyright (C) 2013 InstaSynch
-	
-	<Faqqq- Modified InstaSynch client code>
-	Copyright (C) 2013 Rollermiam, Faqqq
-	
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-	You should have received a copy of the GNU General Public License
-	along with this program. If not, see <http://www.gnu.org/licenses/>.
-	http://opensource.org/licenses/GPL-3.0
-*/
-
-
-function loadClearChatCommand(){
-    commands.set('regularCommands',"'clearChat",clearChat);
-}
-
-function clearChat(){
-	$('#chat_list').empty();
-	messages = 0;
-}
-
-
-beforeConnectFunctions.push(loadClearChatCommand);
-/*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1025,11 +1123,96 @@ beforeConnectFunctions.push(loadClearChatCommand);
     
     http://opensource.org/licenses/GPL-3.0
 */
+
+
+function loadClearChatCommand(){
+    commands.set('regularCommands',"clearChat",clearChat);
+}
+
+function clearChat(){
+	$('#chat_list').empty();
+	messages = 0;
+}
+
+
+beforeConnectFunctions.push(loadClearChatCommand);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadCommandFloodProtect(){
+    var oldsendcmd = sendcmd;
+    sendcmd = function sendcmd(command, data){
+        if(command){
+            //add the command to the cache
+            commandCache.push({command:command,data:data});
+        }
+        //are we ready to send a command?
+        if(sendcmdReady){
+            if(commandCache.length !== 0){
+                //set not ready
+                sendcmdReady = false;
+                //send the command
+                oldsendcmd(commandCache[0].command,commandCache[0].data);
+                //remove the sent command
+                commandCache.splice(0,1);
+                //after 750ms send the next command
+                setTimeout(function(){sendcmdReady = true;sendcmd();},750);
+            }
+        }
+    }
+}
+
+var sendcmdReady = true,
+    commandCache = [];
+    
+beforeConnectFunctions.push(loadCommandFloodProtect);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
 function loadCommandLoader(){
     commands = new function() {
         var items = {};
         items['regularCommands'] = [
-            "'skip",
             "'reload",
             "'resynch",
             "'toggleFilter",
@@ -1067,6 +1250,11 @@ function loadCommandLoader(){
         items['commandFunctionMap'] = {};
         return {
             "set": function(arrayName, funcName, func) {
+                if(arrayName === 'addOnSettings'){
+                    funcName = "~"+funcName;
+                }else{
+                    funcName = "'"+funcName;
+                }
                 items[arrayName].push(funcName);
                 items['commandFunctionMap'][funcName.toLowerCase()] = func;
             },
@@ -1174,8 +1362,8 @@ beforeConnectFunctions.push(loadDescription);
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1209,43 +1397,179 @@ function isUserMod(){
 function isBibbyRoom(){
     return ROOMNAME.match(/bibby/i)?true:false;
 }
+function getIndexOfUser(id){
+    for (var i = 0; i < users.length; i++){
+        if (id === users[i].id){
+            return i;
+        }
+    }
+    return -1
+}
 var thisUsername;
+
+/*
+** Returns the caret (cursor) position of the specified text field.
+** Return value range is 0-oField.value.length.
+** http://flightschool.acylt.com/devnotes/caret-position-woes/
+*/
+function doGetCaretPosition(oField) {
+
+  // Initialize
+  var iCaretPos = 0;
+
+  // IE Support
+  if (document.selection) {
+
+    // Set focus on the element
+    oField.focus ();
+
+    // To get cursor position, get empty selection range
+    var oSel = document.selection.createRange ();
+
+    // Move selection start to 0 position
+    oSel.moveStart ('character', -oField.value.length);
+
+    // The caret position is selection length
+    iCaretPos = oSel.text.length;
+  }
+
+  // Firefox support
+  else if (oField.selectionStart || oField.selectionStart == '0')
+    iCaretPos = oField.selectionStart;
+
+  // Return results
+  return (iCaretPos);
+}
+
+function doSetCaretPosition(oField, position) {
+    //IE
+    if (document.selection) {
+        oField.focus ();
+        var oSel = document.selection.createRange ();
+        oSel.moveStart('character', position);
+        oSel.moveEnd('character', position);
+    }
+
+    // Firefox support
+    else if (oField.selectionStart || oField.selectionStart == '0'){
+        oField.selectionStart = position;
+        oField.selectionEnd = position;
+    }
+}
+function pasteTextAtCaret(text) {
+    var sel, range;
+    if (window.getSelection) {
+        // IE9 and non-IE
+        sel = window.getSelection();
+        if (sel.getRangeAt && sel.rangeCount) {
+            range = sel.getRangeAt(0);
+            range.deleteContents();
+
+            var textNode = document.createTextNode(text);
+            range.insertNode(textNode);
+
+            // Preserve the selection
+            range = range.cloneRange();
+            range.setStartAfter(textNode);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+    } else if (document.selection && document.selection.type != "Control") {
+        // IE < 9
+        document.selection.createRange().text = text;
+    }
+}
 
 beforeConnectFunctions.splice(0,0,loadGeneralStuff);
 /*
-	<InstaSynch - Watch Videos with friends.>
-	Copyright (C) 2013 InstaSynch
-	
-	<Faqqq- Modified InstaSynch client code>
-	Copyright (C) 2013 Rollermiam, Faqqq
-	
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-	You should have received a copy of the GNU General Public License
-	along with this program. If not, see <http://www.gnu.org/licenses/>.
-	http://opensource.org/licenses/GPL-3.0
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
 */
 
+function loadPurgeTooLongCommand(){
+    commands.set('modCommands',"purgeTooLong ",purgeTooLong);
+}
+
+function purgeTooLong(params){
+    var maxTimeLimit = params[1]?parseInt(params[1])*60:60*60,
+        videos = [];
+
+    //get all Videos longer than maxTimeLimit
+    for (var i = 0; i < playlist.length; i++) {
+        if(playlist[i].duration >= maxTimeLimit){
+            videos.push({info:playlist[i].info, duration:playlist[i].duration});
+        }
+    }  
+
+    function compareVideos(a,b){
+        return b.duration - a.duration;
+    };
+    videos.sort(compareVideos);
+
+    for (var i = 0; i < videos.length; i++) {
+        sendcmd('remove', {info: videos[i].info});
+    }
+}
+
+beforeConnectFunctions.push(loadPurgeTooLongCommand);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+
 function loadRemoveLast(){
-    commands.set('modCommands',"'removeLast ",removeLast);
+    commands.set('modCommands',"removeLast ",removeLast);
 }
 
 
 // Remove the last video from the user 
 function removeLast(params){
+    if(!params[1]){
+        addMessage('','No user specified: \'removeLast [user]','','hashtext');
+        return;
+    }
 	var user = params[1],
 		removeIndex = -1,
     	i;
 
-	if(!user){
-        return;
-    }
 	// Look for the user last added video
     for (i = playlist.length - 1; i >= 0; i--) {
         if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
@@ -1263,7 +1587,28 @@ function removeLast(params){
 }
 		
 beforeConnectFunctions.push(loadRemoveLast);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
 
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
 
 function loadSettingsLoader(){
     var cookieName = 'InstaSynch Addons Settings',
@@ -1319,7 +1664,7 @@ function loadSettingsLoader(){
 var settings;
 
 function loadSettingsLoaderCommand(){
-    commands.set('regularCommands',"'printAddOnSettings",printAddonSettings);
+    commands.set('regularCommands',"printAddOnSettings",printAddonSettings);
 }
 
 function printAddonSettings(){
@@ -1336,8 +1681,40 @@ beforeConnectFunctions.push(loadSettingsLoaderCommand);
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadSkipCommand(){
+    commands.set('regularCommands',"skip ",skip);
+}
+
+function skip(){	
+	sendcmd("skip", null);
+}
+
+beforeConnectFunctions.push(loadSkipCommand);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1356,19 +1733,25 @@ beforeConnectFunctions.push(loadSettingsLoaderCommand);
 */
 
 function loadTrimWallCommand(){
-    commands.set('modCommands',"'trimWall ",trimWall);
+    commands.set('modCommands',"trimWall ",trimWall);
 }
 
 function trimWall(params){
+    if(!params[1]){
+        addMessage('','No user specified: \'trimWall [user] [maxMinutes]','','hashtext');
+        return;
+    }
+    resetWallCounter();
     var user = params[1],
-        maxTimeLimit = parseInt(params[2]),
+        maxTimeLimit = params[2]?parseInt(params[2])*60:60*60,
         currentTime = wallCounter[user],
         videos = [];
 
     if(currentTime < maxTimeLimit){
-        addMessage('',"The wall was smaller than the timelimit",'','hashtext');
+        addMessage('','The wall is smaller than the timelimit','','hashtext');
         return;
     }
+    //get all Videos for the user
     for (var i = 0; i < playlist.length; i++) {
         if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
             videos.push({info:playlist[i].info, duration:playlist[i].duration});
@@ -1378,25 +1761,281 @@ function trimWall(params){
     function compareVideos(a,b){
         return b.duration - a.duration;
     };
-
+    // function rmVideo(index, vidinfo){
+    //     setTimeout(
+    //         function(){
+    //             sendcmd('remove', {info: vidinfo});
+    //         }, 
+    //         (index+1) * 750);
+    // }
+    //sort the array so we will get the longest first
     videos.sort(compareVideos);
 
     for (var i = 0; i < videos.length && currentTime > maxTimeLimit; i++) {
         currentTime-= videos[i].duration;
-        setTimeout(
-            function(){
-                sendcmd('remove', {info: videos[i].info});
-            }, (i+1) * 750);
+        // rmVideo(i,videos[i].info);
+        //delay via commandFloodProtect.js
+        sendcmd('remove', {info: videos[i].info});
     }
 }
 
-//beforeConnectFunctions.push(loadTrimWallCommand);
+beforeConnectFunctions.push(loadTrimWallCommand);
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadVotePurgeCommand(){
+    commands.set('modCommands',"votepurge ",votePurge);
+}
+
+function votePurge(params)
+{
+	var user = params[1],
+		poll = new Object(),
+		option;
+				
+	if (!user){
+        addMessage('','No user specified: \'votePurge [user]','','hashtext');
+		return;
+	}
+	
+	poll.title = "Should we purge " + user + " ? /babyseal";
+	poll.options = new Array();
+	option = "Yes !";
+	poll.options.push(option);
+	option = "No !";
+	poll.options.push(option);
+	
+	sendcmd("poll-create", poll);
+}
+
+beforeConnectFunctions.push(loadVotePurgeCommand);
+var indexOfSearch;
+var entries;
+
+// Search results container
+var divresults = document.createElement("div");
+divresults.id = "searchResults";
+applyStyle(divresults);
+
+// Close button container
+var divremove = document.createElement("div");
+divremove.id = "divclosesearch";
+applyStyle(divremove);
+
+// "Moar" link container
+var divmore = document.createElement("div");
+divmore.id = "divmore";
+
+// Getting poll container's parent to insert search result container
+var divpolls = document.getElementsByClassName("poll-container")[0];
+var divpollparent = divpolls.parentNode;
+divpollparent.insertBefore(divresults,divpolls);
+
+
+// Setting event "TAB" on the URL input
+$("#URLinput").bind("keydown", function(event) {
+ //    if (event.keyCode === $.ui.keyCode.TAB){    
+ //     event.preventDefault();  // prevents lost of focus
+ //     closeResults();
+ //        search();
+ //    }
+ //    if(event.keyCode === $.ui.keyCode.LEFT){
+ //    	   getMoreResults('last');
+ //    	   return;
+ //    }else if(event.keyCode === $.ui.keyCode.RIGHT){
+ //    	   getMoreResults('next');
+ //    	   return;
+ //    }
+    if(event.keyCode === $.ui.keyCode.ESCAPE){
+        closeResults();
+    }else{
+        if(searchTimeout){
+            clearInterval(searchTimeout);
+        }
+        searchTimeout = setTimeout(startSearch,500);  
+    }
+});
+var searchTimeout;
+function startSearch(){
+    searchTimeout = null;
+    closeResults();
+    search();
+}
+// Retrieve data from the search query
+function search(){
+    var query,
+        url;
+    
+    query = document.getElementById('URLinput').value;
+    if(!query || parseUrl(query)){
+    	return;
+    }
+
+    url = "https://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5&max-results=45&q=" + query;
+    indexOfSearch = 0;
+    $.getJSON(url, function(data){showResults(data)});
+}
+
+// Parse data and display it
+function showResults(data) {
+  var feed = data.feed;
+  entries = feed.entry || [];
+  var html = new Array();
+  
+  for (var i = 0; i < 9; i++) {
+    var entry = entries[i];
+    var thumbnailUrl = entries[i].media$group.media$thumbnail[0].url;
+    var thumbnail = "<img onmouseover='showTitle(this)' onmouseout='hideTitle(this)' src='" + thumbnailUrl + "'>";
+    var title = entry.title.$t;
+    var idtag = new Array();
+    idtag = entry.id.$t.split(':');
+    var id = idtag[3];
+    var link = "http://www.youtube.com/watch?v=" + id;
+    
+    html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'  onClick='addLinkToPl(this)'>" + thumbnail + "<p  style='position:absolute;top:10px;visibility:hidden'><span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span></p><p style='display:none'>" + link + "</p> </div>");
+  }
+  $(html.join('')).appendTo("#searchResults");
+  
+  applyStyle(divmore);
+  divresults.insertBefore(divremove,divresults.firstChild); // Somehow adding it before won't work
+  divresults.appendChild(divmore);
+  divresults.style.display = "block";
+  divremove.style.display = "block";
+} 
+
+function getMoreResults(param){
+    if (param === "last"){
+        indexOfSearch = indexOfSearch - 9;
+    }
+    else{
+        indexOfSearch = indexOfSearch + 9;
+    }
+    $("#searchResults").empty();
+    var max = Math.min(indexOfSearch+9 , entries.length);
+    var html = new Array();
+    for (var i = indexOfSearch; i < max; i++) {
+        var entry = entries[i];
+        var thumbnailUrl = entries[i].media$group.media$thumbnail[0].url;
+        var thumbnail = "<img onmouseover='showTitle(this)' onmouseout='hideTitle(this)' src='" + thumbnailUrl + "'>";
+        var title = entry.title.$t;
+        var idtag = new Array();
+        idtag = entry.id.$t.split(':');
+        var id = idtag[3];
+        var link = "http://www.youtube.com/watch?v=" + id;
+        
+        html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'  onClick='addLinkToPl(this)'>" + thumbnail + "<p  style='position:absolute;top:10px;visibility:hidden'><span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span></p><p style='display:none'>" + link + "</p> </div>");
+  }
+  $(html.join('')).appendTo("#searchResults");
+  applyStyle(divmore);
+  divresults.insertBefore(divremove,divresults.firstChild); // Somehow adding it before won't work
+  divresults.appendChild(divmore);
+  divresults.style.display = "block";
+  divremove.style.display = "block";
+    
+}
+// shows the video title on hover
+function showTitle(e){
+    var titleToShow = e.parentNode.childNodes[1];
+    titleToShow.style.visibility='visible';
+}
+
+// hide the video title on mouse out
+function hideTitle(e){
+    var titleToHide = e.parentNode.childNodes[1];
+    titleToHide.style.visibility='hidden';
+}
+    
+// Paste the title clicked in the add bar
+function addLinkToPl(e) {
+    var linkToPaste = e.childNodes[2].innerHTML;
+    
+    var addbox = document.getElementById("URLinput");
+    addbox.value = linkToPaste;
+}
+
+// closes the results and empties it
+function closeResults()
+{
+    $("#searchResults").empty();
+    divresults.style.display = "none";
+    divremove.style.display = "none";
+}
+
+// css thingies
+function applyStyle(e)
+{
+    if (e.id === "searchResults")
+    {
+        divresults.style.cssFloat = "right"; // All but IE
+        divresults.style.styleFloat = "right"; //IE
+        divresults.style.width = "380px"; 
+        divresults.style.marginTop = "10px";
+        divresults.style.backgroundColor = "#DFDFDF";
+        divresults.style.opacity = "0.9";
+        divresults.style.padding = "5px";
+        divresults.style.display = "none";
+        divresults.style.position = "relative";
+    }
+    if (e.id === "divclosesearch")
+    {
+        divremove.innerHTML = "<img onClick=closeResults() src='http://www.instasynch.com/images/close.png'>";
+        divremove.style.cssFloat = "right"; // All but IE
+        divremove.style.styleFloat = "right"; //IE
+        divremove.style.cursor = "pointer";
+        divremove.style.display = "none";
+        divremove.style.position = "absolute";
+        divremove.style.left = "375px";
+        divremove.style.top = "0px";    
+    }
+    if (e.id === "divmore")
+    {
+        if (indexOfSearch === 0)
+        {
+            divmore.innerHTML = "<a onClick=getMoreResults('next')> Next &gt&gt </a>";
+        }
+        else 
+        {
+            if (indexOfSearch >= 36)
+            {
+                divmore.innerHTML = "<a onClick=getMoreResults('last')>  &lt&lt Last </a> ";
+            }
+            else
+            {
+                divmore.innerHTML = "<a onClick=getMoreResults('last')> &lt&lt Last </a> <a onClick=getMoreResults('next')> Next &gt&gt </a>";
+            }
+        }
+        divmore.style.textAlign="center";
+        divmore.style.cursor="pointer";
+    }
+}
+        
+    
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1424,8 +2063,8 @@ function loadMirrorPlayer(){
         settings.set('automaticMirror',true);
     }
     //add the command
-    commands.set('addOnSettings',":toggleAutomaticPlayerMirror",toggleAutomaticMirrorPlayer);
-    commands.set('regularCommands',"'mirrorPlayer",toggleMirrorPlayer);
+    commands.set('addOnSettings',"AutomaticPlayerMirror",toggleAutomaticMirrorPlayer);
+    commands.set('regularCommands',"mirrorPlayer",toggleMirrorPlayer);
 
     //appening the class until we got our css files
     //http://stackoverflow.com/a/3434665
@@ -1450,12 +2089,13 @@ function loadMirrorPlayer(){
     };
 
     //checking the current video after loading the first time
-    setTimeout(function(){
-        if(containsMirrored(playlist[getActiveVideoIndex()].title)){
-            toggleMirrorPlayer();
-        }
-    },1000);
-    
+    if(playlist.length != 0){
+        setTimeout(function(){
+            if(containsMirrored(playlist[getActiveVideoIndex()].title)){
+                toggleMirrorPlayer();
+            }
+        },1000);
+    }
 }
 function containsMirrored(title){
     if(!automaticMirror){
@@ -1494,8 +2134,8 @@ afterConnectFunctions.push(loadMirrorPlayer);
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1599,8 +2239,8 @@ beforeConnectFunctions.push(loadMouseWheelVolumecontrol);
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1628,7 +2268,7 @@ function loadTogglePlayer(){
         settings.set('playerActive',true);
     }
     //add the command
-    commands.set('regularCommands',"'togglePlayer",togglePlayer);
+    commands.set('regularCommands',"togglePlayer",togglePlayer);
 
     //toggle the player once if the stored setting was false
     if(!playerActive){
@@ -1675,8 +2315,8 @@ afterConnectFunctions.push(loadTogglePlayer);
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1693,8 +2333,9 @@ afterConnectFunctions.push(loadTogglePlayer);
     
     http://opensource.org/licenses/GPL-3.0
 */
+
 function loadExportPlaylist(){
-    commands.set('regularCommands',"'exportPlaylist",exportPlaylist);
+    commands.set('regularCommands',"exportPlaylist",exportPlaylist);
 }
 
 
@@ -1717,8 +2358,8 @@ beforeConnectFunctions.push(loadExportPlaylist);
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq, Rollermiam
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -1747,16 +2388,10 @@ function loadWallCounter(){
         value;
 
     //add commands
-    commands.set('regularCommands',"'printWallCounter",printWallCounter);
-    commands.set('regularCommands',"'printMyWallCounter",printMyWallCounter);
+    commands.set('regularCommands',"printWallCounter",printWallCounter);
+    commands.set('regularCommands',"printMyWallCounter",printMyWallCounter);
 
 
-    for(i = 0; i < playlist.length;i++){
-        video = playlist[i];
-        value = wallCounter[video.addedby];
-        value =((value)?value:0) + video.duration;
-        wallCounter[video.addedby] = value;
-    }
     //overwrite InstaSynch's addVideo
     addVideo = function addVideo(vidinfo) {
 
@@ -1791,10 +2426,22 @@ function loadWallCounter(){
             message +='WallCounter: ['+secondsToTime(wallCounter[thisUsername])+']';
         }
         oldAddMessage(username, message, userstyle, textstyle);
-    };
+    };    
 
+    //init the wallcounnter
+    resetWallCounter();
 }
 var wallCounter = {};
+
+function resetWallCounter(){
+    wallCounter = {};
+    for(i = 0; i < playlist.length;i++){
+        video = playlist[i];
+        value = wallCounter[video.addedby];
+        value =((value)?value:0) + video.duration;
+        wallCounter[video.addedby] = value;
+    } 
+}
 
 function printWallCounter(){
     var output = "",
@@ -1817,5 +2464,136 @@ function printMyWallCounter()
 }
 
 afterConnectFunctions.push(loadWallCounter);
+/*
+    Copyright (C) 2013  faqqq @Bibbytube
+    
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+
+function parseUrl(URL){
+	//Parse URLs from  youtube / twitch / vimeo / dailymotion / livestream
+ 
+	var match = URL.match(/(https?:\/\/)?(.*\.)?(\w+)\./i);
+	if(match === null){
+		/*error*/
+		return false;
+	}
+	var provider = match[3], //the provider e.g. youtube,twitch ...
+		mediaType, // stream or video (this can't be determined for youtube streams, since the url is the same for a video)
+		id, //the video-id 
+		channel; //for twitch and livestream
+	switch(provider){
+		case 'youtu':
+		case 'youtube':{ 
+			provider = 'youtube'; //so that we don't have youtu or youtube later on
+
+			//match for http://www.youtube.com/watch?v=12345678901
+			if((match=URL.match(/v=([\w-_]{11})/i))){
+			}//match for http://www.youtube.com/v/12345678901 and http://www.youtu.be/12345678901
+			else if((match=URL.match(/\/([\w-_]{11})/i))){
+			}else{
+				/*error*/
+				return false;
+			}
+			//Try to match the different youtube urls, if successful the last (=correct) id will be saved in the array
+			//Read above for RegExp explanation
+			id = match[1];
+			mediaType = 'video';
+		}break;
+		case 'twitch':{
+			//match for http://www.twitch.tv/ <channel> /c/ <video id>
+			if((match = URL.match(/twitch\.tv\/(.*?)\/.\/(\d+)?/i))){
+			}//match for http://www.twitch.tv/* channel=<channel> *
+			else if((match = URL.match(/channel=([A-Za-z0-9_]+)/i))){
+			}//match for http://www.twitch.tv/ <channel>
+			else if((match = URL.match(/twitch\.tv\/([A-Za-z0-9_]+)/i))){
+			}else{
+				/*error*/
+				return false;
+			}
+			mediaType = 'stream';
+			if(match.length == 3){
+				//get the video id 
+				id = match[2];
+				//also it's a video then
+				mediaType = 'video';
+			}
+			//get the channel name
+			channel = match[1];
+		}break;
+		case 'vimeo':{
+
+			//match for http://vimeo.com/channels/<channel>/<video id>
+			if(match = URL.match(/\/channels\/[\w0-9]+\/(\d+)/i)){
+			}//match for http://vimeo.com/album/<album id>/video/<video id>
+			else if(match = URL.match(/\/album\/\d+\/video\/(\d+)/i)){
+			}//match for http://player.vimeo.com/video/<video id>
+			else if(match = URL.match(/\/video\/(\d+)/i)){
+			}//match for http://vimeo.com/<video id>
+			else if(match = URL.match(/\/(\d+)/i)){
+			}else{
+				/*error*/
+				return false;
+			}
+			//get the video id
+			id = match[1];
+			mediaType = 'video';
+		} break;
+		case 'dai':
+		case 'dailymotion':{
+			provider = 'dailymotion'; //same as youtube / youtu
+			//match for http://www.dailymotion.com/video/ <video id> _ <video title>
+			if((match=URL.match(/\/video\/([^_]+)/i))){
+			}//match for http://dai.ly/ <video id>
+			else if((match=URL.match(/ly\/([^_]+)/i))){	
+			}//or find the #video= tag in http://www.dailymotion.com/en/relevance/search/ <search phrase> /1#video= <video id>
+			else if((match=URL.match(/#video=([^_]+)/i))){	
+			}else{
+				/*error*/
+				return false;
+			}
+			//get the video id
+			id= match[1];
+			mediaType = 'video';
+
+		}break;
+		case 'livestream':{
+			//match for http://www.livestream.com/ <channel>
+			//not sure about new.livestream.com links tho
+			if((match = URL.match(/livestream\.com\/(\w+)/i))){	
+			}else{
+				/*error*/
+				return false;
+			}
+			//get the channel name
+			channel = match[1];
+			mediaType = 'stream';
+		}break;
+		//different provider -> error
+		default: /*error*/ return false;
+	}
+
+	//return the data
+	return {
+		'provider': provider,
+		'mediaType':mediaType,
+		'id':id,
+		'channel':channel
+	};
+}
 beforeConnect();
 afterConnect();

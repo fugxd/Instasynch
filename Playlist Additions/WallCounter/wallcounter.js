@@ -2,8 +2,8 @@
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013  Faqqq, Rollermiam
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,16 +32,10 @@ function loadWallCounter(){
         value;
 
     //add commands
-    commands.set('regularCommands',"'printWallCounter",printWallCounter);
-    commands.set('regularCommands',"'printMyWallCounter",printMyWallCounter);
+    commands.set('regularCommands',"printWallCounter",printWallCounter);
+    commands.set('regularCommands',"printMyWallCounter",printMyWallCounter);
 
 
-    for(i = 0; i < playlist.length;i++){
-        video = playlist[i];
-        value = wallCounter[video.addedby];
-        value =((value)?value:0) + video.duration;
-        wallCounter[video.addedby] = value;
-    }
     //overwrite InstaSynch's addVideo
     addVideo = function addVideo(vidinfo) {
 
@@ -76,10 +70,22 @@ function loadWallCounter(){
             message +='WallCounter: ['+secondsToTime(wallCounter[thisUsername])+']';
         }
         oldAddMessage(username, message, userstyle, textstyle);
-    };
+    };    
 
+    //init the wallcounnter
+    resetWallCounter();
 }
 var wallCounter = {};
+
+function resetWallCounter(){
+    wallCounter = {};
+    for(i = 0; i < playlist.length;i++){
+        video = playlist[i];
+        value = wallCounter[video.addedby];
+        value =((value)?value:0) + video.duration;
+        wallCounter[video.addedby] = value;
+    } 
+}
 
 function printWallCounter(){
     var output = "",

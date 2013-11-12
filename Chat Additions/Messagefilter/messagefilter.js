@@ -1,20 +1,23 @@
 /*
     <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2013 InstaSynch
-    
-    <Faqqq- Modified InstaSynch client code>
-    Copyright (C) 2013 Faqqq
-    
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
+    
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
+    
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
     http://opensource.org/licenses/GPL-3.0
 */
 
@@ -36,8 +39,8 @@ function loadMessageFilter() {
     }
 
     //add the commands
-    commands.set('addOnSettings',":toggleTags",toggleTags);
-    commands.set('addOnSettings',":toggleNSFWEmotes",toggleNSFWEmotes);
+    commands.set('addOnSettings',"Tags",toggleTags);
+    commands.set('addOnSettings',"NSFWEmotes",toggleNSFWEmotes);
 
     //init
     if(NSFWEmotes){
@@ -144,6 +147,19 @@ function parseMessage(message,isChatMessage){
     //filter tags
     for (word in tags) {
         message = message.replace(new RegExp(word, 'gi'),function(){return (filterTags)?tags[word]:'';});
+    }    
+    //filter advancedTags
+    for (word in advancedTags) {
+        message = message.replace(new RegExp(advancedTags[word], 'g'),
+            function(match, m1, m2){
+                var ret = '';
+                switch(word){
+                    case 'hexcolor': ret = '<span style="color:' +m1+ '">';break;
+                    case 'marquee' : ret = '<MARQUEE behavior="scroll" direction='+(m1?"left":"right")+' width="100%" scrollamount="'+ m2 +'">'; break;
+                    case 'alternate': ret = '<MARQUEE behavior="alternate" direction="right" width="100%" scrollamount="'+ m1 +'">'; break;
+                }
+                return (filterTags)?ret:'';
+            });
     }
     //remove unnused tags [asd] if there is a emote
     if(emoteFound && isChatMessage){
@@ -202,6 +218,22 @@ function parseMessage(message,isChatMessage){
     }
     return message;
 }
+function toggleNSFWEmotes(){
+    if(!NSFWEmotes){
+        $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        $codes['meatspin'] = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        autocompleteData.push('/boobies');
+        autocompleteData.push('/meatspin');
+        autocompleteData.sort();
+    }else{
+        delete $codes['boobies'];
+        delete $codes['meatspin'];
+        autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1); 
+        autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1); 
+    }
+    NSFWEmotes = !NSFWEmotes;
+    settings.set('NSFWEmotes',NSFWEmotes);
+}
 
 var filterTags = true,
     NSFWEmotes = false,
@@ -213,6 +245,11 @@ var filterTags = true,
     "gay" : "hetero",
     "GAY" : "HETERO"
 },
+    advancedTags = {
+       'hexcolor': '\\[(#[0-9A-F]{1,6})\\]',
+       'marquee': '\\[marquee(-)?(\\d{1,2})\\]',
+       'alternate': '\\[alt(\\d{1,2})\\]'
+    },
     tags = {
     '\\[black\\]': '<span style="color:black">',
     '\\[/black\\]': '</span>',
@@ -272,6 +309,10 @@ var filterTags = true,
 
     '\\[rmarquee\\]': '<marquee>',
     '\\[/rmarquee\\]': '</marquee>',
+    '\\[alt\\]': '<marquee behavior="alternate" direction="right">',
+    '\\[/alt\\]': '</marquee>',
+    '\\[falt\\]': '<marquee behavior="alternate" scrollamount="50" direction="right">',
+    '\\[/falt\\]': '</marquee>',
     '\\[marquee\\]': '<marquee direction="right">',
     '\\[/marquee\\]': '</marquee>',
     '\\[rsanic\\]': '<MARQUEE behavior="scroll" direction="left" width="100%" scrollamount="50">',
