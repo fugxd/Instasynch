@@ -143,7 +143,7 @@ function loadAutoComplete() {
                 caretPosition = doGetCaretPosition(cin),
                 lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~']);
             //prevent it from autocompleting when a little changed has been made and its already there
-            if(message.indexOf(ui.item.value) === lastIndex){
+            if(message.indexOf(ui.item.value) === lastIndex && lastIndex+ui.item.value.length !== caretPosition){
                 doSetCaretPosition(cin,lastIndex+ui.item.value.length);
                 return false;
             }
