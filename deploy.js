@@ -2464,6 +2464,7 @@ function printMyWallCounter()
 }
 
 afterConnectFunctions.push(loadWallCounter);
+
 /*
     Copyright (C) 2013  faqqq @Bibbytube
     
@@ -2493,26 +2494,35 @@ function parseUrl(URL){
 		return false;
 	}
 	var provider = match[3], //the provider e.g. youtube,twitch ...
-		mediaType, // stream or video (this can't be determined for youtube streams, since the url is the same for a video)
+		mediaType, // stream, video or playlist (this can't be determined for youtube streams, since the url is the same for a video)
 		id, //the video-id 
-		channel; //for twitch and livestream
+		channel, //for twitch and livestream
+		playlistId //youtube playlistId;
 	switch(provider){
 		case 'youtu':
 		case 'youtube':{ 
 			provider = 'youtube'; //so that we don't have youtu or youtube later on
 
 			//match for http://www.youtube.com/watch?v=12345678901
-			if((match=URL.match(/v=([\w-_]{11})/i))){
+			if((match=URL.match(/v=([\w-]{11})/i))){
+				id = match[1];
 			}//match for http://www.youtube.com/v/12345678901 and http://www.youtu.be/12345678901
-			else if((match=URL.match(/\/([\w-_]{11})/i))){
-			}else{
-				/*error*/
+			else if((match=URL.match(/(v|be)\/([\w-]{11})/i))){
+				id = match[2];
+			}
+            if((match=URL.match(/list=([\w-]+)/i))){
+				playlistId = match[1];
+			}
+			if(!id && !playlistId){
 				return false;
 			}
 			//Try to match the different youtube urls, if successful the last (=correct) id will be saved in the array
 			//Read above for RegExp explanation
-			id = match[1];
-			mediaType = 'video';
+            if(playlistId){                
+			    mediaType = 'playlist';
+            }else{
+			    mediaType = 'video';
+            }
 		}break;
 		case 'twitch':{
 			//match for http://www.twitch.tv/ <channel> /c/ <video id>
@@ -2587,11 +2597,13 @@ function parseUrl(URL){
 		default: /*error*/ return false;
 	}
 
+   logIt("["+provider + "] [" +mediaType + "] [" + id + "] [" + channel + "] [" + playlistId + "]" );
 	//return the data
 	return {
 		'provider': provider,
 		'mediaType':mediaType,
 		'id':id,
+		'playlistId':playlistId,
 		'channel':channel
 	};
 }
