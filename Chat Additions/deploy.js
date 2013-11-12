@@ -2597,7 +2597,6 @@ function parseUrl(URL){
 		default: /*error*/ return false;
 	}
 
-   logIt("["+provider + "] [" +mediaType + "] [" + id + "] [" + channel + "] [" + playlistId + "]" );
 	//return the data
 	return {
 		'provider': provider,
