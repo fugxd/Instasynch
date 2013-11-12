@@ -149,10 +149,6 @@ The player can be turned off by using the command <code>'togglePlayer</code>.
 
 Click <a href="Player Additions/Toggle Player/toggleplayerexample.gif" >here</a> for the example.
 
-Toggle Player
-
-<img src="Player Additions/Toggle Player/toggleplayerexample.gif" >
-
 Mirror Player
 -------------
 
