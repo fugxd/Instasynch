@@ -44,7 +44,7 @@ Create a new userscript and copy the contents of <a href="https://github.com/Bib
 
 Click <a href="/install.gif">here</a> for Chrome example.
 
-Change Log
+Changes
 ------------
 
 <pre>
