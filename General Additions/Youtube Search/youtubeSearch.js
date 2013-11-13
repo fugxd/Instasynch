@@ -28,13 +28,6 @@ $("#URLinput").bind("keydown", function(event) {
  //     closeResults();
  //        search();
  //    }
- //    if(event.keyCode === $.ui.keyCode.LEFT){
- //    	   getMoreResults('last');
- //    	   return;
- //    }else if(event.keyCode === $.ui.keyCode.RIGHT){
- //    	   getMoreResults('next');
- //    	   return;
- //    }
     if(event.keyCode === $.ui.keyCode.ESCAPE){
         closeResults();
     }else{
@@ -93,7 +86,7 @@ function showResults(data) {
 } 
 
 function getMoreResults(param){
-    if (param === "last"){
+    if (param === "prev"){
         indexOfSearch = indexOfSearch - 9;
     }
     else{
@@ -186,11 +179,11 @@ function applyStyle(e)
         {
             if (indexOfSearch >= 36)
             {
-                divmore.innerHTML = "<a onClick=getMoreResults('last')>  &lt&lt Last </a> ";
+                divmore.innerHTML = "<a onClick=getMoreResults('prev')>  &lt&lt prev </a> ";
             }
             else
             {
-                divmore.innerHTML = "<a onClick=getMoreResults('last')> &lt&lt Last </a> <a onClick=getMoreResults('next')> Next &gt&gt </a>";
+                divmore.innerHTML = "<a onClick=getMoreResults('prev')> &lt&lt prev </a> <a onClick=getMoreResults('next')> Next &gt&gt </a>";
             }
         }
         divmore.style.textAlign="center";
