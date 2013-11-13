@@ -179,11 +179,11 @@ function applyStyle(e)
         {
             if (indexOfSearch >= 36)
             {
-                divmore.innerHTML = "<a onClick=getMoreResults('prev')>  &lt&lt prev </a> ";
+                divmore.innerHTML = "<a onClick=getMoreResults('prev')>  &lt&lt Prev </a> ";
             }
             else
             {
-                divmore.innerHTML = "<a onClick=getMoreResults('prev')> &lt&lt prev </a> <a onClick=getMoreResults('next')> Next &gt&gt </a>";
+                divmore.innerHTML = "<a onClick=getMoreResults('prev')> &lt&lt Prev </a> <a onClick=getMoreResults('next')> Next &gt&gt </a>";
             }
         }
         divmore.style.textAlign="center";
