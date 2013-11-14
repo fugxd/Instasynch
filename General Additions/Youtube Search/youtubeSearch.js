@@ -50,7 +50,7 @@ function search(){
     
     query = document.getElementById('URLinput').value;
     if(!query || parseUrl(query)){
-    	return;
+        return;
     }
 
     url = "https://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5&max-results=45&q=" + query;
@@ -67,14 +67,14 @@ function showResults(data) {
   for (var i = 0; i < 9; i++) {
     var entry = entries[i];
     var thumbnailUrl = entries[i].media$group.media$thumbnail[0].url;
-    var thumbnail = "<img onmouseover='showTitle(this)' onmouseout='hideTitle(this)' src='" + thumbnailUrl + "'>";
+    var thumbnail = "<img src='" + thumbnailUrl + "'>";
     var title = entry.title.$t;
     var idtag = new Array();
     idtag = entry.id.$t.split(':');
     var id = idtag[3];
     var link = "http://www.youtube.com/watch?v=" + id;
     
-    html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'  onClick='addLinkToPl(this)'>" + thumbnail + "<p  style='position:absolute;top:10px;visibility:hidden'><span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span></p><p style='display:none'>" + link + "</p> </div>");
+    html.push("<div onmouseover='showTitle(this)' onmouseout='hideTitle(this)'><div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'  onClick='addLinkToPl(this)'>" + thumbnail + "<p  style='position:absolute;top:10px;visibility:hidden'><span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span></p><p style='display:none'>" + link + "</p> </div> </div>");
   }
   $(html.join('')).appendTo("#searchResults");
   
@@ -98,14 +98,14 @@ function getMoreResults(param){
     for (var i = indexOfSearch; i < max; i++) {
         var entry = entries[i];
         var thumbnailUrl = entries[i].media$group.media$thumbnail[0].url;
-        var thumbnail = "<img onmouseover='showTitle(this)' onmouseout='hideTitle(this)' src='" + thumbnailUrl + "'>";
+        var thumbnail = "<img   src='" + thumbnailUrl + "'>";
         var title = entry.title.$t;
         var idtag = new Array();
         idtag = entry.id.$t.split(':');
         var id = idtag[3];
         var link = "http://www.youtube.com/watch?v=" + id;
         
-        html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'  onClick='addLinkToPl(this)'>" + thumbnail + "<p  style='position:absolute;top:10px;visibility:hidden'><span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span></p><p style='display:none'>" + link + "</p> </div>");
+        html.push("<div onmouseover='showTitle(this)' onmouseout='hideTitle(this)'><div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'  onClick='addLinkToPl(this)'>" + thumbnail + "<p  style='position:absolute;top:10px;visibility:hidden'><span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span></p><p style='display:none'>" + link + "</p> </div> </div>");
   }
   $(html.join('')).appendTo("#searchResults");
   applyStyle(divmore);
@@ -117,13 +117,13 @@ function getMoreResults(param){
 }
 // shows the video title on hover
 function showTitle(e){
-    var titleToShow = e.parentNode.childNodes[1];
+    var titleToShow = e.firstChild.childNodes[1];
     titleToShow.style.visibility='visible';
 }
 
 // hide the video title on mouse out
 function hideTitle(e){
-    var titleToHide = e.parentNode.childNodes[1];
+    var titleToHide = e.firstChild.childNodes[1];
     titleToHide.style.visibility='hidden';
 }
     
@@ -190,5 +190,5 @@ function applyStyle(e)
         divmore.style.cursor="pointer";
     }
 }
-        
+     
     
