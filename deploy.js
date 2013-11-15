@@ -2495,14 +2495,15 @@ function parseUrl(URL){
 		case 'youtu':
 		case 'youtube':{ 
 			provider = 'youtube'; //so that we don't have youtu or youtube later on
-
 			//match for http://www.youtube.com/watch?v=12345678901
 			if((match=URL.match(/v=([\w-]{11})/i))){
 				id = match[1];
-			}//match for http://www.youtube.com/v/12345678901 and http://www.youtu.be/12345678901
-			else if((match=URL.match(/(v|be)\/([\w-]{11})/i))){
+			}//match for http://www.youtube.com/v/12345678901, http://www.youtu.be/12345678901 
+			 //and http://gdata.youtube.com/feeds/api/videos/12345678901/related
+			else if((match=URL.match(/(v|be|videos)\/([\w-]{11})/i))){
 				id = match[2];
 			}
+			//get playlist parameter
             if((match=URL.match(/list=([\w-]+)/i))){
 				playlistId = match[1];
 			}
@@ -2511,10 +2512,10 @@ function parseUrl(URL){
 			}
 			//Try to match the different youtube urls, if successful the last (=correct) id will be saved in the array
 			//Read above for RegExp explanation
-            if(playlistId){                
-			    mediaType = 'playlist';
-            }else{
+            if(id){                
 			    mediaType = 'video';
+            }else{
+			    mediaType = 'playlist';
             }
 		}break;
 		case 'twitch':{
