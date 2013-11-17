@@ -77,18 +77,17 @@ function loadCommandLoader(){
                 return items;
             },
             "execute":function(funcName, params){
-                var executed = false;
+                commandExecuted = false;
                 funcName = funcName.toLowerCase();
                 if(items['commandFunctionMap'].hasOwnProperty(funcName)){
                     items['commandFunctionMap'][funcName](params);
-                    executed = true;
+                    commandExecuted = true;
                 }
                 funcName = funcName +' ';
                 if(items['commandFunctionMap'].hasOwnProperty(funcName)){
                     items['commandFunctionMap'][funcName](params);
-                    executed = true;
+                    commandExecuted = true;
                 }
-                return executed;
             }
         }
     };    
@@ -96,12 +95,11 @@ function loadCommandLoader(){
     $("#chat input").bind("keypress", function(event) {
         if (event.keyCode === $.ui.keyCode.ENTER) {
             var params = $(this).val().split(' ');
-            if(commands.execute(params[0],params)){
-                $(this).val('');
-            }
+            commands.execute(params[0],params);
         }
     });
 }
 var commands;
+    commandExecuted = false;
 
 beforeConnectFunctions.splice(0,0,loadCommandLoader);

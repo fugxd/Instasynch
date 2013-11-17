@@ -110,6 +110,9 @@ function search(){
                             }else{
                                 buildMoreEntries = false;
                             }
+                        },
+                        error: function(){
+                            buildMoreEntries = false;
                         }
                     });
                 }
