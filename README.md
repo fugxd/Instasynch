@@ -27,6 +27,7 @@ Command List
 ~EmotesAutocomplete
 ~CommandsAutocomplete
 ~AddOnSettingsAutocomplete
+~NamesAutocomplete
 ~AutomaticPlayerMirror
 ~Tags
 ~NSFWEmotes
