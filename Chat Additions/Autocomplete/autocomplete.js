@@ -27,63 +27,31 @@ function loadAutoComplete() {
         return;
     }
     //load settings
-    var setting = settings.get('autocompleteEmotes');
-    if(setting){
-        autocompleteEmotes = setting ==='false'?false:true;
-    }else{
-        settings.set('autocompleteEmotes',true);
-    }
-
-    setting = settings.get('autocompleteTags');
-    if(setting){
-        autocompleteTags = setting ==='false'?false:true;
-    }else{
-        settings.set('autocompleteTags',true);
-    }
-
-    setting = settings.get('autocompleteCommands');
-    if(setting){
-        autocompleteCommands = setting ==='false'?false:true;
-    }else{
-        settings.set('autocompleteCommands',true);
-    }
-    
-    setting = settings.get('autocompleteAddonSettings');
-    if(setting){
-        autocompleteAddonSettings = setting ==='false'?false:true;
-    }else{
-        settings.set('autocompleteAddonSettings',true);
-    }
+    autocompleteEmotes = settings.get('autocompleteEmotes','true');
+    autocompleteTags = settings.get('autocompleteTags','true');
+    autocompleteCommands = settings.get('autocompleteCommands','true');
+    autocompleteAddonSettings = settings.get('autocompleteAddonSettings','true');
+    autocompleteNames = settings.get('autocompleteNames','true');
 
     //add the commands
     commands.set('addOnSettings',"TagsAutoComplete",toggleTagsAutocomplete);
     commands.set('addOnSettings',"EmotesAutoComplete",toggleEmotesAutocomplete);
     commands.set('addOnSettings',"CommandsAutoComplete",toggleCommandsAutocomplete);
     commands.set('addOnSettings',"AddOnSettingsAutoComplete",toggleAddonSettingsAutocomplete);
+    commands.set('addOnSettings',"NamesAutoComplete",toggleNamesAutocomplete);
 
-    setting = settings.get('autocompleteCommands');
-    if(setting){
-        autocompleteCommands = setting ==='false'?false:true;
-    }else{
-        settings.set('autocompleteCommands',true);
-    }
-    
-    setting = settings.get('autocompleteAddonSettings');
-    if(setting){
-        autocompleteAddonSettings = setting ==='false'?false:true;
-    }else{
-        settings.set('autocompleteAddonSettings',true);
-    }
-    var emotes = (function () {
-        var arr = Object.keys($codes);
-        for (var i = 0; i < arr.length; i++) {
-            arr[i] = '/' + arr[i];
-        }
-        return arr;
-    })(),
+    var i,
+        emotes = (
+            function () {
+                var arr = Object.keys($codes);
+                for (i = 0; i < arr.length; i++) {
+                    arr[i] = '/' + arr[i];
+                }
+                return arr;
+            })(),
         tagKeys = Object.keys(tags);
 
-    for (var i = 0; i < tagKeys.length; i++) {
+    for (i = 0; i < tagKeys.length; i++) {
         tagKeys[i] = tagKeys[i].replace(/\\/g,'');
     }
     autocompleteData = autocompleteData.concat(emotes);
@@ -92,9 +60,9 @@ function loadAutoComplete() {
     if (isUserMod()) {
         autocompleteData = autocompleteData.concat(commands.get('modCommands'));
     }
-
     autocompleteData.sort();
     autocompleteData = autocompleteData.concat(commands.get('addOnSettings').sort());
+
     //add the jquery autcomplete widget to InstaSynch's input field
     $("#chat input")    
     .bind("keydown", function(event) {
@@ -113,22 +81,34 @@ function loadAutoComplete() {
             }
             var message = request.term,
                 caretPosition = doGetCaretPosition(cin),
-                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~']),
+                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@']),
                 partToComplete = message.substring(lastIndex,caretPosition),
                 matches = [];
 
             if(partToComplete.length>0){
                 switch(partToComplete[0]){
                     case '/': if(!autocompleteEmotes) return;
-                    case "'": if(!autocompleteCommands) return;
+                    case '\'': if(!autocompleteCommands || (lastIndex!==0 && message[lastIndex-1].match(/\w/))) return;
                     case '[': if(!autocompleteTags) return;
                     case '~': if(!autocompleteAddonSettings) return;
+                    case '@': if(!autocompleteNames)return;
+
                 }
-                matches = $.map(autocompleteData, function (item) {
-                    if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
-                        return item;
-                    }
-                });
+                if(partToComplete[0] ==='@'){
+                    matches = $.map(getUsernameArray(), function(item){
+                        item = '@' + item;
+                        if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
+                            return item;
+                        }
+                    });
+                }else{
+                    matches = $.map(autocompleteData, function (item) {
+                        if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
+                            return item;
+                        }
+                    });
+                }
+
             }
             //show only 7 responses
             response(matches.slice(0, 7));
@@ -141,7 +121,7 @@ function loadAutoComplete() {
 
             var message = this.value,
                 caretPosition = doGetCaretPosition(cin),
-                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~']);
+                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@']);
             //prevent it from autocompleting when a little changed has been made and its already there
             if(message.indexOf(ui.item.value) === lastIndex && lastIndex+ui.item.value.length !== caretPosition){
                 doSetCaretPosition(cin,lastIndex+ui.item.value.length);
@@ -177,6 +157,7 @@ var isAutocompleteMenuActive = false,
     autocompleteCommands = true,
     autocompleteTags = true,
     autocompleteAddonSettings = true,
+    autocompleteNames = true;
     autocompleteData = [];
 
 function toggleTagsAutocomplete(){
@@ -194,6 +175,10 @@ function toggleCommandsAutocomplete(){
 function toggleAddonSettingsAutocomplete(){
     autocompleteAddonSettings = !autocompleteAddonSettings; 
     settings.set('autocompleteAddonSettings',autocompleteAddonSettings);
+}
+function toggleNamesAutocomplete(){
+    autocompleteNames = !autocompleteNames; 
+    settings.set('autocompleteNames',autocompleteNames);
 }
 
 afterConnectFunctions.push(loadAutoComplete);

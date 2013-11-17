@@ -23,12 +23,8 @@
 
 function loadModSpy(){
 	//load settings
-	var setting = settings.get('modSpy');
-	if(setting){
-		modSpy = setting ==='false'?false:true;
-	}else{
-		settings.set('modSpy',false);
-	}
+	modSpy = settings.get('modSpy','false');
+	
 	//add command
     commands.set('addOnSettings',"ModSpy",toggleModSpy);
 

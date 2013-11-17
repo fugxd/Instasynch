@@ -31,7 +31,7 @@ function loadAutocomplete() {
             //split the message
             var message = $(this).val().split(' '),
                 //make a regex out of the last part 
-                messagetags = message[message.length-1].match(/((\[.*?\])*\[?)([\w-]+)/),
+                messagetags = message[message.length-1].match(/((\[.*?\])*\[?@?)([\w-]+)/),
                 name,
                 data,
                 partToComplete = '',

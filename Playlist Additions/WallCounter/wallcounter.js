@@ -38,10 +38,8 @@ function loadWallCounter(){
 
     //overwrite InstaSynch's addVideo
     addVideo = function addVideo(vidinfo) {
-
+        resetWallCounter();
         value = wallCounter[vidinfo.addedby];
-        value =((value)?value:0) + vidinfo.duration;
-        wallCounter[vidinfo.addedby] = value;
         if (isBibbyRoom() && value >= 3600 && vidinfo.addedby === thisUsername){
             var output = "Watch out " + thisUsername + " ! You're being a faggot by adding more than 1 hour of videos !";
             addMessage('',output,'','hashtext');
@@ -49,30 +47,33 @@ function loadWallCounter(){
         oldAddVideo(vidinfo);
     };
 
-    //overwrite InstaSynch's removeVideo
-    removeVideo = function removeVideo(vidinfo){
-        var indexOfVid = getVideoIndex(vidinfo);
-        video = playlist[indexOfVid];
-        value = wallCounter[video.addedby];
-        value -= video.duration;
+    /*
+     * Commented since this shit isnt working and I have no idea why
+    */
+    // //overwrite InstaSynch's removeVideo
+    // removeVideo = function removeVideo(vidinfo){
+    //     var indexOfVid = getVideoIndex(vidinfo);
+    //     video = playlist[indexOfVid];
+    //     value = wallCounter[video.addedby];
+    //     value -= video.duration;
 
-        if(value > 0){
-            wallCounter[video.addedby] = value;
-        }else{
-            delete wallCounter[video.addedby];
-        }
+    //     if(value > 0){
+    //         wallCounter[video.addedby] = value;
+    //     }else{
+    //         delete wallCounter[video.addedby];
+    //     }
 
-        oldRemoveVideo(vidinfo);
-    };    
+    //     oldRemoveVideo(vidinfo);
+    // };    
 
-    addMessage = function addMessage(username, message, userstyle, textstyle) {
-        if(username === '' && message === 'Video added succesfully.'){
-            message +='WallCounter: ['+secondsToTime(wallCounter[thisUsername])+']';
-        }
-        oldAddMessage(username, message, userstyle, textstyle);
-    };    
+    // addMessage = function addMessage(username, message, userstyle, textstyle) {
+    //     if(username === '' && message === 'Video added succesfully.'){
+    //         message +='WallCounter: ['+secondsToTime(wallCounter[thisUsername])+']';
+    //     }
+    //     oldAddMessage(username, message, userstyle, textstyle);
+    // };    
 
-    //init the wallcounnter
+    //init the wallcounter
     resetWallCounter();
 }
 var wallCounter = {};
@@ -88,16 +89,22 @@ function resetWallCounter(){
 }
 
 function printWallCounter(){
+    resetWallCounter();
     var output = "",
         key;
     for(key in wallCounter){
-        output += "["+key + ": "+secondsToTime(wallCounter[key])+"] ";
+        if(wallCounter[key] > 3600){
+            output += "<span style='color:red'>["+key + ": "+secondsToTime(wallCounter[key])+"]</span> ";
+        }else{
+            output += "["+key + ": "+secondsToTime(wallCounter[key])+"] ";
+        }
     }
     addMessage('', output, '', 'hashtext');
 }
 
 function printMyWallCounter()
 {   
+    resetWallCounter();
     var output = "";
     if(wallCounter[thisUsername]){
         output = "["+ thisUsername +" : "+ secondsToTime(wallCounter[thisUsername])+"]";

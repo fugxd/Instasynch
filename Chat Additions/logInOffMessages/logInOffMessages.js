@@ -23,12 +23,8 @@
 
 function loadLogInOffMessages(){
     //load settings
-    var setting = settings.get('logInOffMessages');
-    if(setting){
-        logInOffMessages = setting ==='false'?false:true;
-    }else{
-        settings.set('logInOffMessages',false);
-    }
+    logInOffMessages = settings.get('logInOffMessages','false');
+    
     //add the command
     commands.set('addOnSettings',"LogInOffMessages",toggleLogInOffMessages);
     
@@ -66,5 +62,3 @@ function toggleLogInOffMessages(){
 }
 
 afterConnectFunctions.push(loadLogInOffMessages);
-
-
