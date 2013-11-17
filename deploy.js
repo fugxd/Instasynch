@@ -985,7 +985,7 @@ var notified = false;
 
 function toggleNotify(){
     if(window.newMsg && !notified){
-        $('head > link:last-of-type')[0].href = 'https://dl.dropboxusercontent.com/s/38jrcrgn210jabq/notificationFavicon.ico?dl=1&token_hash=AAFeZfrZVaXt-L579mMmsmQ2wRpNhBIA8WdCGL200B77dA';
+        $('head > link:last-of-type')[0].href = 'https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Name%20Notification/notificationFavicon.ico?raw=true';
         $('#chat_list').scrollTop($('#chat_list').scrollTop()-5);
         notified = true;
     }else{
