@@ -13,13 +13,13 @@ Command List
 'clearChat
 'printAddonSettings
 'printMyWallCounter
+'exportPlaylist
 
 //Mod Commands
 'bump [user]
 'removeLast [user]
 'trimWall [user] [maxMinutes]
 'purgeTooLong [maxMinutes]
-'exportPlaylist
 'votePurge [user]
 
 //Settings
