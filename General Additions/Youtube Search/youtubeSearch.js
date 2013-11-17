@@ -263,17 +263,17 @@ function applyStyle(e){
     }
     if (e.id === "divmore"){
         if (indexOfSearch === 0){
-            divmore.innerHTML = "<a style='cursor:pointer' onClick=getMoreResults('next')> Next &gt&gt </a>";
+            divmore.innerHTML = "<input type='button' style='cursor:pointer' onClick=getMoreResults('next') value='Next &gt&gt'/>";
         }else{
             if (indexOfSearch >= numberOfVids - 9){
-                divmore.innerHTML = "<span style='position:absolute;bottom:0;left:180px;'> <a style='cursor:pointer' onClick=getMoreResults('prev')>&lt&lt Prev</a> </span>";
+                divmore.innerHTML = "<input type='button' style='cursor:pointer' onClick=getMoreResults('prev') value='&lt&lt Prev'/> </span>";
             }else{
-                divmore.innerHTML = "<a style='cursor:pointer' onClick=getMoreResults('prev')> &lt&lt Prev </a> <a style='cursor:pointer' onClick=getMoreResults('next')> Next &gt&gt </a>";
+                divmore.innerHTML = "<input type='button' style='cursor:pointer' onClick=getMoreResults('prev') value='&lt&lt Prev' /> <input type='button' style='cursor:pointer' onClick=getMoreResults('next') value='Next &gt&gt' />";
             }
         }
         divmore.style.textAlign="center";
         //divmore.style.cursor="pointer";
-        divmore.style.height="290px";
+        divmore.style.height="300px";
         divmore.style.width = "380px"; 
         divmore.style.position="relative";
         divmore.style.zIndex="1";
