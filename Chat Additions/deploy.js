@@ -843,7 +843,7 @@ beforeConnectFunctions.push(loadModSpy);
 */
 
 
-function loadAutocomplete() {
+function loadNameAutocomplete() {
     $("#chat input").bind('keydown',function(event){
         
         if(event.keyCode == 9){//tab
@@ -852,7 +852,7 @@ function loadAutocomplete() {
             //split the message
             var message = $(this).val().split(' '),
                 //make a regex out of the last part 
-                messagetags = message[message.length-1].match(/((\[.*?\])*\[?@?)([\w-]+)/),
+                messagetags = message[message.length-1].match(/^((\[[^\]]*\])*\[?@?)([\w-]+)/),
                 name,
                 data,
                 partToComplete = '',
@@ -899,7 +899,7 @@ function loadAutocomplete() {
 
 }
 
-//beforeConnectFunctions.push(loadAutocomplete);
+beforeConnectFunctions.push(loadNameAutocomplete);
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1347,14 +1347,18 @@ function loadCommandLoader(){
                 return items;
             },
             "execute":function(funcName, params){
+                var executed = false;
                 funcName = funcName.toLowerCase();
                 if(items['commandFunctionMap'].hasOwnProperty(funcName)){
                     items['commandFunctionMap'][funcName](params);
+                    executed = true;
                 }
                 funcName = funcName +' ';
                 if(items['commandFunctionMap'].hasOwnProperty(funcName)){
                     items['commandFunctionMap'][funcName](params);
+                    executed = true;
                 }
+                return executed;
             }
         }
     };    
@@ -1362,7 +1366,9 @@ function loadCommandLoader(){
     $("#chat input").bind("keypress", function(event) {
         if (event.keyCode === $.ui.keyCode.ENTER) {
             var params = $(this).val().split(' ');
-            commands.execute(params[0],params);
+            if(commands.execute(params[0],params)){
+                $(this).val('');
+            }
         }
     });
 }

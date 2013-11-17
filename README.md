@@ -52,6 +52,7 @@ Changes
 • Walls over an hour will show up red in the wallcounter now
 • <a href="#youtube-search">YouTube Search</a> now supports browsing playlists by pasting the link into the input field
 • Added <a href="#notifications">Notifications</a>
+• Changing settings with the ~ commands won't show up in the chat anymore
 </pre>
 
 <pre>

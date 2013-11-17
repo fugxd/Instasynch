@@ -77,14 +77,18 @@ function loadCommandLoader(){
                 return items;
             },
             "execute":function(funcName, params){
+                var executed = false;
                 funcName = funcName.toLowerCase();
                 if(items['commandFunctionMap'].hasOwnProperty(funcName)){
                     items['commandFunctionMap'][funcName](params);
+                    executed = true;
                 }
                 funcName = funcName +' ';
                 if(items['commandFunctionMap'].hasOwnProperty(funcName)){
                     items['commandFunctionMap'][funcName](params);
+                    executed = true;
                 }
+                return executed;
             }
         }
     };    
@@ -92,7 +96,9 @@ function loadCommandLoader(){
     $("#chat input").bind("keypress", function(event) {
         if (event.keyCode === $.ui.keyCode.ENTER) {
             var params = $(this).val().split(' ');
-            commands.execute(params[0],params);
+            if(commands.execute(params[0],params)){
+                $(this).val('');
+            }
         }
     });
 }
