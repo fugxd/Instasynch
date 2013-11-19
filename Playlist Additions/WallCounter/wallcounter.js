@@ -102,8 +102,7 @@ function printWallCounter(){
     addMessage('', output, '', 'hashtext');
 }
 
-function printMyWallCounter()
-{   
+function printMyWallCounter(){   
     resetWallCounter();
     var output = "";
     if(wallCounter[thisUsername]){

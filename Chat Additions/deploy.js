@@ -1397,6 +1397,9 @@ beforeConnectFunctions.splice(0,0,loadCommandLoader);
 */
  
 function loadDescription(){
+    if(!isBibbyRoom()){
+        return;
+    }
     var descr="";
     descr += "<p style=\"font-family: Palatino; text-align: center; \">";
     descr += "  <span style=\"color:#003399;\"><strong style=\"font-size: 20pt; \">Bibbytube<\/strong><\/span><\/p>";
@@ -2639,8 +2642,7 @@ function printWallCounter(){
     addMessage('', output, '', 'hashtext');
 }
 
-function printMyWallCounter()
-{   
+function printMyWallCounter(){   
     resetWallCounter();
     var output = "";
     if(wallCounter[thisUsername]){
