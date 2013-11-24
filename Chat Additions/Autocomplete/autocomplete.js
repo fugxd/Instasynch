@@ -149,6 +149,11 @@ function lastIndexOfSet(input, set){
     for (var i = 0; i < set.length; i++) {
         index = Math.max(index, input.lastIndexOf(set[i]));
     }
+    if(index>0){
+        if(input[index] === '/' && input[index-1]==='['){
+            index--;
+        }
+    }
     return index;
 }
 var isAutocompleteMenuActive = false,

@@ -166,6 +166,11 @@ function lastIndexOfSet(input, set){
     for (var i = 0; i < set.length; i++) {
         index = Math.max(index, input.lastIndexOf(set[i]));
     }
+    if(index>0){
+        if(input[index] === '/' && input[index-1]==='['){
+            index--;
+        }
+    }
     return index;
 }
 var isAutocompleteMenuActive = false,
@@ -1591,6 +1596,54 @@ function pasteTextAtCaret(text) {
 }
 
 beforeConnectFunctions.splice(0,0,loadGeneralStuff);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadGreynameCount(){
+    var oldAddUser = addUser,
+        oldRemoveUser = removeUser;
+
+    addUser = function addUser(user, css, sort) {
+        oldAddUser(user, css, sort);
+        setViewerCount();
+    }    
+    removeUser = function removeUser(id) {
+        oldRemoveUser(id);
+        setViewerCount();
+    }
+    setViewerCount();
+}
+function setViewerCount(){
+    var greynameCount = 0;
+    for (var i = 0; i < users.length; i++) {
+        if(!users[i].loggedin){
+            greynameCount++;
+        }
+    };
+    $('#viewercount').html(users.length-greynameCount + '/' +greynameCount);
+}
+
+beforeConnectFunctions.push(loadGreynameCount);
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
