@@ -23,12 +23,8 @@
 
 function loadModSpy(){
 	//load settings
-	var setting = settings.get('modSpy');
-	if(setting){
-		modSpy = setting ==='false'?false:true;
-	}else{
-		settings.set('modSpy',false);
-	}
+	modSpy = settings.get('modSpy','false');
+	
 	//add command
     commands.set('addOnSettings',"ModSpy",toggleModSpy);
 
@@ -52,9 +48,10 @@ function loadModSpy(){
 
 	// Overwriting moveVideo to differentiate bump and move
 	moveVideo = function(vidinfo, position) {
+		var oldPosition = getVideoIndex(vidinfo);
 		oldMoveVideo(vidinfo,position);
 		
-		if ( Math.abs(getActiveVideoIndex()-position) <= 10){ // "It's a bump ! " - Amiral Ackbar
+		if ( Math.abs(getActiveVideoIndex()-position) <= 10 && Math.abs(oldPosition-position) > 10){ // "It's a bump ! " - Amiral Ackbar
 			bumpCheck = true;
 		}
 	}

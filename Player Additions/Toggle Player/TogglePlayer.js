@@ -24,12 +24,8 @@
 
 function loadTogglePlayer(){
     //load settings
-    var setting = settings.get('playerActive');
-    if(setting){
-        playerActive = setting ==='false'?false:true;
-    }else{
-        settings.set('playerActive',true);
-    }
+    playerActive = settings.get('playerActive','true');
+    
     //add the command
     commands.set('regularCommands',"togglePlayer",togglePlayer);
 

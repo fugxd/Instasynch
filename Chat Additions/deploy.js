@@ -44,63 +44,31 @@ function loadAutoComplete() {
         return;
     }
     //load settings
-    var setting = settings.get('autocompleteEmotes');
-    if(setting){
-        autocompleteEmotes = setting ==='false'?false:true;
-    }else{
-        settings.set('autocompleteEmotes',true);
-    }
-
-    setting = settings.get('autocompleteTags');
-    if(setting){
-        autocompleteTags = setting ==='false'?false:true;
-    }else{
-        settings.set('autocompleteTags',true);
-    }
-
-    setting = settings.get('autocompleteCommands');
-    if(setting){
-        autocompleteCommands = setting ==='false'?false:true;
-    }else{
-        settings.set('autocompleteCommands',true);
-    }
-    
-    setting = settings.get('autocompleteAddonSettings');
-    if(setting){
-        autocompleteAddonSettings = setting ==='false'?false:true;
-    }else{
-        settings.set('autocompleteAddonSettings',true);
-    }
+    autocompleteEmotes = settings.get('autocompleteEmotes','true');
+    autocompleteTags = settings.get('autocompleteTags','true');
+    autocompleteCommands = settings.get('autocompleteCommands','true');
+    autocompleteAddonSettings = settings.get('autocompleteAddonSettings','true');
+    autocompleteNames = settings.get('autocompleteNames','true');
 
     //add the commands
     commands.set('addOnSettings',"TagsAutoComplete",toggleTagsAutocomplete);
     commands.set('addOnSettings',"EmotesAutoComplete",toggleEmotesAutocomplete);
     commands.set('addOnSettings',"CommandsAutoComplete",toggleCommandsAutocomplete);
     commands.set('addOnSettings',"AddOnSettingsAutoComplete",toggleAddonSettingsAutocomplete);
+    commands.set('addOnSettings',"NamesAutoComplete",toggleNamesAutocomplete);
 
-    setting = settings.get('autocompleteCommands');
-    if(setting){
-        autocompleteCommands = setting ==='false'?false:true;
-    }else{
-        settings.set('autocompleteCommands',true);
-    }
-    
-    setting = settings.get('autocompleteAddonSettings');
-    if(setting){
-        autocompleteAddonSettings = setting ==='false'?false:true;
-    }else{
-        settings.set('autocompleteAddonSettings',true);
-    }
-    var emotes = (function () {
-        var arr = Object.keys($codes);
-        for (var i = 0; i < arr.length; i++) {
-            arr[i] = '/' + arr[i];
-        }
-        return arr;
-    })(),
+    var i,
+        emotes = (
+            function () {
+                var arr = Object.keys($codes);
+                for (i = 0; i < arr.length; i++) {
+                    arr[i] = '/' + arr[i];
+                }
+                return arr;
+            })(),
         tagKeys = Object.keys(tags);
 
-    for (var i = 0; i < tagKeys.length; i++) {
+    for (i = 0; i < tagKeys.length; i++) {
         tagKeys[i] = tagKeys[i].replace(/\\/g,'');
     }
     autocompleteData = autocompleteData.concat(emotes);
@@ -109,9 +77,9 @@ function loadAutoComplete() {
     if (isUserMod()) {
         autocompleteData = autocompleteData.concat(commands.get('modCommands'));
     }
-
     autocompleteData.sort();
     autocompleteData = autocompleteData.concat(commands.get('addOnSettings').sort());
+
     //add the jquery autcomplete widget to InstaSynch's input field
     $("#chat input")    
     .bind("keydown", function(event) {
@@ -130,22 +98,34 @@ function loadAutoComplete() {
             }
             var message = request.term,
                 caretPosition = doGetCaretPosition(cin),
-                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~']),
+                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@']),
                 partToComplete = message.substring(lastIndex,caretPosition),
                 matches = [];
 
             if(partToComplete.length>0){
                 switch(partToComplete[0]){
                     case '/': if(!autocompleteEmotes) return;
-                    case "'": if(!autocompleteCommands) return;
+                    case '\'': if(!autocompleteCommands || (lastIndex!==0 && message[lastIndex-1].match(/\w/))) return;
                     case '[': if(!autocompleteTags) return;
                     case '~': if(!autocompleteAddonSettings) return;
+                    case '@': if(!autocompleteNames)return;
+
                 }
-                matches = $.map(autocompleteData, function (item) {
-                    if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
-                        return item;
-                    }
-                });
+                if(partToComplete[0] ==='@'){
+                    matches = $.map(getUsernameArray(), function(item){
+                        item = '@' + item;
+                        if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
+                            return item;
+                        }
+                    });
+                }else{
+                    matches = $.map(autocompleteData, function (item) {
+                        if (item.toLowerCase().indexOf(partToComplete.toLowerCase()) === 0) {
+                            return item;
+                        }
+                    });
+                }
+
             }
             //show only 7 responses
             response(matches.slice(0, 7));
@@ -158,7 +138,7 @@ function loadAutoComplete() {
 
             var message = this.value,
                 caretPosition = doGetCaretPosition(cin),
-                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~']);
+                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@']);
             //prevent it from autocompleting when a little changed has been made and its already there
             if(message.indexOf(ui.item.value) === lastIndex && lastIndex+ui.item.value.length !== caretPosition){
                 doSetCaretPosition(cin,lastIndex+ui.item.value.length);
@@ -186,6 +166,11 @@ function lastIndexOfSet(input, set){
     for (var i = 0; i < set.length; i++) {
         index = Math.max(index, input.lastIndexOf(set[i]));
     }
+    if(index>0){
+        if(input[index] === '/' && input[index-1]==='['){
+            index--;
+        }
+    }
     return index;
 }
 var isAutocompleteMenuActive = false,
@@ -194,6 +179,7 @@ var isAutocompleteMenuActive = false,
     autocompleteCommands = true,
     autocompleteTags = true,
     autocompleteAddonSettings = true,
+    autocompleteNames = true;
     autocompleteData = [];
 
 function toggleTagsAutocomplete(){
@@ -211,6 +197,10 @@ function toggleCommandsAutocomplete(){
 function toggleAddonSettingsAutocomplete(){
     autocompleteAddonSettings = !autocompleteAddonSettings; 
     settings.set('autocompleteAddonSettings',autocompleteAddonSettings);
+}
+function toggleNamesAutocomplete(){
+    autocompleteNames = !autocompleteNames; 
+    settings.set('autocompleteNames',autocompleteNames);
 }
 
 afterConnectFunctions.push(loadAutoComplete);
@@ -336,6 +326,9 @@ function loadInputHistory(){
                     inputHistory.splice(inputHistory.length-1,1);
                 }
                 setInputHistoryIndex(0);
+                if(commandExecuted){
+                    $(this).val('');
+                }
             }
         }else{
             setInputHistoryIndex(0);
@@ -404,12 +397,8 @@ beforeConnectFunctions.push(loadInputHistory);
 
 function loadLogInOffMessages(){
     //load settings
-    var setting = settings.get('logInOffMessages');
-    if(setting){
-        logInOffMessages = setting ==='false'?false:true;
-    }else{
-        settings.set('logInOffMessages',false);
-    }
+    logInOffMessages = settings.get('logInOffMessages','false');
+    
     //add the command
     commands.set('addOnSettings',"LogInOffMessages",toggleLogInOffMessages);
     
@@ -447,8 +436,6 @@ function toggleLogInOffMessages(){
 }
 
 afterConnectFunctions.push(loadLogInOffMessages);
-
-
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -475,19 +462,8 @@ afterConnectFunctions.push(loadLogInOffMessages);
 
 function loadMessageFilter() {
     //load settings
-    var setting = settings.get('filterTags');
-    if(setting){
-        filterTags = setting ==='false'?false:true;
-    }else{
-        settings.set('filterTags',true);
-    }
-
-    setting = settings.get('NSFWEmotes');
-    if(setting){
-        NSFWEmotes = setting ==='false'?false:true;
-    }else{
-        settings.set('NSFWEmotes',false);
-    }
+    filterTags = settings.get('filterTags','true');
+    NSFWEmotes = settings.get('NSFWEmotes','false');
 
     //add the commands
     commands.set('addOnSettings',"Tags",toggleTags);
@@ -557,7 +533,7 @@ function toggleNSFWEmotes(){
 
 function parseMessage(message,isChatMessage){
     var emoteFound = false,
-        match = message.match(/^((\[.*?\])*)\/([^\[ ]+)((\[.*?\])*)/i),
+        match = message.match(/^((\[[^\]]*\])*)\/([^\[ ]+)((\[.*?\])*)/i),
         emote,
         word;
     //if the text matches [tag]/emote[/tag] or /emote
@@ -568,7 +544,7 @@ function parseMessage(message,isChatMessage){
     } else {
         var greentext = false;
         //if the text matches [tag]>* or >*
-        if (message.match(/^((\[.*?\])*)((&gt;)|>)/) ) {
+        if (message.match(/^((\[[^\]]*\])*)((&gt;)|>)/) ) {
             greentext = true;
         } else {
             //split up the message and add hashtag colors #SWAG #YOLO
@@ -614,7 +590,7 @@ function parseMessage(message,isChatMessage){
     }
     //remove unnused tags [asd] if there is a emote
     if(emoteFound && isChatMessage){
-        message = message.replace(/\[.*?\]/, '');
+        message = message.replace(/\[[^\]]*\]/, '');
     }
     
     return message;
@@ -810,12 +786,8 @@ beforeConnectFunctions.push(loadMessageFilter);
 
 function loadModSpy(){
 	//load settings
-	var setting = settings.get('modSpy');
-	if(setting){
-		modSpy = setting ==='false'?false:true;
-	}else{
-		settings.set('modSpy',false);
-	}
+	modSpy = settings.get('modSpy','false');
+	
 	//add command
     commands.set('addOnSettings',"ModSpy",toggleModSpy);
 
@@ -839,9 +811,10 @@ function loadModSpy(){
 
 	// Overwriting moveVideo to differentiate bump and move
 	moveVideo = function(vidinfo, position) {
+		var oldPosition = getVideoIndex(vidinfo);
 		oldMoveVideo(vidinfo,position);
 		
-		if ( Math.abs(getActiveVideoIndex()-position) <= 10){ // "It's a bump ! " - Amiral Ackbar
+		if ( Math.abs(getActiveVideoIndex()-position) <= 10 && Math.abs(oldPosition-position) > 10){ // "It's a bump ! " - Amiral Ackbar
 			bumpCheck = true;
 		}
 	}
@@ -879,7 +852,7 @@ beforeConnectFunctions.push(loadModSpy);
 */
 
 
-function loadAutocomplete() {
+function loadNameAutocomplete() {
     $("#chat input").bind('keydown',function(event){
         
         if(event.keyCode == 9){//tab
@@ -888,7 +861,7 @@ function loadAutocomplete() {
             //split the message
             var message = $(this).val().split(' '),
                 //make a regex out of the last part 
-                messagetags = message[message.length-1].match(/((\[.*?\])*\[?)([\w-]+)/),
+                messagetags = message[message.length-1].match(/^((\[[^\]]*\])*\[?@?)([\w-]+)/),
                 name,
                 data,
                 partToComplete = '',
@@ -935,7 +908,102 @@ function loadAutocomplete() {
 
 }
 
-beforeConnectFunctions.push(loadAutocomplete);
+beforeConnectFunctions.push(loadNameAutocomplete);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadNameNotification(){
+    var oldAddMessage = addMessage;
+
+    //overwrite InstaSynch's addMessage function
+    addMessage = function addMessage(username, message, userstyle, textstyle) {
+        //continue with InstaSynch's addMessage function
+        oldAddMessage(username, message, userstyle, textstyle);
+        if(!newMsg){
+            return;
+        }
+        var possibleNames = [],
+            exactMatches = [],
+            nameStart = -1,
+            name = '',
+            end = false,
+            i,
+            j;
+        
+        while(!end){
+            nameStart = message.indexOf('@',nameStart+1);
+            if(nameStart == -1){
+                end = true;
+            }else{
+                possibleNames = getUsernameArray(true);
+                exactMatches = [];
+                name = '';
+                for(i = nameStart+1; i< message.length;i++){
+                    name += message[i].toLowerCase();
+    
+                    for(j = 0; j < possibleNames.length;j++){
+                        if(name.indexOf(possibleNames[j]) == 0 ){
+                            exactMatches.push(possibleNames[j]);
+                            possibleNames.splice(j,1);
+                            j--;
+                            continue;
+                        }
+                        if(possibleNames[j].indexOf(name) != 0){
+                            possibleNames.splice(j,1);
+                            j--;
+                        }
+                    }
+                    if(possibleNames.length == 0){
+                        break;
+                    }
+                }
+                if(exactMatches.length != 0){
+                    if(thisUsername === exactMatches[exactMatches.length-1]){
+                        toggleNotify();
+                    }
+                }
+                nameStart = i-1;
+            }
+        }
+    };
+   $('#cin')['focus'](function () {
+        toggleNotify();
+    });
+}
+var notified = false;
+
+function toggleNotify(){
+    if(window.newMsg && !notified){
+        $('head > link:last-of-type')[0].href = 'https://github.com/Bibbytube/Instasynch/blob/master/Chat%20Additions/Name%20Notification/notificationFavicon.ico?raw=true';
+        $('#chat_list').scrollTop($('#chat_list').scrollTop()-5);
+        notified = true;
+    }else{
+        $('head > link:last-of-type')[0].href = 'http://instasynch.com/favicon.ico';
+        notified = false;
+    }
+}
+
+beforeConnectFunctions.push(loadNameNotification);
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -960,7 +1028,9 @@ beforeConnectFunctions.push(loadAutocomplete);
 */
 
 function loadOnClickKickBan(){
-
+    if(!isUserMod()){
+        return;
+    }
     var oldAddMessage = addMessage;
 
     //overwrite InstaSynch's  addMessage function
@@ -968,7 +1038,7 @@ function loadOnClickKickBan(){
         
         oldAddMessage(username, message, userstyle, textstyle);
         //only add the onclick events if the user is a mod and its not a system message
-        if(username != '' && isUserMod()){
+        if(username != ''){
             var currentElement,
                 //the cursor doesnt need to be changed if the key is still held down
                 isCtrlKeyDown = false,
@@ -1015,7 +1085,7 @@ function loadOnClickKickBan(){
                                 sendcmd('ban', {userid: userId});    
                                 addMessage('', 'b& user: '+user, '', 'hashtext');
                             }else{
-                                sendcmd('leaverban', {userid: userId});    
+                                sendcmd('leaverban', {username: user});    
                                 addMessage('', 'Leaverb& user: '+user, '', 'hashtext');
                             }
                         }
@@ -1046,10 +1116,31 @@ function loadOnClickKickBan(){
             });
         }
     };
+    var chatCtrlDown = false,
+        chatKeyDown = function (event) {
+            if(!chatCtrlDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
+                $('#chat_list').scrollTop($('#chat_list').scrollTop()-5);
+                chatCtrlDown = true;
+            }
+        },
+        chatKeyUp = function (event) {
+            if(chatCtrlDown && !event.ctrlKey){
+                $('#chat_list').scrollTop($('#chat_list')[0].scrollHeight);
+                chatCtrlDown = false;
+            }
+        };
+    $('#chat_list').hover(
+        function(){
+            $(document).bind('keydown',chatKeyDown);
+            $(document).bind('keyup',chatKeyUp);
+        },function(){       
+            chatCtrlDown = false;
+            $(document).unbind('keydown',chatKeyDown);
+            $(document).unbind('keyup',chatKeyUp);
+    });
 };
 
-
-beforeConnectFunctions.push(loadOnClickKickBan);
+afterConnectFunctions.push(loadOnClickKickBan);
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1265,13 +1356,16 @@ function loadCommandLoader(){
                 return items;
             },
             "execute":function(funcName, params){
+                commandExecuted = false;
                 funcName = funcName.toLowerCase();
                 if(items['commandFunctionMap'].hasOwnProperty(funcName)){
                     items['commandFunctionMap'][funcName](params);
+                    commandExecuted = true;
                 }
                 funcName = funcName +' ';
                 if(items['commandFunctionMap'].hasOwnProperty(funcName)){
                     items['commandFunctionMap'][funcName](params);
+                    commandExecuted = true;
                 }
             }
         }
@@ -1285,6 +1379,7 @@ function loadCommandLoader(){
     });
 }
 var commands;
+    commandExecuted = false;
 
 beforeConnectFunctions.splice(0,0,loadCommandLoader);
 /*
@@ -1307,6 +1402,9 @@ beforeConnectFunctions.splice(0,0,loadCommandLoader);
 */
  
 function loadDescription(){
+    if(!isBibbyRoom()){
+        return;
+    }
     var descr="";
     descr += "<p style=\"font-family: Palatino; text-align: center; \">";
     descr += "  <span style=\"color:#003399;\"><strong style=\"font-size: 20pt; \">Bibbytube<\/strong><\/span><\/p>";
@@ -1397,6 +1495,7 @@ function isUserMod(){
 function isBibbyRoom(){
     return ROOMNAME.match(/bibby/i)?true:false;
 }
+
 function getIndexOfUser(id){
     for (var i = 0; i < users.length; i++){
         if (id === users[i].id){
@@ -1405,6 +1504,21 @@ function getIndexOfUser(id){
     }
     return -1
 }
+
+function getUsernameArray(lowerCase){
+    var arr = [];
+    for(i = 0; i< users.length;i++){
+        if(users[i].username !== 'unnamed'){
+            if(!lowerCase){
+                arr.push(users[i].username);
+            }else{
+                arr.push(users[i].username.toLowerCase());
+            }
+        }
+    }
+    return arr;
+}
+
 var thisUsername;
 
 /*
@@ -1482,6 +1596,54 @@ function pasteTextAtCaret(text) {
 }
 
 beforeConnectFunctions.splice(0,0,loadGeneralStuff);
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadGreynameCount(){
+    var oldAddUser = addUser,
+        oldRemoveUser = removeUser;
+
+    addUser = function addUser(user, css, sort) {
+        oldAddUser(user, css, sort);
+        setViewerCount();
+    }    
+    removeUser = function removeUser(id) {
+        oldRemoveUser(id);
+        setViewerCount();
+    }
+    setViewerCount();
+}
+function setViewerCount(){
+    var greynameCount = 0;
+    for (var i = 0; i < users.length; i++) {
+        if(!users[i].loggedin){
+            greynameCount++;
+        }
+    };
+    $('#viewercount').html(users.length-greynameCount + '/' +greynameCount);
+}
+
+beforeConnectFunctions.push(loadGreynameCount);
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1651,9 +1813,12 @@ function loadSettingsLoader(){
                 //clear the cookie.
                 $.cookie(cookieName, null);
             },
-            "get": function(key) {
+            "get": function(key, val) {
+                if(!items[key] && val){
+                    settings.set(key, val);
+                }
                 //Get all the array.
-                return items[key];
+                return items[key] === 'false'?false:true;
             },
             "getAll": function() {
                 return items;
@@ -1829,8 +1994,37 @@ function votePurge(params)
 }
 
 beforeConnectFunctions.push(loadVotePurgeCommand);
-var indexOfSearch;
-var entries;
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+
+var indexOfSearch,
+    entries = new Array(),
+    partialEntries = new Array(),
+    isPlaylist,
+    numberOfVids,
+    startIndex = 1,
+    searchTimeout;
 
 // Search results container
 var divresults = document.createElement("div");
@@ -1852,20 +2046,8 @@ var divpollparent = divpolls.parentNode;
 divpollparent.insertBefore(divresults,divpolls);
 
 
-// Setting event "TAB" on the URL input
+// Setting events on the URL input
 $("#URLinput").bind("keydown", function(event) {
- //    if (event.keyCode === $.ui.keyCode.TAB){    
- //     event.preventDefault();  // prevents lost of focus
- //     closeResults();
- //        search();
- //    }
- //    if(event.keyCode === $.ui.keyCode.LEFT){
- //    	   getMoreResults('last');
- //    	   return;
- //    }else if(event.keyCode === $.ui.keyCode.RIGHT){
- //    	   getMoreResults('next');
- //    	   return;
- //    }
     if(event.keyCode === $.ui.keyCode.ESCAPE){
         closeResults();
     }else{
@@ -1875,7 +2057,7 @@ $("#URLinput").bind("keydown", function(event) {
         searchTimeout = setTimeout(startSearch,500);  
     }
 });
-var searchTimeout;
+
 function startSearch(){
     searchTimeout = null;
     closeResults();
@@ -1884,35 +2066,94 @@ function startSearch(){
 // Retrieve data from the search query
 function search(){
     var query,
-        url;
+        url,
+        urlInfo;
     
     query = document.getElementById('URLinput').value;
-    if(!query || parseUrl(query)){
-    	return;
+    if(!query){  // if empty
+        return;
+    }else{  // is not empty
+        urlInfo = parseUrl(query);
+        if (!urlInfo){ // is not a link
+            isPlaylist = false;
+            url = "https://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5&max-results=45&q=" + query;
+            $.getJSON(url, function(data){showResults(data)});
+        }else{ // is a link
+            if (!urlInfo.playlistId){ // not a playlist
+                return;
+            }else{ // is a playlist
+                var buildMoreEntries = true;
+                startIndex = 1;
+                isPlaylist = true;
+                while (buildMoreEntries){
+                    url = "http://gdata.youtube.com/feeds/api/playlists/" + urlInfo.playlistId + "?v=2&alt=json&max-results=50&start-index=" + startIndex;
+                    $.ajax({
+                        async: false,
+                        url: url,
+                        dataType: "json",
+                        success: function(data){
+                            var feed = data.feed;
+                            partialEntries = feed.entry;
+                            
+                            if (entries.length === 0){
+                                entries = partialEntries;
+                            }else{
+                                entries = entries.concat(partialEntries);
+                            }
+                            
+                            if (partialEntries.length >= 49){
+                                startIndex = startIndex + 50;
+                            }else{
+                                buildMoreEntries = false;
+                            }
+                        },
+                        error: function(){
+                            buildMoreEntries = false;
+                        }
+                    });
+                }
+                showResults();
+            }
+        }
     }
-
-    url = "https://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5&max-results=45&q=" + query;
-    indexOfSearch = 0;
-    $.getJSON(url, function(data){showResults(data)});
 }
-
+    
 // Parse data and display it
 function showResults(data) {
-  var feed = data.feed;
-  entries = feed.entry || [];
-  var html = new Array();
+    indexOfSearch = 0; 
+    if (!isPlaylist){
+      var feed = data.feed;
+      entries = feed.entry;
+    }
+    var html = new Array(),
+        i,
+        entry;
   
-  for (var i = 0; i < 9; i++) {
-    var entry = entries[i];
-    var thumbnailUrl = entries[i].media$group.media$thumbnail[0].url;
-    var thumbnail = "<img onmouseover='showTitle(this)' onmouseout='hideTitle(this)' src='" + thumbnailUrl + "'>";
-    var title = entry.title.$t;
-    var idtag = new Array();
-    idtag = entry.id.$t.split(':');
-    var id = idtag[3];
-    var link = "http://www.youtube.com/watch?v=" + id;
-    
-    html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'  onClick='addLinkToPl(this)'>" + thumbnail + "<p  style='position:absolute;top:10px;visibility:hidden'><span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span></p><p style='display:none'>" + link + "</p> </div>");
+    numberOfVids = (isPlaylist) ? entries.length : 45;
+  
+    for (i = 0; i < 9; i++) {
+        entry = entries[i];
+        if (entries[i].media$group.media$thumbnail !== undefined){ // won't do shit if the video was removed by youtube.
+            var thumbnailUrl = entries[i].media$group.media$thumbnail[0].url,
+                thumbnail = "<img src='" + thumbnailUrl + "'>",
+                title = entry.title.$t,
+                id,
+                link = "http://www.youtube.com/watch?v="; 
+            if (!isPlaylist){
+                var idtag = new Array();
+                idtag = entry.id.$t.split(':');
+                id = idtag[3];
+            }else{       
+                var feedURL = entry.link[1].href,
+                    infoURL = parseUrl(feedURL);
+                id = infoURL.id;
+            }
+            link += id;
+            
+            html.push("<div onmouseover='showTitle(this)' onmouseout='hideTitle(this)'><div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px;z-index:2;cursor:pointer;'  onClick='addLinkToPl(this)'>" + thumbnail + "<p  style='position:absolute;top:10px;visibility:hidden'><span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span></p><p style='display:none'>" + link + "</p> </div></div>");
+        }else{
+            html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'> Video Removed By Youtube </div>");
+    }
   }
   $(html.join('')).appendTo("#searchResults");
   
@@ -1924,26 +2165,38 @@ function showResults(data) {
 } 
 
 function getMoreResults(param){
-    if (param === "last"){
+    if (param === "prev"){
         indexOfSearch = indexOfSearch - 9;
-    }
-    else{
+    }else{
         indexOfSearch = indexOfSearch + 9;
     }
     $("#searchResults").empty();
-    var max = Math.min(indexOfSearch+9 , entries.length);
-    var html = new Array();
-    for (var i = indexOfSearch; i < max; i++) {
-        var entry = entries[i];
-        var thumbnailUrl = entries[i].media$group.media$thumbnail[0].url;
-        var thumbnail = "<img onmouseover='showTitle(this)' onmouseout='hideTitle(this)' src='" + thumbnailUrl + "'>";
-        var title = entry.title.$t;
-        var idtag = new Array();
-        idtag = entry.id.$t.split(':');
-        var id = idtag[3];
-        var link = "http://www.youtube.com/watch?v=" + id;
-        
-        html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'  onClick='addLinkToPl(this)'>" + thumbnail + "<p  style='position:absolute;top:10px;visibility:hidden'><span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span></p><p style='display:none'>" + link + "</p> </div>");
+    var max = Math.min(indexOfSearch+9 , entries.length),
+        html = new Array(),
+        entry,
+        i;
+    for (i = indexOfSearch; i < max; i++) {
+        entry = entries[i];
+        if (entry.media$group.media$thumbnail !== undefined){ // check if video was removed by youtube
+            var thumbnailUrl = entry.media$group.media$thumbnail[0].url,
+                thumbnail = "<img src='" + thumbnailUrl + "'>",
+                title = entry.title.$t,
+                id,
+                link = "http://www.youtube.com/watch?v="; 
+            if (!isPlaylist){
+                var idtag = new Array();
+                idtag = entry.id.$t.split(':');
+                id = idtag[3];
+            }else{   
+                var feedURL = entry.link[1].href,   
+                    infoURL = parseUrl(feedURL);
+                id = infoURL.id;
+            }
+            link += id;
+            html.push("<div onmouseover='showTitle(this)' onmouseout='hideTitle(this)'><div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px;z-index:2;cursor:pointer;'  onClick='addLinkToPl(this)'>" + thumbnail + "<p  style='position:absolute;top:10px;visibility:hidden'><span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span></p><p style='display:none'>" + link + "</p> </div></div>");
+        }else{
+            html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'> Video Removed By Youtube </div>");
+        }
   }
   $(html.join('')).appendTo("#searchResults");
   applyStyle(divmore);
@@ -1955,37 +2208,35 @@ function getMoreResults(param){
 }
 // shows the video title on hover
 function showTitle(e){
-    var titleToShow = e.parentNode.childNodes[1];
+    var titleToShow = e.firstChild.childNodes[1];
     titleToShow.style.visibility='visible';
 }
 
 // hide the video title on mouse out
 function hideTitle(e){
-    var titleToHide = e.parentNode.childNodes[1];
+    var titleToHide = e.firstChild.childNodes[1];
     titleToHide.style.visibility='hidden';
 }
     
 // Paste the title clicked in the add bar
 function addLinkToPl(e) {
-    var linkToPaste = e.childNodes[2].innerHTML;
-    
-    var addbox = document.getElementById("URLinput");
+    var linkToPaste = e.childNodes[2].innerHTML,
+        addbox = document.getElementById("URLinput");
     addbox.value = linkToPaste;
 }
 
 // closes the results and empties it
-function closeResults()
-{
+function closeResults(){
     $("#searchResults").empty();
+    entries = new Array();
+    partialEntries = new Array();
     divresults.style.display = "none";
     divremove.style.display = "none";
 }
 
 // css thingies
-function applyStyle(e)
-{
-    if (e.id === "searchResults")
-    {
+function applyStyle(e){
+    if (e.id === "searchResults"){
         divresults.style.cssFloat = "right"; // All but IE
         divresults.style.styleFloat = "right"; //IE
         divresults.style.width = "380px"; 
@@ -1996,8 +2247,7 @@ function applyStyle(e)
         divresults.style.display = "none";
         divresults.style.position = "relative";
     }
-    if (e.id === "divclosesearch")
-    {
+    if (e.id === "divclosesearch"){
         divremove.innerHTML = "<img onClick=closeResults() src='http://www.instasynch.com/images/close.png'>";
         divremove.style.cssFloat = "right"; // All but IE
         divremove.style.styleFloat = "right"; //IE
@@ -2007,29 +2257,24 @@ function applyStyle(e)
         divremove.style.left = "375px";
         divremove.style.top = "0px";    
     }
-    if (e.id === "divmore")
-    {
-        if (indexOfSearch === 0)
-        {
-            divmore.innerHTML = "<a onClick=getMoreResults('next')> Next &gt&gt </a>";
-        }
-        else 
-        {
-            if (indexOfSearch >= 36)
-            {
-                divmore.innerHTML = "<a onClick=getMoreResults('last')>  &lt&lt Last </a> ";
-            }
-            else
-            {
-                divmore.innerHTML = "<a onClick=getMoreResults('last')> &lt&lt Last </a> <a onClick=getMoreResults('next')> Next &gt&gt </a>";
+    if (e.id === "divmore"){
+        if (indexOfSearch === 0){
+            divmore.innerHTML = "<input type='button' style='cursor:pointer' onClick=getMoreResults('next') value='Next &gt&gt'/>";
+        }else{
+            if (indexOfSearch >= numberOfVids - 9){
+                divmore.innerHTML = "<input type='button' style='cursor:pointer' onClick=getMoreResults('prev') value='&lt&lt Prev'/> </span>";
+            }else{
+                divmore.innerHTML = "<input type='button' style='cursor:pointer' onClick=getMoreResults('prev') value='&lt&lt Prev' /> <input type='button' style='cursor:pointer' onClick=getMoreResults('next') value='Next &gt&gt' />";
             }
         }
         divmore.style.textAlign="center";
-        divmore.style.cursor="pointer";
+        //divmore.style.cursor="pointer";
+        divmore.style.height="300px";
+        divmore.style.width = "380px"; 
+        divmore.style.position="relative";
+        divmore.style.zIndex="1";
     }
 }
-        
-    
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -2056,12 +2301,8 @@ function applyStyle(e)
 
 function loadMirrorPlayer(){
     //load settings
-    var setting = settings.get('automaticMirror');
-    if(setting){
-        automaticMirror = setting ==='false'?false:true;
-    }else{
-        settings.set('automaticMirror',true);
-    }
+    automaticMirror = settings.get('automaticMirror','true');
+    
     //add the command
     commands.set('addOnSettings',"AutomaticPlayerMirror",toggleAutomaticMirrorPlayer);
     commands.set('regularCommands',"mirrorPlayer",toggleMirrorPlayer);
@@ -2261,12 +2502,8 @@ beforeConnectFunctions.push(loadMouseWheelVolumecontrol);
 
 function loadTogglePlayer(){
     //load settings
-    var setting = settings.get('playerActive');
-    if(setting){
-        playerActive = setting ==='false'?false:true;
-    }else{
-        settings.set('playerActive',true);
-    }
+    playerActive = settings.get('playerActive','true');
+    
     //add the command
     commands.set('regularCommands',"togglePlayer",togglePlayer);
 
@@ -2394,10 +2631,8 @@ function loadWallCounter(){
 
     //overwrite InstaSynch's addVideo
     addVideo = function addVideo(vidinfo) {
-
+        resetWallCounter();
         value = wallCounter[vidinfo.addedby];
-        value =((value)?value:0) + vidinfo.duration;
-        wallCounter[vidinfo.addedby] = value;
         if (isBibbyRoom() && value >= 3600 && vidinfo.addedby === thisUsername){
             var output = "Watch out " + thisUsername + " ! You're being a faggot by adding more than 1 hour of videos !";
             addMessage('',output,'','hashtext');
@@ -2405,30 +2640,33 @@ function loadWallCounter(){
         oldAddVideo(vidinfo);
     };
 
-    //overwrite InstaSynch's removeVideo
-    removeVideo = function removeVideo(vidinfo){
-        var indexOfVid = getVideoIndex(vidinfo);
-        video = playlist[indexOfVid];
-        value = wallCounter[video.addedby];
-        value -= video.duration;
+    /*
+     * Commented since this shit isnt working and I have no idea why
+    */
+    // //overwrite InstaSynch's removeVideo
+    // removeVideo = function removeVideo(vidinfo){
+    //     var indexOfVid = getVideoIndex(vidinfo);
+    //     video = playlist[indexOfVid];
+    //     value = wallCounter[video.addedby];
+    //     value -= video.duration;
 
-        if(value > 0){
-            wallCounter[video.addedby] = value;
-        }else{
-            delete wallCounter[video.addedby];
-        }
+    //     if(value > 0){
+    //         wallCounter[video.addedby] = value;
+    //     }else{
+    //         delete wallCounter[video.addedby];
+    //     }
 
-        oldRemoveVideo(vidinfo);
-    };    
+    //     oldRemoveVideo(vidinfo);
+    // };    
 
-    addMessage = function addMessage(username, message, userstyle, textstyle) {
-        if(username === '' && message === 'Video added succesfully.'){
-            message +='WallCounter: ['+secondsToTime(wallCounter[thisUsername])+']';
-        }
-        oldAddMessage(username, message, userstyle, textstyle);
-    };    
+    // addMessage = function addMessage(username, message, userstyle, textstyle) {
+    //     if(username === '' && message === 'Video added succesfully.'){
+    //         message +='WallCounter: ['+secondsToTime(wallCounter[thisUsername])+']';
+    //     }
+    //     oldAddMessage(username, message, userstyle, textstyle);
+    // };    
 
-    //init the wallcounnter
+    //init the wallcounter
     resetWallCounter();
 }
 var wallCounter = {};
@@ -2444,16 +2682,21 @@ function resetWallCounter(){
 }
 
 function printWallCounter(){
+    resetWallCounter();
     var output = "",
         key;
     for(key in wallCounter){
-        output += "["+key + ": "+secondsToTime(wallCounter[key])+"] ";
+        if(wallCounter[key] > 3600){
+            output += "<span style='color:red'>["+key + ": "+secondsToTime(wallCounter[key])+"]</span> ";
+        }else{
+            output += "["+key + ": "+secondsToTime(wallCounter[key])+"] ";
+        }
     }
     addMessage('', output, '', 'hashtext');
 }
 
-function printMyWallCounter()
-{   
+function printMyWallCounter(){   
+    resetWallCounter();
     var output = "";
     if(wallCounter[thisUsername]){
         output = "["+ thisUsername +" : "+ secondsToTime(wallCounter[thisUsername])+"]";
@@ -2464,6 +2707,7 @@ function printMyWallCounter()
 }
 
 afterConnectFunctions.push(loadWallCounter);
+
 /*
     Copyright (C) 2013  faqqq @Bibbytube
     
@@ -2493,26 +2737,36 @@ function parseUrl(URL){
 		return false;
 	}
 	var provider = match[3], //the provider e.g. youtube,twitch ...
-		mediaType, // stream or video (this can't be determined for youtube streams, since the url is the same for a video)
+		mediaType, // stream, video or playlist (this can't be determined for youtube streams, since the url is the same for a video)
 		id, //the video-id 
-		channel; //for twitch and livestream
+		channel, //for twitch and livestream
+		playlistId //youtube playlistId;
 	switch(provider){
 		case 'youtu':
 		case 'youtube':{ 
 			provider = 'youtube'; //so that we don't have youtu or youtube later on
-
 			//match for http://www.youtube.com/watch?v=12345678901
-			if((match=URL.match(/v=([\w-_]{11})/i))){
-			}//match for http://www.youtube.com/v/12345678901 and http://www.youtu.be/12345678901
-			else if((match=URL.match(/\/([\w-_]{11})/i))){
-			}else{
-				/*error*/
+			if((match=URL.match(/v=([\w-]{11})/i))){
+				id = match[1];
+			}//match for http://www.youtube.com/v/12345678901, http://www.youtu.be/12345678901 
+			 //and http://gdata.youtube.com/feeds/api/videos/12345678901/related
+			else if((match=URL.match(/(v|be|videos)\/([\w-]{11})/i))){
+				id = match[2];
+			}
+			//get playlist parameter
+            if((match=URL.match(/list=([\w-]+)/i))){
+				playlistId = match[1];
+			}
+			if(!id && !playlistId){
 				return false;
 			}
 			//Try to match the different youtube urls, if successful the last (=correct) id will be saved in the array
 			//Read above for RegExp explanation
-			id = match[1];
-			mediaType = 'video';
+            if(id){                
+			    mediaType = 'video';
+            }else{
+			    mediaType = 'playlist';
+            }
 		}break;
 		case 'twitch':{
 			//match for http://www.twitch.tv/ <channel> /c/ <video id>
@@ -2592,6 +2846,7 @@ function parseUrl(URL){
 		'provider': provider,
 		'mediaType':mediaType,
 		'id':id,
+		'playlistId':playlistId,
 		'channel':channel
 	};
 }

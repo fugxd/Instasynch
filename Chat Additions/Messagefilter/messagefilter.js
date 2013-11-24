@@ -24,19 +24,8 @@
 
 function loadMessageFilter() {
     //load settings
-    var setting = settings.get('filterTags');
-    if(setting){
-        filterTags = setting ==='false'?false:true;
-    }else{
-        settings.set('filterTags',true);
-    }
-
-    setting = settings.get('NSFWEmotes');
-    if(setting){
-        NSFWEmotes = setting ==='false'?false:true;
-    }else{
-        settings.set('NSFWEmotes',false);
-    }
+    filterTags = settings.get('filterTags','true');
+    NSFWEmotes = settings.get('NSFWEmotes','false');
 
     //add the commands
     commands.set('addOnSettings',"Tags",toggleTags);
@@ -106,7 +95,7 @@ function toggleNSFWEmotes(){
 
 function parseMessage(message,isChatMessage){
     var emoteFound = false,
-        match = message.match(/^((\[.*?\])*)\/([^\[ ]+)((\[.*?\])*)/i),
+        match = message.match(/^((\[[^\]]*\])*)\/([^\[ ]+)((\[.*?\])*)/i),
         emote,
         word;
     //if the text matches [tag]/emote[/tag] or /emote
@@ -117,7 +106,7 @@ function parseMessage(message,isChatMessage){
     } else {
         var greentext = false;
         //if the text matches [tag]>* or >*
-        if (message.match(/^((\[.*?\])*)((&gt;)|>)/) ) {
+        if (message.match(/^((\[[^\]]*\])*)((&gt;)|>)/) ) {
             greentext = true;
         } else {
             //split up the message and add hashtag colors #SWAG #YOLO
@@ -163,7 +152,7 @@ function parseMessage(message,isChatMessage){
     }
     //remove unnused tags [asd] if there is a emote
     if(emoteFound && isChatMessage){
-        message = message.replace(/\[.*?\]/, '');
+        message = message.replace(/\[[^\]]*\]/, '');
     }
     
     return message;

@@ -62,9 +62,12 @@ function loadSettingsLoader(){
                 //clear the cookie.
                 $.cookie(cookieName, null);
             },
-            "get": function(key) {
+            "get": function(key, val) {
+                if(!items[key] && val){
+                    settings.set(key, val);
+                }
                 //Get all the array.
-                return items[key];
+                return items[key] === 'false'?false:true;
             },
             "getAll": function() {
                 return items;

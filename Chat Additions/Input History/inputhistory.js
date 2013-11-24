@@ -40,6 +40,9 @@ function loadInputHistory(){
                     inputHistory.splice(inputHistory.length-1,1);
                 }
                 setInputHistoryIndex(0);
+                if(commandExecuted){
+                    $(this).val('');
+                }
             }
         }else{
             setInputHistoryIndex(0);

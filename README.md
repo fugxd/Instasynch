@@ -13,13 +13,13 @@ Command List
 'clearChat
 'printAddonSettings
 'printMyWallCounter
+'exportPlaylist
 
 //Mod Commands
 'bump [user]
 'removeLast [user]
 'trimWall [user] [maxMinutes]
 'purgeTooLong [maxMinutes]
-'exportPlaylist
 'votePurge [user]
 
 //Settings
@@ -27,6 +27,7 @@ Command List
 ~EmotesAutocomplete
 ~CommandsAutocomplete
 ~AddOnSettingsAutocomplete
+~NamesAutocomplete
 ~AutomaticPlayerMirror
 ~Tags
 ~NSFWEmotes
@@ -46,12 +47,19 @@ Click <a href="/install.gif">here</a> for Chrome example.
 
 Changes
 ------------
+<pre>
+• For mods the chat will now stop scrolling when holding down ctrl so it's easier to click on someones name to kick or ban
+• Walls over an hour will show up red in the wallcounter now
+• <a href="#youtube-search">YouTube Search</a> now supports browsing playlists by pasting the link into the input field
+• Added <a href="#notifications">Notifications</a>
+• Changing settings with the ~ commands won't show up in the chat anymore
+</pre>
 
 <pre>
 • Added [alt] and [falt] tags
-• Added support for advanced tags that can take parameters.[marquee-10][marquee99], [alt10][alt99],[#7882BF][#FFFF00]
+• Added support for advanced tags that can take parameters.[marquee-10][marquee99],[alt10][alt99],[#7882BF][#FFFF00]
 • Settings prefix changed from : to ~
-• Improved autocomplete so it will work anywhere in text. The message will now only be sent when the command is at the begging of the text field
+• Improved autocomplete so it will work anywhere in text. The message will now only be sent when the command is at the beginning of the text field
 • Added <a href="#login-off-messages">Login-Off Messages</a>
 • Added <a href="#purge-too-long-command">Purge Too Long Command</a>
 • Added <a href="#trim-wall-command">Trim Wall Command</a>
@@ -59,11 +67,6 @@ Changes
 • Added <a href="#youtube-search">YouTube Search</a>
 • Added <a href="#command-flood-protect">Command Flood Protect</a>
 </pre>
-
-<a href="#remove-last-command">Remove last Command</a><br>
-<a href="#export-playlist-command">Export Playlist Command</a><br>
-<a href="#bump-command">Bump Command</a><br>
-<a href="#mod-spy">Mod Spy</a><br>
 
 Just send a <a href="mailto:megafaqqq@gmail.com">mail</a> if you got suggestions or found a bug.
 
@@ -85,7 +88,7 @@ Click <a href="/Chat Additions/Messagefilter/messagefilterexample.gif">here</a> 
 Autocomplete
 ------------
 
-Autocomplete will assist the user in typing out commands, emotes, settings and tags.
+Autocomplete will assist the user in typing out commands, emotes, settings, names and tags.
 By hitting tab or enter the selected item will be added to the input field. 
 If it is an emote or a command that does not need additional input it will be automatically sent to the chat.
 
@@ -94,7 +97,8 @@ Each of those can be turned on and off.
 <code>~TagsAutocomplete
 ~EmotesAutocomplete
 ~CommandsAutocomplete
-~AddOnSettingsAutocomplete</code>
+~AddOnSettingsAutocomplete
+~NamesAutocomplete</code>
 </pre>
 
 Click <a href="Chat Additions/Autocomplete/autocompleteexample.gif">here</a> for the example.
@@ -175,9 +179,18 @@ To print your own wall length use <code>'printMyWallCounter</code> and too see i
 YouTube Search
 --------------
 
-Searching a YouTube video can be done directly from the site. Simply start typing in the add video url text field and the results will pop up in the poll section. By clicking on the thumbnail of the video the url will be added to the text field
+Searching a YouTube video can be done directly from the site. Simply start typing in the add video url text field and the results will pop up in the poll section. By clicking on the thumbnail of the video the url will be added to the text field.
+To browse a playlist simply paste the playlist link into the input field.
 
 Click <a href="General Additions/Youtube Search/youtubesearchexample.gif" >here</a> for the example.
+
+Notifications
+-------------
+
+A user will now recieve a notification via the favicon of the browser tab if the chat is not focused and their name has been said in the chat with the @ prefix.
+The chat will stop scrolling at this position so the messages does not need to be searched afterwards.
+
+Click <a href="Chat Additions/Name Notification/namenotificationexample.gif" >here</a> for the example.
 
 Login-Off Messages
 ------------------

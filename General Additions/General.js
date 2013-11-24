@@ -37,6 +37,7 @@ function isUserMod(){
 function isBibbyRoom(){
     return ROOMNAME.match(/bibby/i)?true:false;
 }
+
 function getIndexOfUser(id){
     for (var i = 0; i < users.length; i++){
         if (id === users[i].id){
@@ -45,6 +46,21 @@ function getIndexOfUser(id){
     }
     return -1
 }
+
+function getUsernameArray(lowerCase){
+    var arr = [];
+    for(i = 0; i< users.length;i++){
+        if(users[i].username !== 'unnamed'){
+            if(!lowerCase){
+                arr.push(users[i].username);
+            }else{
+                arr.push(users[i].username.toLowerCase());
+            }
+        }
+    }
+    return arr;
+}
+
 var thisUsername;
 
 /*

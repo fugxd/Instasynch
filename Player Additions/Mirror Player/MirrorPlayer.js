@@ -24,12 +24,8 @@
 
 function loadMirrorPlayer(){
     //load settings
-    var setting = settings.get('automaticMirror');
-    if(setting){
-        automaticMirror = setting ==='false'?false:true;
-    }else{
-        settings.set('automaticMirror',true);
-    }
+    automaticMirror = settings.get('automaticMirror','true');
+    
     //add the command
     commands.set('addOnSettings',"AutomaticPlayerMirror",toggleAutomaticMirrorPlayer);
     commands.set('regularCommands',"mirrorPlayer",toggleMirrorPlayer);

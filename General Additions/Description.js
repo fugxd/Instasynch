@@ -18,6 +18,9 @@
 */
  
 function loadDescription(){
+    if(!isBibbyRoom()){
+        return;
+    }
     var descr="";
     descr += "<p style=\"font-family: Palatino; text-align: center; \">";
     descr += "  <span style=\"color:#003399;\"><strong style=\"font-size: 20pt; \">Bibbytube<\/strong><\/span><\/p>";

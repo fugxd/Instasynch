@@ -77,13 +77,16 @@ function loadCommandLoader(){
                 return items;
             },
             "execute":function(funcName, params){
+                commandExecuted = false;
                 funcName = funcName.toLowerCase();
                 if(items['commandFunctionMap'].hasOwnProperty(funcName)){
                     items['commandFunctionMap'][funcName](params);
+                    commandExecuted = true;
                 }
                 funcName = funcName +' ';
                 if(items['commandFunctionMap'].hasOwnProperty(funcName)){
                     items['commandFunctionMap'][funcName](params);
+                    commandExecuted = true;
                 }
             }
         }
@@ -97,5 +100,6 @@ function loadCommandLoader(){
     });
 }
 var commands;
+    commandExecuted = false;
 
 beforeConnectFunctions.splice(0,0,loadCommandLoader);

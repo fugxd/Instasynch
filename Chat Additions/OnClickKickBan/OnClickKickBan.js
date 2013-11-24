@@ -22,7 +22,9 @@
 */
 
 function loadOnClickKickBan(){
-
+    if(!isUserMod()){
+        return;
+    }
     var oldAddMessage = addMessage;
 
     //overwrite InstaSynch's  addMessage function
@@ -30,7 +32,7 @@ function loadOnClickKickBan(){
         
         oldAddMessage(username, message, userstyle, textstyle);
         //only add the onclick events if the user is a mod and its not a system message
-        if(username != '' && isUserMod()){
+        if(username != ''){
             var currentElement,
                 //the cursor doesnt need to be changed if the key is still held down
                 isCtrlKeyDown = false,
@@ -77,7 +79,7 @@ function loadOnClickKickBan(){
                                 sendcmd('ban', {userid: userId});    
                                 addMessage('', 'b& user: '+user, '', 'hashtext');
                             }else{
-                                sendcmd('leaverban', {userid: userId});    
+                                sendcmd('leaverban', {username: user});    
                                 addMessage('', 'Leaverb& user: '+user, '', 'hashtext');
                             }
                         }
@@ -108,7 +110,28 @@ function loadOnClickKickBan(){
             });
         }
     };
+    var chatCtrlDown = false,
+        chatKeyDown = function (event) {
+            if(!chatCtrlDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
+                $('#chat_list').scrollTop($('#chat_list').scrollTop()-5);
+                chatCtrlDown = true;
+            }
+        },
+        chatKeyUp = function (event) {
+            if(chatCtrlDown && !event.ctrlKey){
+                $('#chat_list').scrollTop($('#chat_list')[0].scrollHeight);
+                chatCtrlDown = false;
+            }
+        };
+    $('#chat_list').hover(
+        function(){
+            $(document).bind('keydown',chatKeyDown);
+            $(document).bind('keyup',chatKeyUp);
+        },function(){       
+            chatCtrlDown = false;
+            $(document).unbind('keydown',chatKeyDown);
+            $(document).unbind('keyup',chatKeyUp);
+    });
 };
 
-
-beforeConnectFunctions.push(loadOnClickKickBan);
+afterConnectFunctions.push(loadOnClickKickBan);
