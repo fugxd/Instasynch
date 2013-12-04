@@ -58,7 +58,7 @@ function loadMirrorPlayer(){
             if(containsMirrored(playlist[getActiveVideoIndex()].title)){
                 toggleMirrorPlayer();
             }
-        },1000);
+        },2500);
     }
 }
 function containsMirrored(title){

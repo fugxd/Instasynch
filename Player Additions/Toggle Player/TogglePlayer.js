@@ -59,7 +59,7 @@ function loadTogglePlayer(){
 
 function togglePlayer(){
     if(playerActive){
-        destroyPlayer();
+        video.destroyPlayer();
     }else{
         sendcmd('reload', null);
     }

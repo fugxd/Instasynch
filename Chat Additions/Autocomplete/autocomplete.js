@@ -162,7 +162,7 @@ var isAutocompleteMenuActive = false,
     autocompleteCommands = true,
     autocompleteTags = true,
     autocompleteAddonSettings = true,
-    autocompleteNames = true;
+    autocompleteNames = true,
     autocompleteData = [];
 
 function toggleTagsAutocomplete(){

@@ -22,7 +22,7 @@
 function parseUrl(URL){
 	//Parse URLs from  youtube / twitch / vimeo / dailymotion / livestream
  
-	var match = URL.match(/(https?:\/\/)?(.*\.)?(\w+)\./i);
+	var match = URL.match(/(https?:\/\/)?([^\.]+\.)?(\w+)\./i);
 	if(match === null){
 		/*error*/
 		return false;

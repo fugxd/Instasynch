@@ -229,8 +229,6 @@ var filterTags = true,
     filteredwords = {
     "skip": "upvote",
     "SKIP": "UPVOTE",
-    "club": "party",
-    "CLUB": "PARTY",
     "gay" : "hetero",
     "GAY" : "HETERO"
 },

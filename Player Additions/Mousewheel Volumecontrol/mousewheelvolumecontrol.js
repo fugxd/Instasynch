@@ -54,50 +54,72 @@ function loadMouseWheelVolumecontrol(){
         }
     );
 
-    var oldLoadYoutubePlayer = loadYoutubePlayer,
-        oldLoadVimeoVideo = loadVimeoVideo;
-        
-     //overwrite InstaSynch's loadYoutubePlayer
-    loadYoutubePlayer = function loadYoutubePlayer(id, time, playing) {
-        oldLoadYoutubePlayer(id, time, playing);
-        //set the globalVolume to the player after it has been loaded
-        var oldAfterReady = $.tubeplayer.defaults.afterReady;
-        $.tubeplayer.defaults.afterReady = function afterReady(k3) {
-            initGlobalVolume();
-            oldAfterReady(k3);
-        };
-    };    
+    // var oldLoadYoutubePlayer = loadYoutubePlayer,
+    //     oldLoadVimeoVideo = loadVimeoVideo;
+    
+    //  //overwrite InstaSynch's loadYoutubePlayer
+    // loadYoutubePlayer = function loadYoutubePlayer(id, time, playing) {
+    //     oldLoadYoutubePlayer(id, time, playing);
+    //     //set the globalVolume to the player after it has been loaded
+ 
+    // };    
 
 
-    //overwrite InstaSynch's loadVimeoPlayer
-    loadVimeoVideo = function loadVimeoPlayer(id, time, playing) {
-        oldLoadVimeoVideo(id, time, playing);
+    // //overwrite InstaSynch's loadVimeoPlayer
+    // loadVimeoVideo = function loadVimeoPlayer(id, time, playing) {
+    //     oldLoadVimeoVideo(id, time, playing);
 
-        //set the globalVolume to the player after it has been loaded
-        $f($('#vimeo')[0])['addEvent']('ready',initGlobalVolume);
-    };
+    //     //set the globalVolume to the player after it has been loaded
+    // };
+
+    var oldPlayVideo = playVideo,
+        newPlayer = false;
+
+    playVideo = function playVideo(vidinfo, time, playing){
+        oldPlayVideo(vidinfo,time,playing);
+        if(oldProvider !== vidinfo.provider){
+            newPlayer = true;
+            oldProvider = vidinfo.provider;
+        }
+        if(newPlayer){
+            newPlayer = false;
+            switch(oldProvider){
+                case 'youtube': {
+                    var oldAfterReady = $.tubeplayer.defaults.afterReady;
+                    $.tubeplayer.defaults.afterReady = function afterReady(k3) {
+                    initGlobalVolume();
+                    oldAfterReady(k3);
+                    };
+                }break;
+                case 'vimeo':{
+                    $f($('#vimeo')[0])['addEvent']('ready',initGlobalVolume);
+                }break;
+            }
+        }
+    }
 }
 
-var isReady = false,
+var isPlayerRead = false,
     globalVolume = 50,
-    mouserOverPlayer = false;
+    mouserOverPlayer = false,
+    oldProvider = 'youtube';
 
 function initGlobalVolume(){
-    if(isReady){
+    if(isPlayerRead){
         setVol();
     }else{
-        if(loadedPlayer === 'youtube'){
+        if(oldProvider === 'youtube'){
             globalVolume = $('#media').tubeplayer('volume');
-        }else if(loadedPlayer === 'vimeo'){
+        }else if(oldProvider === 'vimeo'){
             $f($('#vimeo')[0]).api('getVolume',function(vol){globalVolume = vol*100.0;});
         }   
-        isReady = true;
+        isPlayerRead = true;
     }
 }
 function setVol(){
-    if(loadedPlayer === 'youtube'){
+    if(oldProvider === 'youtube'){
         $('#media').tubeplayer('volume',globalVolume);
-    }else if(loadedPlayer === 'vimeo'){
+    }else if(oldProvider === 'vimeo'){
         $f($('#vimeo')[0]).api('setVolume',globalVolume/100.0);
     }
 }

@@ -1,21 +1,30 @@
-var afterConnectFunctions = [];
-var beforeConnectFunctions = [];
-
+var afterConnectFunctions = [],
+    beforeConnectFunctions = [],
+    scriptErrors = [];
+function executeFunctions(funcArray){
+    var i;
+    for(i = 0; i< funcArray.length;i++){
+        try{
+            funcArray[i]();
+        }catch(err){
+            scriptErrors.push(err);
+            console.log("Error in " + funcArray[i].name + ". See scriptErrors["+(scriptErrors.length-1)+"].stack for details");
+        }
+    }
+}
 function afterConnect(){
 	if (messages < 3) {
 	    setTimeout(function () {afterConnect();}, 100);
 	    return;
 	}
 
-	for(var i = 0; i< afterConnectFunctions.length;i++){
-		afterConnectFunctions[i]();
-	}
+    executeFunctions(afterConnectFunctions);
 }
 function beforeConnect(){
-	for(var i = 0; i< beforeConnectFunctions.length;i++){
-		beforeConnectFunctions[i]();
-	}
-}/*
+    executeFunctions(beforeConnectFunctions);
+}
+//-----------------start autocomplete.js-----------------
+/*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
 
@@ -179,7 +188,7 @@ var isAutocompleteMenuActive = false,
     autocompleteCommands = true,
     autocompleteTags = true,
     autocompleteAddonSettings = true,
-    autocompleteNames = true;
+    autocompleteNames = true,
     autocompleteData = [];
 
 function toggleTagsAutocomplete(){
@@ -204,6 +213,8 @@ function toggleNamesAutocomplete(){
 }
 
 afterConnectFunctions.push(loadAutoComplete);
+//----------------- end  autocomplete.js-----------------
+//-----------------start autoscrollFix.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -284,6 +295,8 @@ function loadAutoscrollFix(){
 
 
 afterConnectFunctions.push(loadAutoscrollFix);
+//----------------- end  autoscrollFix.js-----------------
+//-----------------start inputHistory.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -372,6 +385,8 @@ var inputHistory = [""],
     inputHistoryIndex = 0;
 
 beforeConnectFunctions.push(loadInputHistory);
+//----------------- end  inputHistory.js-----------------
+//-----------------start logInOffMessages.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -436,6 +451,8 @@ function toggleLogInOffMessages(){
 }
 
 afterConnectFunctions.push(loadLogInOffMessages);
+//----------------- end  logInOffMessages.js-----------------
+//-----------------start messagefilter.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -667,8 +684,6 @@ var filterTags = true,
     filteredwords = {
     "skip": "upvote",
     "SKIP": "UPVOTE",
-    "club": "party",
-    "CLUB": "PARTY",
     "gay" : "hetero",
     "GAY" : "HETERO"
 },
@@ -761,6 +776,8 @@ var filterTags = true,
 
 
 beforeConnectFunctions.push(loadMessageFilter);
+//----------------- end  messagefilter.js-----------------
+//-----------------start modSpy.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -793,18 +810,33 @@ function loadModSpy(){
 
 	// Overwriting console.log
 	var oldLog = console.log, 
-		oldMoveVideo = moveVideo;
+		oldMoveVideo = moveVideo,
+		filterList = [
+			/^Resynch requested../,
+			/cleaned the playlist/,
+			/Using HTML5 player is not recomended./
+		],
+		filter;
 
 	console.log = function (message) {
 		// We don't want the cleaning messages in the chat (Ok in the console) .
-		if (message && message.match && !message.match(/cleaned the playlist/g) && modSpy)
+		if (modSpy && message && message.match)
 		{
-			if (message.match(/ moved a video/g) && bumpCheck)
-			{
-				message = message.replace("moved","bumped");
-				bumpCheck = false;
+			filter = false;
+			for (var i = 0; i < filterList.length; i++) {
+				if(message.match(filterList[i])){
+					filter = true;
+					break;
+				}
 			}
-			addMessage('', message, '','hashtext');   
+			if(!filter){
+				if (message.match(/ moved a video/g) && bumpCheck)
+				{
+					message = message.replace("moved","bumped");
+					bumpCheck = false;
+				}
+				addMessage('', message, '','hashtext');   
+			}
 		}
 		oldLog.apply(console,arguments);
 	};
@@ -828,6 +860,8 @@ var modSpy = false,
 	bumpCheck = false;
 
 beforeConnectFunctions.push(loadModSpy);
+//----------------- end  modSpy.js-----------------
+//-----------------start nameAutocomplete.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -909,6 +943,8 @@ function loadNameAutocomplete() {
 }
 
 beforeConnectFunctions.push(loadNameAutocomplete);
+//----------------- end  nameAutocomplete.js-----------------
+//-----------------start nameNotification.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1004,6 +1040,8 @@ function toggleNotify(){
 }
 
 beforeConnectFunctions.push(loadNameNotification);
+//----------------- end  nameNotification.js-----------------
+//-----------------start OnClickKickBan.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1141,6 +1179,8 @@ function loadOnClickKickBan(){
 };
 
 afterConnectFunctions.push(loadOnClickKickBan);
+//----------------- end  OnClickKickBan.js-----------------
+//-----------------start bump.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1192,6 +1232,8 @@ function bump(params){
 
 
 beforeConnectFunctions.push(loadBumpCommand);
+//----------------- end  bump.js-----------------
+//-----------------start clearChat.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1227,6 +1269,8 @@ function clearChat(){
 
 
 beforeConnectFunctions.push(loadClearChatCommand);
+//----------------- end  clearChat.js-----------------
+//-----------------start commandFloodProtect.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1267,7 +1311,7 @@ function loadCommandFloodProtect(){
                 //remove the sent command
                 commandCache.splice(0,1);
                 //after 750ms send the next command
-                setTimeout(function(){sendcmdReady = true;sendcmd();},750);
+                setTimeout(function(){sendcmdReady = true;sendcmd();},1100);
             }
         }
     }
@@ -1277,6 +1321,8 @@ var sendcmdReady = true,
     commandCache = [];
     
 beforeConnectFunctions.push(loadCommandFloodProtect);
+//----------------- end  commandFloodProtect.js-----------------
+//-----------------start commandLoader.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1382,6 +1428,8 @@ var commands;
     commandExecuted = false;
 
 beforeConnectFunctions.splice(0,0,loadCommandLoader);
+//----------------- end  commandLoader.js-----------------
+//-----------------start Description.js-----------------
 /*
     Copyright (C) 2013  Bibbytube
    
@@ -1456,6 +1504,8 @@ function loadDescription(){
  
  
 beforeConnectFunctions.push(loadDescription);
+//----------------- end  Description.js-----------------
+//-----------------start General.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1596,6 +1646,8 @@ function pasteTextAtCaret(text) {
 }
 
 beforeConnectFunctions.splice(0,0,loadGeneralStuff);
+//----------------- end  General.js-----------------
+//-----------------start greynameCount.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1644,6 +1696,8 @@ function setViewerCount(){
 }
 
 beforeConnectFunctions.push(loadGreynameCount);
+//----------------- end  greynameCount.js-----------------
+//-----------------start purgeTooLong.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1693,6 +1747,8 @@ function purgeTooLong(params){
 }
 
 beforeConnectFunctions.push(loadPurgeTooLongCommand);
+//----------------- end  purgeTooLong.js-----------------
+//-----------------start removeLast.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1749,6 +1805,8 @@ function removeLast(params){
 }
 		
 beforeConnectFunctions.push(loadRemoveLast);
+//----------------- end  removeLast.js-----------------
+//-----------------start settingsLoader.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1842,6 +1900,8 @@ function printAddonSettings(){
 //settings need to be loaded first
 beforeConnectFunctions.splice(0,0,loadSettingsLoader);
 beforeConnectFunctions.push(loadSettingsLoaderCommand);
+//----------------- end  settingsLoader.js-----------------
+//-----------------start skip.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1874,6 +1934,8 @@ function skip(){
 }
 
 beforeConnectFunctions.push(loadSkipCommand);
+//----------------- end  skip.js-----------------
+//-----------------start trimWall.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1945,6 +2007,8 @@ function trimWall(params){
 }
 
 beforeConnectFunctions.push(loadTrimWallCommand);
+//----------------- end  trimWall.js-----------------
+//-----------------start votePurge.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -1994,6 +2058,8 @@ function votePurge(params)
 }
 
 beforeConnectFunctions.push(loadVotePurgeCommand);
+//----------------- end  votePurge.js-----------------
+//-----------------start youtubeSearch.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -2275,6 +2341,8 @@ function applyStyle(e){
         divmore.style.zIndex="1";
     }
 }
+//----------------- end  youtubeSearch.js-----------------
+//-----------------start mirrorPlayer.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -2335,7 +2403,7 @@ function loadMirrorPlayer(){
             if(containsMirrored(playlist[getActiveVideoIndex()].title)){
                 toggleMirrorPlayer();
             }
-        },1000);
+        },2500);
     }
 }
 function containsMirrored(title){
@@ -2371,6 +2439,8 @@ function toggleMirrorPlayer(){
 }
 
 afterConnectFunctions.push(loadMirrorPlayer);
+//----------------- end  mirrorPlayer.js-----------------
+//-----------------start mousewheelVolumeControl.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -2427,55 +2497,79 @@ function loadMouseWheelVolumecontrol(){
         }
     );
 
-    var oldLoadYoutubePlayer = loadYoutubePlayer,
-        oldLoadVimeoVideo = loadVimeoVideo;
-        
-     //overwrite InstaSynch's loadYoutubePlayer
-    loadYoutubePlayer = function loadYoutubePlayer(id, time, playing) {
-        oldLoadYoutubePlayer(id, time, playing);
-        //set the globalVolume to the player after it has been loaded
-        var oldAfterReady = $.tubeplayer.defaults.afterReady;
-        $.tubeplayer.defaults.afterReady = function afterReady(k3) {
-            initGlobalVolume();
-            oldAfterReady(k3);
-        };
-    };    
+    // var oldLoadYoutubePlayer = loadYoutubePlayer,
+    //     oldLoadVimeoVideo = loadVimeoVideo;
+    
+    //  //overwrite InstaSynch's loadYoutubePlayer
+    // loadYoutubePlayer = function loadYoutubePlayer(id, time, playing) {
+    //     oldLoadYoutubePlayer(id, time, playing);
+    //     //set the globalVolume to the player after it has been loaded
+ 
+    // };    
 
 
-    //overwrite InstaSynch's loadVimeoPlayer
-    loadVimeoVideo = function loadVimeoPlayer(id, time, playing) {
-        oldLoadVimeoVideo(id, time, playing);
+    // //overwrite InstaSynch's loadVimeoPlayer
+    // loadVimeoVideo = function loadVimeoPlayer(id, time, playing) {
+    //     oldLoadVimeoVideo(id, time, playing);
 
-        //set the globalVolume to the player after it has been loaded
-        $f($('#vimeo')[0])['addEvent']('ready',initGlobalVolume);
-    };
+    //     //set the globalVolume to the player after it has been loaded
+    // };
+
+    var oldPlayVideo = playVideo,
+        newPlayer = false;
+
+    playVideo = function playVideo(vidinfo, time, playing){
+        oldPlayVideo(vidinfo,time,playing);
+        if(oldProvider !== vidinfo.provider){
+            newPlayer = true;
+            oldProvider = vidinfo.provider;
+        }
+        if(newPlayer){
+            newPlayer = false;
+            switch(oldProvider){
+                case 'youtube': {
+                    var oldAfterReady = $.tubeplayer.defaults.afterReady;
+                    $.tubeplayer.defaults.afterReady = function afterReady(k3) {
+                    initGlobalVolume();
+                    oldAfterReady(k3);
+                    };
+                }break;
+                case 'vimeo':{
+                    $f($('#vimeo')[0])['addEvent']('ready',initGlobalVolume);
+                }break;
+            }
+        }
+    }
 }
 
-var isReady = false,
+var isPlayerRead = false,
     globalVolume = 50,
-    mouserOverPlayer = false;
+    mouserOverPlayer = false,
+    oldProvider = 'youtube';
 
 function initGlobalVolume(){
-    if(isReady){
+    if(isPlayerRead){
         setVol();
     }else{
-        if(loadedPlayer === 'youtube'){
+        if(oldProvider === 'youtube'){
             globalVolume = $('#media').tubeplayer('volume');
-        }else if(loadedPlayer === 'vimeo'){
+        }else if(oldProvider === 'vimeo'){
             $f($('#vimeo')[0]).api('getVolume',function(vol){globalVolume = vol*100.0;});
         }   
-        isReady = true;
+        isPlayerRead = true;
     }
 }
 function setVol(){
-    if(loadedPlayer === 'youtube'){
+    if(oldProvider === 'youtube'){
         $('#media').tubeplayer('volume',globalVolume);
-    }else if(loadedPlayer === 'vimeo'){
+    }else if(oldProvider === 'vimeo'){
         $f($('#vimeo')[0]).api('setVolume',globalVolume/100.0);
     }
 }
 
 beforeConnectFunctions.push(loadMouseWheelVolumecontrol);
+//----------------- end  mousewheelVolumeControl.js-----------------
+//-----------------start togglePlayer.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -2537,7 +2631,7 @@ function loadTogglePlayer(){
 
 function togglePlayer(){
     if(playerActive){
-        destroyPlayer();
+        video.destroyPlayer();
     }else{
         sendcmd('reload', null);
     }
@@ -2548,6 +2642,8 @@ function togglePlayer(){
 var playerActive = true;
 
 afterConnectFunctions.push(loadTogglePlayer);
+//----------------- end  togglePlayer.js-----------------
+//-----------------start ExportPlaylistCommand.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -2591,6 +2687,8 @@ function exportPlaylist(){
     window.prompt ("Copy to clipboard: Ctrl+C, Enter", output);
 }
 beforeConnectFunctions.push(loadExportPlaylist);
+//----------------- end  ExportPlaylistCommand.js-----------------
+//-----------------start wallcounter.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -2672,6 +2770,7 @@ function loadWallCounter(){
 var wallCounter = {};
 
 function resetWallCounter(){
+    var video,value;
     wallCounter = {};
     for(i = 0; i < playlist.length;i++){
         video = playlist[i];
@@ -2707,6 +2806,8 @@ function printMyWallCounter(){
 }
 
 afterConnectFunctions.push(loadWallCounter);
+//----------------- end  wallcounter.js-----------------
+//-----------------start UrlParser.js-----------------
 
 /*
     Copyright (C) 2013  faqqq @Bibbytube
@@ -2731,7 +2832,7 @@ afterConnectFunctions.push(loadWallCounter);
 function parseUrl(URL){
 	//Parse URLs from  youtube / twitch / vimeo / dailymotion / livestream
  
-	var match = URL.match(/(https?:\/\/)?(.*\.)?(\w+)\./i);
+	var match = URL.match(/(https?:\/\/)?([^\.]+\.)?(\w+)\./i);
 	if(match === null){
 		/*error*/
 		return false;
@@ -2850,5 +2951,6 @@ function parseUrl(URL){
 		'channel':channel
 	};
 }
+//----------------- end  UrlParser.js-----------------
 beforeConnect();
 afterConnect();

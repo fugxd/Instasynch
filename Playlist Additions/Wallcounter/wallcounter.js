@@ -79,6 +79,7 @@ function loadWallCounter(){
 var wallCounter = {};
 
 function resetWallCounter(){
+    var video,value;
     wallCounter = {};
     for(i = 0; i < playlist.length;i++){
         video = playlist[i];
