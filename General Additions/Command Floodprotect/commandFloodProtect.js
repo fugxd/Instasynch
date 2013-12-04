@@ -38,7 +38,7 @@ function loadCommandFloodProtect(){
                 //remove the sent command
                 commandCache.splice(0,1);
                 //after 750ms send the next command
-                setTimeout(function(){sendcmdReady = true;sendcmd();},750);
+                setTimeout(function(){sendcmdReady = true;sendcmd();},1100);
             }
         }
     }

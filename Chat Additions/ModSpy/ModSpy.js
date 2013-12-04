@@ -30,18 +30,33 @@ function loadModSpy(){
 
 	// Overwriting console.log
 	var oldLog = console.log, 
-		oldMoveVideo = moveVideo;
+		oldMoveVideo = moveVideo,
+		filterList = [
+			/^Resynch requested../,
+			/cleaned the playlist/,
+			/Using HTML5 player is not recomended./
+		],
+		filter;
 
 	console.log = function (message) {
 		// We don't want the cleaning messages in the chat (Ok in the console) .
-		if (message && message.match && !message.match(/cleaned the playlist/g) && modSpy)
+		if (modSpy && message && message.match)
 		{
-			if (message.match(/ moved a video/g) && bumpCheck)
-			{
-				message = message.replace("moved","bumped");
-				bumpCheck = false;
+			filter = false;
+			for (var i = 0; i < filterList.length; i++) {
+				if(message.match(filterList[i])){
+					filter = true;
+					break;
+				}
 			}
-			addMessage('', message, '','hashtext');   
+			if(!filter){
+				if (message.match(/ moved a video/g) && bumpCheck)
+				{
+					message = message.replace("moved","bumped");
+					bumpCheck = false;
+				}
+				addMessage('', message, '','hashtext');   
+			}
 		}
 		oldLog.apply(console,arguments);
 	};
