@@ -84,7 +84,7 @@ function resetWallCounter(){
     for(i = 0; i < playlist.length;i++){
         video = playlist[i];
         value = wallCounter[video.addedby];
-        value =((value)?value:0) + video.duration;
+        value =(value||0) + video.duration;
         wallCounter[video.addedby] = value;
     } 
 }

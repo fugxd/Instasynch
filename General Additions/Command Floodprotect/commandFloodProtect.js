@@ -41,7 +41,7 @@ function loadCommandFloodProtect(){
                 setTimeout(function(){sendcmdReady = true;sendcmd();},1100);
             }
         }
-    }
+    };
 }
 
 var sendcmdReady = true,

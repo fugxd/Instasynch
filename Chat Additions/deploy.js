@@ -113,11 +113,11 @@ function loadAutoComplete() {
 
             if(partToComplete.length>0){
                 switch(partToComplete[0]){
-                    case '/': if(!autocompleteEmotes) return;
-                    case '\'': if(!autocompleteCommands || (lastIndex!==0 && message[lastIndex-1].match(/\w/))) return;
-                    case '[': if(!autocompleteTags) return;
-                    case '~': if(!autocompleteAddonSettings) return;
-                    case '@': if(!autocompleteNames)return;
+                    case '/': if(!autocompleteEmotes) return; break;
+                    case '\'': if(!autocompleteCommands || (lastIndex!==0 && message[lastIndex-1].match(/\w/))) return; break;
+                    case '[': if(!autocompleteTags) return; break;
+                    case '~': if(!autocompleteAddonSettings) return; break; 
+                    case '@': if(!autocompleteNames)return; break;
 
                 }
                 if(partToComplete[0] ==='@'){
@@ -171,8 +171,9 @@ function loadAutoComplete() {
     });
 }
 function lastIndexOfSet(input, set){
-    var index = -1;
-    for (var i = 0; i < set.length; i++) {
+    var index = -1,
+        i;
+    for (i = 0; i < set.length; i++) {
         index = Math.max(index, input.lastIndexOf(set[i]));
     }
     if(index>0){
@@ -293,8 +294,8 @@ function loadAutoscrollFix(){
     };
 }
 
-
-afterConnectFunctions.push(loadAutoscrollFix);
+//now added oficially on InstaSynch
+//afterConnectFunctions.push(loadAutoscrollFix);
 //----------------- end  autoscrollFix.js-----------------
 //-----------------start inputHistory.js-----------------
 /*
@@ -418,7 +419,8 @@ function loadLogInOffMessages(){
     commands.set('addOnSettings',"LogInOffMessages",toggleLogInOffMessages);
     
     // Overwriting Adduser
-    var oldAddUser = addUser;
+    var oldAddUser = addUser,
+        oldRemoveUser = removeUser;
 
     addUser = function(user, css, sort) {
         // Only if blackname or mod
@@ -426,10 +428,9 @@ function loadLogInOffMessages(){
             addMessage('', user.username + ' logged on.', '','hashtext');
         }
         oldAddUser(user,css,sort);
-    }
+    };
 
     // Overwriting removeUser
-    var oldRemoveUser = removeUser;
 
     removeUser = function(id) {
         var user = users[getIndexOfUser(id)];
@@ -440,7 +441,7 @@ function loadLogInOffMessages(){
             }
         }
         oldRemoveUser(id);
-    }
+    };
 }
 
 var logInOffMessages = false;
@@ -488,8 +489,8 @@ function loadMessageFilter() {
 
     //init
     if(NSFWEmotes){
-        $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
-        $codes['meatspin'] = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        $codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        $codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
     }
     var oldLinkify = linkify,
         oldAddMessage = addMessage,
@@ -499,7 +500,7 @@ function loadMessageFilter() {
         var emotes =[],
             index = 0;
         //remove image urls so they wont get linkified
-        str = str.replace(/src=\"(.*?)\"/gi,function(match){emotes.push(match); return 'src=\"\"';});
+        str = str.replace(/src=\"([^\"]*)\"/gi,function(match){emotes.push(match); return 'src=\"\"';});
         str = oldLinkify(str, buildHashtagUrl, includeW3, target);
         //put them back in
         str = str.replace(/src=\"\"/gi,function(){return emotes[index++];});
@@ -533,14 +534,14 @@ function toggleTags(){
 }
 function toggleNSFWEmotes(){
     if(!NSFWEmotes){
-        $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
-        $codes['meatspin'] = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        $codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        $codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
         autocompleteData.push('/boobies');
         autocompleteData.push('/meatspin');
         autocompleteData.sort();
     }else{
-        delete $codes['boobies'];
-        delete $codes['meatspin'];
+        delete $codes.boobies;
+        delete $codes.meatspin;
         autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1);
         autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1);
     }
@@ -664,14 +665,14 @@ function parseMessage(message,isChatMessage){
 }
 function toggleNSFWEmotes(){
     if(!NSFWEmotes){
-        $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
-        $codes['meatspin'] = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        $codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        $codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
         autocompleteData.push('/boobies');
         autocompleteData.push('/meatspin');
         autocompleteData.sort();
     }else{
-        delete $codes['boobies'];
-        delete $codes['meatspin'];
+        delete $codes.boobies;
+        delete $codes.meatspin;
         autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1); 
         autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1); 
     }
@@ -812,18 +813,19 @@ function loadModSpy(){
 	var oldLog = console.log, 
 		oldMoveVideo = moveVideo,
 		filterList = [
-			/^Resynch requested../,
+			/^Resynch requested\.\./,
 			/cleaned the playlist/,
-			/Using HTML5 player is not recomended./
+			/Using HTML5 player is not recomended\./
 		],
-		filter;
+		filter,
+		i;
 
 	console.log = function (message) {
 		// We don't want the cleaning messages in the chat (Ok in the console) .
 		if (modSpy && message && message.match)
 		{
 			filter = false;
-			for (var i = 0; i < filterList.length; i++) {
+			for (i = 0; i < filterList.length; i++) {
 				if(message.match(filterList[i])){
 					filter = true;
 					break;
@@ -849,7 +851,7 @@ function loadModSpy(){
 		if ( Math.abs(getActiveVideoIndex()-position) <= 10 && Math.abs(oldPosition-position) > 10){ // "It's a bump ! " - Amiral Ackbar
 			bumpCheck = true;
 		}
-	}
+	};
 
 }	
 function toggleModSpy(){
@@ -1022,7 +1024,7 @@ function loadNameNotification(){
             }
         }
     };
-   $('#cin')['focus'](function () {
+   $('#cin').focus(function () {
         toggleNotify();
     });
 }
@@ -1098,7 +1100,7 @@ function loadOnClickKickBan(){
             $('#chat_list > span:last-of-type').prev()
             .on('click', function(event){
                 if(event.ctrlKey){
-                    var user = $(this)[0].innerText,
+                    var user = $(this)[0].innerHTML,
                         userFound = false,
                         isMod = false,
                         userId,
@@ -1176,7 +1178,7 @@ function loadOnClickKickBan(){
             $(document).unbind('keydown',chatKeyDown);
             $(document).unbind('keyup',chatKeyUp);
     });
-};
+}
 
 afterConnectFunctions.push(loadOnClickKickBan);
 //----------------- end  OnClickKickBan.js-----------------
@@ -1314,7 +1316,7 @@ function loadCommandFloodProtect(){
                 setTimeout(function(){sendcmdReady = true;sendcmd();},1100);
             }
         }
-    }
+    };
 }
 
 var sendcmdReady = true,
@@ -1349,13 +1351,13 @@ beforeConnectFunctions.push(loadCommandFloodProtect);
 function loadCommandLoader(){
     commands = new function() {
         var items = {};
-        items['regularCommands'] = [
+        items.regularCommands = [
             "'reload",
             "'resynch",
             "'toggleFilter",
             "'toggleAutosynch"
         ]; 
-        items['modCommands'] = [
+        items.modCommands = [
             "'togglePlaylistLock",
             "'ready",
             "'kick ",
@@ -1383,8 +1385,8 @@ function loadCommandLoader(){
             //"'description ",
             "'next"
         ];
-        items['addOnSettings'] = [];
-        items['commandFunctionMap'] = {};
+        items.addOnSettings = [];
+        items.commandFunctionMap = {};
         return {
             "set": function(arrayName, funcName, func) {
                 if(arrayName === 'addOnSettings'){
@@ -1393,7 +1395,7 @@ function loadCommandLoader(){
                     funcName = "'"+funcName;
                 }
                 items[arrayName].push(funcName);
-                items['commandFunctionMap'][funcName.toLowerCase()] = func;
+                items.commandFunctionMap[funcName.toLowerCase()] = func;
             },
             "get": function(arrayName) {
                 return items[arrayName];
@@ -1404,17 +1406,17 @@ function loadCommandLoader(){
             "execute":function(funcName, params){
                 commandExecuted = false;
                 funcName = funcName.toLowerCase();
-                if(items['commandFunctionMap'].hasOwnProperty(funcName)){
-                    items['commandFunctionMap'][funcName](params);
+                if(items.commandFunctionMap.hasOwnProperty(funcName)){
+                    items.commandFunctionMap[funcName](params);
                     commandExecuted = true;
                 }
                 funcName = funcName +' ';
-                if(items['commandFunctionMap'].hasOwnProperty(funcName)){
-                    items['commandFunctionMap'][funcName](params);
+                if(items.commandFunctionMap.hasOwnProperty(funcName)){
+                    items.commandFunctionMap[funcName](params);
                     commandExecuted = true;
                 }
             }
-        }
+        };
     };    
 
     $("#chat input").bind("keypress", function(event) {
@@ -1547,12 +1549,13 @@ function isBibbyRoom(){
 }
 
 function getIndexOfUser(id){
-    for (var i = 0; i < users.length; i++){
+    var i;
+    for (i = 0; i < users.length; i++){
         if (id === users[i].id){
             return i;
         }
     }
-    return -1
+    return -1;
 }
 
 function getUsernameArray(lowerCase){
@@ -1578,38 +1581,40 @@ var thisUsername;
 */
 function doGetCaretPosition(oField) {
 
-  // Initialize
-  var iCaretPos = 0;
+    // Initialize
+    var iCaretPos = 0;
 
-  // IE Support
-  if (document.selection) {
+    // IE Support
+    if (document.selection) {
+        var oSel;
+        // Set focus on the element
+        oField.focus ();
 
-    // Set focus on the element
-    oField.focus ();
+        // To get cursor position, get empty selection range
+        oSel = document.selection.createRange ();
 
-    // To get cursor position, get empty selection range
-    var oSel = document.selection.createRange ();
+        // Move selection start to 0 position
+        oSel.moveStart ('character', -oField.value.length);
 
-    // Move selection start to 0 position
-    oSel.moveStart ('character', -oField.value.length);
+        // The caret position is selection length
+        iCaretPos = oSel.text.length;
+    }
 
-    // The caret position is selection length
-    iCaretPos = oSel.text.length;
-  }
+    // Firefox support
+    else if (oField.selectionStart || oField.selectionStart == '0'){
+      iCaretPos = oField.selectionStart;
+    }
 
-  // Firefox support
-  else if (oField.selectionStart || oField.selectionStart == '0')
-    iCaretPos = oField.selectionStart;
-
-  // Return results
-  return (iCaretPos);
+    // Return results
+    return (iCaretPos);
 }
 
 function doSetCaretPosition(oField, position) {
     //IE
     if (document.selection) {
+        var oSel;
         oField.focus ();
-        var oSel = document.selection.createRange ();
+        oSel = document.selection.createRange ();
         oSel.moveStart('character', position);
         oSel.moveEnd('character', position);
     }
@@ -1626,10 +1631,11 @@ function pasteTextAtCaret(text) {
         // IE9 and non-IE
         sel = window.getSelection();
         if (sel.getRangeAt && sel.rangeCount) {
+            var textNode;
             range = sel.getRangeAt(0);
             range.deleteContents();
 
-            var textNode = document.createTextNode(text);
+            textNode = document.createTextNode(text);
             range.insertNode(textNode);
 
             // Preserve the selection
@@ -1643,6 +1649,11 @@ function pasteTextAtCaret(text) {
         // IE < 9
         document.selection.createRange().text = text;
     }
+}
+
+function openInNewTab(url){
+    var win=window.open(url, '_blank');
+    win.focus();
 }
 
 beforeConnectFunctions.splice(0,0,loadGeneralStuff);
@@ -1678,16 +1689,17 @@ function loadGreynameCount(){
     addUser = function addUser(user, css, sort) {
         oldAddUser(user, css, sort);
         setViewerCount();
-    }    
+    };    
     removeUser = function removeUser(id) {
         oldRemoveUser(id);
         setViewerCount();
-    }
+    };
     setViewerCount();
 }
 function setViewerCount(){
-    var greynameCount = 0;
-    for (var i = 0; i < users.length; i++) {
+    var greynameCount = 0,
+        i;
+    for (i = 0; i < users.length; i++) {
         if(!users[i].loggedin){
             greynameCount++;
         }
@@ -1697,6 +1709,38 @@ function setViewerCount(){
 
 beforeConnectFunctions.push(loadGreynameCount);
 //----------------- end  greynameCount.js-----------------
+//-----------------start pollseal.js-----------------
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+function loadPollSeal(){
+	$(".st-poll").css( "background", "url(http://i.imgur.com/hTjQCGP.png) 0 0 #DFDFDF" );
+	$(".st-poll").css( "background-size", "auto 100%");
+	$(".st-poll").css( "background-repeat", "no-repeat");
+	$(".st-poll").css( "background-position", "center");
+}
+
+beforeConnectFunctions.push(loadPollSeal);
+//----------------- end  pollseal.js-----------------
 //-----------------start purgeTooLong.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
@@ -1727,10 +1771,11 @@ function loadPurgeTooLongCommand(){
 
 function purgeTooLong(params){
     var maxTimeLimit = params[1]?parseInt(params[1])*60:60*60,
-        videos = [];
+        videos = [],
+        i;
 
     //get all Videos longer than maxTimeLimit
-    for (var i = 0; i < playlist.length; i++) {
+    for (i = 0; i < playlist.length; i++) {
         if(playlist[i].duration >= maxTimeLimit){
             videos.push({info:playlist[i].info, duration:playlist[i].duration});
         }
@@ -1738,7 +1783,7 @@ function purgeTooLong(params){
 
     function compareVideos(a,b){
         return b.duration - a.duration;
-    };
+    }
     videos.sort(compareVideos);
 
     for (var i = 0; i < videos.length; i++) {
@@ -1881,7 +1926,7 @@ function loadSettingsLoader(){
             "getAll": function() {
                 return items;
             }
-        }
+        };
     };
 }
 var settings;
@@ -1891,8 +1936,9 @@ function loadSettingsLoaderCommand(){
 }
 
 function printAddonSettings(){
-    var output ="";
-    for(var key in settings.getAll()){
+    var output ="",
+        key;
+    for(key in settings.getAll()){
         output += "["+key+": "+settings.get(key)+"] ";
     }
     addMessage('', output, '', 'hashtext');
@@ -1972,14 +2018,15 @@ function trimWall(params){
     var user = params[1],
         maxTimeLimit = params[2]?parseInt(params[2])*60:60*60,
         currentTime = wallCounter[user],
-        videos = [];
+        videos = [],
+        i;
 
     if(currentTime < maxTimeLimit){
         addMessage('','The wall is smaller than the timelimit','','hashtext');
         return;
     }
     //get all Videos for the user
-    for (var i = 0; i < playlist.length; i++) {
+    for (i = 0; i < playlist.length; i++) {
         if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
             videos.push({info:playlist[i].info, duration:playlist[i].duration});
         }
@@ -1987,7 +2034,7 @@ function trimWall(params){
 
     function compareVideos(a,b){
         return b.duration - a.duration;
-    };
+    }
     // function rmVideo(index, vidinfo){
     //     setTimeout(
     //         function(){
@@ -1998,7 +2045,7 @@ function trimWall(params){
     //sort the array so we will get the longest first
     videos.sort(compareVideos);
 
-    for (var i = 0; i < videos.length && currentTime > maxTimeLimit; i++) {
+    for (i = 0; i < videos.length && currentTime > maxTimeLimit; i++) {
         currentTime-= videos[i].duration;
         // rmVideo(i,videos[i].info);
         //delay via commandFloodProtect.js
@@ -2085,8 +2132,8 @@ beforeConnectFunctions.push(loadVotePurgeCommand);
 
 
 var indexOfSearch,
-    entries = new Array(),
-    partialEntries = new Array(),
+    entries = [],
+    partialEntries = [],
     isPlaylist,
     numberOfVids,
     startIndex = 1,
@@ -2143,7 +2190,7 @@ function search(){
         if (!urlInfo){ // is not a link
             isPlaylist = false;
             url = "https://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5&max-results=45&q=" + query;
-            $.getJSON(url, function(data){showResults(data)});
+            $.getJSON(url, function(data){showResults(data);});
         }else{ // is a link
             if (!urlInfo.playlistId){ // not a playlist
                 return;
@@ -2191,7 +2238,7 @@ function showResults(data) {
       var feed = data.feed;
       entries = feed.entry;
     }
-    var html = new Array(),
+    var html = [],
         i,
         entry;
   
@@ -2206,7 +2253,7 @@ function showResults(data) {
                 id,
                 link = "http://www.youtube.com/watch?v="; 
             if (!isPlaylist){
-                var idtag = new Array();
+                var idtag = [];
                 idtag = entry.id.$t.split(':');
                 id = idtag[3];
             }else{       
@@ -2238,7 +2285,7 @@ function getMoreResults(param){
     }
     $("#searchResults").empty();
     var max = Math.min(indexOfSearch+9 , entries.length),
-        html = new Array(),
+        html = [],
         entry,
         i;
     for (i = indexOfSearch; i < max; i++) {
@@ -2250,7 +2297,7 @@ function getMoreResults(param){
                 id,
                 link = "http://www.youtube.com/watch?v="; 
             if (!isPlaylist){
-                var idtag = new Array();
+                var idtag = [];
                 idtag = entry.id.$t.split(':');
                 id = idtag[3];
             }else{   
@@ -2294,8 +2341,8 @@ function addLinkToPl(e) {
 // closes the results and empties it
 function closeResults(){
     $("#searchResults").empty();
-    entries = new Array();
-    partialEntries = new Array();
+    entries = [];
+    partialEntries = [];
     divresults.style.display = "none";
     divremove.style.display = "none";
 }
@@ -2539,7 +2586,7 @@ function loadMouseWheelVolumecontrol(){
                 }break;
             }
         }
-    }
+    };
 }
 
 var isPlayerRead = false,
@@ -2683,11 +2730,85 @@ function exportPlaylist(){
             default: continue;
         }
         output += playlist[i].info.id+'\n ';
-    };
+    }
     window.prompt ("Copy to clipboard: Ctrl+C, Enter", output);
 }
 beforeConnectFunctions.push(loadExportPlaylist);
 //----------------- end  ExportPlaylistCommand.js-----------------
+//-----------------start History.js-----------------
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadHistory(){
+    commands.set('regularCommands',"history",printHistory);
+	var oldPlayVideo = playVideo;
+	playVideo = function(vidinfo, time, playing) {
+		oldPlayVideo(vidinfo,time,playing);
+		//Keep the last 9 videos
+		if (history.length === 9){
+			history.shift();	
+		}
+		history.push([vidinfo,playlist[getVideoIndex(vidinfo)].title]);
+	};
+}
+
+function printHistory(){
+	closeResults();
+	var output = "Last ten videos played : \n",
+		html = [],
+		thumbnail,
+		link;
+		
+	for (i=0; i<history.length; i++){
+	
+		switch(history[i][0].provider){
+            case 'youtube': link = 'http://www.youtube.com/watch?v=' + history[i][0].id ;break;
+            case 'vimeo': link = 'http://vimeo.com/' + history[i][0].id ;break;
+            default: continue;
+        }
+		
+		thumbnail = "<img style='height:90px;width:120px' src='" + history[i][0].thumbnail + "'>";
+		
+		html.push("<div onmouseover='showTitle(this)' onmouseout='hideTitle(this)'><div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px;z-index:2;cursor:pointer;'  onClick='openInNewTab(\""+link+"\")'>" + thumbnail + "<p  style='position:absolute;top:10px;visibility:hidden'><span style='background:rgba(0, 0, 0, 0.7);color:white'>" + history[i][1] +  "</span></div></div>");		
+	}
+	$(html.join('')).appendTo("#searchResults");
+	
+	divresults.insertBefore(divremove,divresults.firstChild); // Somehow adding it before won't work
+	divresults.style.display = "block";
+	divremove.style.display = "block";
+}
+
+// closes the results and empties it
+function closeResults(){
+    $("#searchResults").empty();
+    divresults.style.display = "none";
+    divremove.style.display = "none";
+}
+				
+var history = [];
+beforeConnectFunctions.push(loadHistory);
+
+//----------------- end  History.js-----------------
 //-----------------start wallcounter.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
@@ -2775,7 +2896,7 @@ function resetWallCounter(){
     for(i = 0; i < playlist.length;i++){
         video = playlist[i];
         value = wallCounter[video.addedby];
-        value =((value)?value:0) + video.duration;
+        value =(value||0) + video.duration;
         wallCounter[video.addedby] = value;
     } 
 }
@@ -2841,7 +2962,7 @@ function parseUrl(URL){
 		mediaType, // stream, video or playlist (this can't be determined for youtube streams, since the url is the same for a video)
 		id, //the video-id 
 		channel, //for twitch and livestream
-		playlistId //youtube playlistId;
+		playlistId; //youtube playlistId;
 	switch(provider){
 		case 'youtu':
 		case 'youtube':{ 

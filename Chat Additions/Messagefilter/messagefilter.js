@@ -33,8 +33,8 @@ function loadMessageFilter() {
 
     //init
     if(NSFWEmotes){
-        $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
-        $codes['meatspin'] = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        $codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        $codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
     }
     var oldLinkify = linkify,
         oldAddMessage = addMessage,
@@ -44,7 +44,7 @@ function loadMessageFilter() {
         var emotes =[],
             index = 0;
         //remove image urls so they wont get linkified
-        str = str.replace(/src=\"(.*?)\"/gi,function(match){emotes.push(match); return 'src=\"\"';});
+        str = str.replace(/src=\"([^\"]*)\"/gi,function(match){emotes.push(match); return 'src=\"\"';});
         str = oldLinkify(str, buildHashtagUrl, includeW3, target);
         //put them back in
         str = str.replace(/src=\"\"/gi,function(){return emotes[index++];});
@@ -78,14 +78,14 @@ function toggleTags(){
 }
 function toggleNSFWEmotes(){
     if(!NSFWEmotes){
-        $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
-        $codes['meatspin'] = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        $codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        $codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
         autocompleteData.push('/boobies');
         autocompleteData.push('/meatspin');
         autocompleteData.sort();
     }else{
-        delete $codes['boobies'];
-        delete $codes['meatspin'];
+        delete $codes.boobies;
+        delete $codes.meatspin;
         autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1);
         autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1);
     }
@@ -209,14 +209,14 @@ function parseMessage(message,isChatMessage){
 }
 function toggleNSFWEmotes(){
     if(!NSFWEmotes){
-        $codes['boobies'] = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
-        $codes['meatspin'] = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        $codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        $codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
         autocompleteData.push('/boobies');
         autocompleteData.push('/meatspin');
         autocompleteData.sort();
     }else{
-        delete $codes['boobies'];
-        delete $codes['meatspin'];
+        delete $codes.boobies;
+        delete $codes.meatspin;
         autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1); 
         autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1); 
     }

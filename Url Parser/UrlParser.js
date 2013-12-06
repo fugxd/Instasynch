@@ -31,7 +31,7 @@ function parseUrl(URL){
 		mediaType, // stream, video or playlist (this can't be determined for youtube streams, since the url is the same for a video)
 		id, //the video-id 
 		channel, //for twitch and livestream
-		playlistId //youtube playlistId;
+		playlistId; //youtube playlistId;
 	switch(provider){
 		case 'youtu':
 		case 'youtube':{ 

@@ -96,7 +96,7 @@ function loadMouseWheelVolumecontrol(){
                 }break;
             }
         }
-    }
+    };
 }
 
 var isPlayerRead = false,

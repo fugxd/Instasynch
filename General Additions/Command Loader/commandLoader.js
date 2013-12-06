@@ -24,13 +24,13 @@
 function loadCommandLoader(){
     commands = new function() {
         var items = {};
-        items['regularCommands'] = [
+        items.regularCommands = [
             "'reload",
             "'resynch",
             "'toggleFilter",
             "'toggleAutosynch"
         ]; 
-        items['modCommands'] = [
+        items.modCommands = [
             "'togglePlaylistLock",
             "'ready",
             "'kick ",
@@ -58,8 +58,8 @@ function loadCommandLoader(){
             //"'description ",
             "'next"
         ];
-        items['addOnSettings'] = [];
-        items['commandFunctionMap'] = {};
+        items.addOnSettings = [];
+        items.commandFunctionMap = {};
         return {
             "set": function(arrayName, funcName, func) {
                 if(arrayName === 'addOnSettings'){
@@ -68,7 +68,7 @@ function loadCommandLoader(){
                     funcName = "'"+funcName;
                 }
                 items[arrayName].push(funcName);
-                items['commandFunctionMap'][funcName.toLowerCase()] = func;
+                items.commandFunctionMap[funcName.toLowerCase()] = func;
             },
             "get": function(arrayName) {
                 return items[arrayName];
@@ -79,17 +79,17 @@ function loadCommandLoader(){
             "execute":function(funcName, params){
                 commandExecuted = false;
                 funcName = funcName.toLowerCase();
-                if(items['commandFunctionMap'].hasOwnProperty(funcName)){
-                    items['commandFunctionMap'][funcName](params);
+                if(items.commandFunctionMap.hasOwnProperty(funcName)){
+                    items.commandFunctionMap[funcName](params);
                     commandExecuted = true;
                 }
                 funcName = funcName +' ';
-                if(items['commandFunctionMap'].hasOwnProperty(funcName)){
-                    items['commandFunctionMap'][funcName](params);
+                if(items.commandFunctionMap.hasOwnProperty(funcName)){
+                    items.commandFunctionMap[funcName](params);
                     commandExecuted = true;
                 }
             }
-        }
+        };
     };    
 
     $("#chat input").bind("keypress", function(event) {

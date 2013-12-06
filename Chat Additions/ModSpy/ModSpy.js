@@ -32,18 +32,19 @@ function loadModSpy(){
 	var oldLog = console.log, 
 		oldMoveVideo = moveVideo,
 		filterList = [
-			/^Resynch requested../,
+			/^Resynch requested\.\./,
 			/cleaned the playlist/,
-			/Using HTML5 player is not recomended./
+			/Using HTML5 player is not recomended\./
 		],
-		filter;
+		filter,
+		i;
 
 	console.log = function (message) {
 		// We don't want the cleaning messages in the chat (Ok in the console) .
 		if (modSpy && message && message.match)
 		{
 			filter = false;
-			for (var i = 0; i < filterList.length; i++) {
+			for (i = 0; i < filterList.length; i++) {
 				if(message.match(filterList[i])){
 					filter = true;
 					break;
@@ -69,7 +70,7 @@ function loadModSpy(){
 		if ( Math.abs(getActiveVideoIndex()-position) <= 10 && Math.abs(oldPosition-position) > 10){ // "It's a bump ! " - Amiral Ackbar
 			bumpCheck = true;
 		}
-	}
+	};
 
 }	
 function toggleModSpy(){

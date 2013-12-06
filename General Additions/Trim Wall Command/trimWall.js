@@ -34,14 +34,15 @@ function trimWall(params){
     var user = params[1],
         maxTimeLimit = params[2]?parseInt(params[2])*60:60*60,
         currentTime = wallCounter[user],
-        videos = [];
+        videos = [],
+        i;
 
     if(currentTime < maxTimeLimit){
         addMessage('','The wall is smaller than the timelimit','','hashtext');
         return;
     }
     //get all Videos for the user
-    for (var i = 0; i < playlist.length; i++) {
+    for (i = 0; i < playlist.length; i++) {
         if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
             videos.push({info:playlist[i].info, duration:playlist[i].duration});
         }
@@ -49,7 +50,7 @@ function trimWall(params){
 
     function compareVideos(a,b){
         return b.duration - a.duration;
-    };
+    }
     // function rmVideo(index, vidinfo){
     //     setTimeout(
     //         function(){
@@ -60,7 +61,7 @@ function trimWall(params){
     //sort the array so we will get the longest first
     videos.sort(compareVideos);
 
-    for (var i = 0; i < videos.length && currentTime > maxTimeLimit; i++) {
+    for (i = 0; i < videos.length && currentTime > maxTimeLimit; i++) {
         currentTime-= videos[i].duration;
         // rmVideo(i,videos[i].info);
         //delay via commandFloodProtect.js

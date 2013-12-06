@@ -87,11 +87,11 @@ function loadAutoComplete() {
 
             if(partToComplete.length>0){
                 switch(partToComplete[0]){
-                    case '/': if(!autocompleteEmotes) return;
-                    case '\'': if(!autocompleteCommands || (lastIndex!==0 && message[lastIndex-1].match(/\w/))) return;
-                    case '[': if(!autocompleteTags) return;
-                    case '~': if(!autocompleteAddonSettings) return;
-                    case '@': if(!autocompleteNames)return;
+                    case '/': if(!autocompleteEmotes) return; break;
+                    case '\'': if(!autocompleteCommands || (lastIndex!==0 && message[lastIndex-1].match(/\w/))) return; break;
+                    case '[': if(!autocompleteTags) return; break;
+                    case '~': if(!autocompleteAddonSettings) return; break; 
+                    case '@': if(!autocompleteNames)return; break;
 
                 }
                 if(partToComplete[0] ==='@'){
@@ -145,8 +145,9 @@ function loadAutoComplete() {
     });
 }
 function lastIndexOfSet(input, set){
-    var index = -1;
-    for (var i = 0; i < set.length; i++) {
+    var index = -1,
+        i;
+    for (i = 0; i < set.length; i++) {
         index = Math.max(index, input.lastIndexOf(set[i]));
     }
     if(index>0){

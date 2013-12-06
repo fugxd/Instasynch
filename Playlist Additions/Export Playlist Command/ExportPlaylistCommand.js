@@ -37,7 +37,7 @@ function exportPlaylist(){
             default: continue;
         }
         output += playlist[i].info.id+'\n ';
-    };
+    }
     window.prompt ("Copy to clipboard: Ctrl+C, Enter", output);
 }
 beforeConnectFunctions.push(loadExportPlaylist);

@@ -20,30 +20,11 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
-
-function loadGreynameCount(){
-    var oldAddUser = addUser,
-        oldRemoveUser = removeUser;
-
-    addUser = function addUser(user, css, sort) {
-        oldAddUser(user, css, sort);
-        setViewerCount();
-    };    
-    removeUser = function removeUser(id) {
-        oldRemoveUser(id);
-        setViewerCount();
-    };
-    setViewerCount();
-}
-function setViewerCount(){
-    var greynameCount = 0,
-        i;
-    for (i = 0; i < users.length; i++) {
-        if(!users[i].loggedin){
-            greynameCount++;
-        }
-    };
-    $('#viewercount').html(users.length-greynameCount + '/' +greynameCount);
+function loadPollSeal(){
+	$(".st-poll").css( "background", "url(http://i.imgur.com/hTjQCGP.png) 0 0 #DFDFDF" );
+	$(".st-poll").css( "background-size", "auto 100%");
+	$(".st-poll").css( "background-repeat", "no-repeat");
+	$(".st-poll").css( "background-position", "center");
 }
 
-beforeConnectFunctions.push(loadGreynameCount);
+beforeConnectFunctions.push(loadPollSeal);

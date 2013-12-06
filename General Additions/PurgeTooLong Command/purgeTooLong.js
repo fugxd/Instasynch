@@ -27,10 +27,11 @@ function loadPurgeTooLongCommand(){
 
 function purgeTooLong(params){
     var maxTimeLimit = params[1]?parseInt(params[1])*60:60*60,
-        videos = [];
+        videos = [],
+        i;
 
     //get all Videos longer than maxTimeLimit
-    for (var i = 0; i < playlist.length; i++) {
+    for (i = 0; i < playlist.length; i++) {
         if(playlist[i].duration >= maxTimeLimit){
             videos.push({info:playlist[i].info, duration:playlist[i].duration});
         }
@@ -38,7 +39,7 @@ function purgeTooLong(params){
 
     function compareVideos(a,b){
         return b.duration - a.duration;
-    };
+    }
     videos.sort(compareVideos);
 
     for (var i = 0; i < videos.length; i++) {

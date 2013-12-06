@@ -75,7 +75,7 @@ function loadNameNotification(){
             }
         }
     };
-   $('#cin')['focus'](function () {
+   $('#cin').focus(function () {
         toggleNotify();
     });
 }

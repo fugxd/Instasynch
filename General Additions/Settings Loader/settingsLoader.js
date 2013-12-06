@@ -72,7 +72,7 @@ function loadSettingsLoader(){
             "getAll": function() {
                 return items;
             }
-        }
+        };
     };
 }
 var settings;
@@ -82,8 +82,9 @@ function loadSettingsLoaderCommand(){
 }
 
 function printAddonSettings(){
-    var output ="";
-    for(var key in settings.getAll()){
+    var output ="",
+        key;
+    for(key in settings.getAll()){
         output += "["+key+": "+settings.get(key)+"] ";
     }
     addMessage('', output, '', 'hashtext');

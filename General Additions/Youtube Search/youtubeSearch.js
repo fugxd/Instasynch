@@ -23,8 +23,8 @@
 
 
 var indexOfSearch,
-    entries = new Array(),
-    partialEntries = new Array(),
+    entries = [],
+    partialEntries = [],
     isPlaylist,
     numberOfVids,
     startIndex = 1,
@@ -81,7 +81,7 @@ function search(){
         if (!urlInfo){ // is not a link
             isPlaylist = false;
             url = "https://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5&max-results=45&q=" + query;
-            $.getJSON(url, function(data){showResults(data)});
+            $.getJSON(url, function(data){showResults(data);});
         }else{ // is a link
             if (!urlInfo.playlistId){ // not a playlist
                 return;
@@ -129,7 +129,7 @@ function showResults(data) {
       var feed = data.feed;
       entries = feed.entry;
     }
-    var html = new Array(),
+    var html = [],
         i,
         entry;
   
@@ -144,7 +144,7 @@ function showResults(data) {
                 id,
                 link = "http://www.youtube.com/watch?v="; 
             if (!isPlaylist){
-                var idtag = new Array();
+                var idtag = [];
                 idtag = entry.id.$t.split(':');
                 id = idtag[3];
             }else{       
@@ -176,7 +176,7 @@ function getMoreResults(param){
     }
     $("#searchResults").empty();
     var max = Math.min(indexOfSearch+9 , entries.length),
-        html = new Array(),
+        html = [],
         entry,
         i;
     for (i = indexOfSearch; i < max; i++) {
@@ -188,7 +188,7 @@ function getMoreResults(param){
                 id,
                 link = "http://www.youtube.com/watch?v="; 
             if (!isPlaylist){
-                var idtag = new Array();
+                var idtag = [];
                 idtag = entry.id.$t.split(':');
                 id = idtag[3];
             }else{   
@@ -232,8 +232,8 @@ function addLinkToPl(e) {
 // closes the results and empties it
 function closeResults(){
     $("#searchResults").empty();
-    entries = new Array();
-    partialEntries = new Array();
+    entries = [];
+    partialEntries = [];
     divresults.style.display = "none";
     divremove.style.display = "none";
 }

@@ -39,12 +39,13 @@ function isBibbyRoom(){
 }
 
 function getIndexOfUser(id){
-    for (var i = 0; i < users.length; i++){
+    var i;
+    for (i = 0; i < users.length; i++){
         if (id === users[i].id){
             return i;
         }
     }
-    return -1
+    return -1;
 }
 
 function getUsernameArray(lowerCase){
@@ -70,38 +71,40 @@ var thisUsername;
 */
 function doGetCaretPosition(oField) {
 
-  // Initialize
-  var iCaretPos = 0;
+    // Initialize
+    var iCaretPos = 0;
 
-  // IE Support
-  if (document.selection) {
+    // IE Support
+    if (document.selection) {
+        var oSel;
+        // Set focus on the element
+        oField.focus ();
 
-    // Set focus on the element
-    oField.focus ();
+        // To get cursor position, get empty selection range
+        oSel = document.selection.createRange ();
 
-    // To get cursor position, get empty selection range
-    var oSel = document.selection.createRange ();
+        // Move selection start to 0 position
+        oSel.moveStart ('character', -oField.value.length);
 
-    // Move selection start to 0 position
-    oSel.moveStart ('character', -oField.value.length);
+        // The caret position is selection length
+        iCaretPos = oSel.text.length;
+    }
 
-    // The caret position is selection length
-    iCaretPos = oSel.text.length;
-  }
+    // Firefox support
+    else if (oField.selectionStart || oField.selectionStart == '0'){
+      iCaretPos = oField.selectionStart;
+    }
 
-  // Firefox support
-  else if (oField.selectionStart || oField.selectionStart == '0')
-    iCaretPos = oField.selectionStart;
-
-  // Return results
-  return (iCaretPos);
+    // Return results
+    return (iCaretPos);
 }
 
 function doSetCaretPosition(oField, position) {
     //IE
     if (document.selection) {
+        var oSel;
         oField.focus ();
-        var oSel = document.selection.createRange ();
+        oSel = document.selection.createRange ();
         oSel.moveStart('character', position);
         oSel.moveEnd('character', position);
     }
@@ -118,10 +121,11 @@ function pasteTextAtCaret(text) {
         // IE9 and non-IE
         sel = window.getSelection();
         if (sel.getRangeAt && sel.rangeCount) {
+            var textNode;
             range = sel.getRangeAt(0);
             range.deleteContents();
 
-            var textNode = document.createTextNode(text);
+            textNode = document.createTextNode(text);
             range.insertNode(textNode);
 
             // Preserve the selection
@@ -135,6 +139,11 @@ function pasteTextAtCaret(text) {
         // IE < 9
         document.selection.createRange().text = text;
     }
+}
+
+function openInNewTab(url){
+    var win=window.open(url, '_blank');
+    win.focus();
 }
 
 beforeConnectFunctions.splice(0,0,loadGeneralStuff);

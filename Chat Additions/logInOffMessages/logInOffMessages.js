@@ -29,7 +29,8 @@ function loadLogInOffMessages(){
     commands.set('addOnSettings',"LogInOffMessages",toggleLogInOffMessages);
     
     // Overwriting Adduser
-    var oldAddUser = addUser;
+    var oldAddUser = addUser,
+        oldRemoveUser = removeUser;
 
     addUser = function(user, css, sort) {
         // Only if blackname or mod
@@ -37,10 +38,9 @@ function loadLogInOffMessages(){
             addMessage('', user.username + ' logged on.', '','hashtext');
         }
         oldAddUser(user,css,sort);
-    }
+    };
 
     // Overwriting removeUser
-    var oldRemoveUser = removeUser;
 
     removeUser = function(id) {
         var user = users[getIndexOfUser(id)];
@@ -51,7 +51,7 @@ function loadLogInOffMessages(){
             }
         }
         oldRemoveUser(id);
-    }
+    };
 }
 
 var logInOffMessages = false;

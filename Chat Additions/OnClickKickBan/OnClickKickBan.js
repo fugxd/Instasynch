@@ -54,7 +54,7 @@ function loadOnClickKickBan(){
             $('#chat_list > span:last-of-type').prev()
             .on('click', function(event){
                 if(event.ctrlKey){
-                    var user = $(this)[0].innerText,
+                    var user = $(this)[0].innerHTML,
                         userFound = false,
                         isMod = false,
                         userId,
@@ -132,6 +132,6 @@ function loadOnClickKickBan(){
             $(document).unbind('keydown',chatKeyDown);
             $(document).unbind('keyup',chatKeyUp);
     });
-};
+}
 
 afterConnectFunctions.push(loadOnClickKickBan);
