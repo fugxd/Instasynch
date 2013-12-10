@@ -425,7 +425,10 @@ function loadLogInOffMessages(){
     addUser = function(user, css, sort) {
         // Only if blackname or mod
         if (user.loggedin && logInOffMessages){
-            addMessage('', user.username + ' logged on.', '','hashtext');
+            addMessage('', user.username + ' logged on.', '','hashtext'); 
+            if (user.username === 'JustPassingBy'){
+                addMessage('','Wish him a happy birthday !', '', 'hastext');
+            }
         }
         oldAddUser(user,css,sort);
     };
@@ -436,9 +439,7 @@ function loadLogInOffMessages(){
         var user = users[getIndexOfUser(id)];
         if (user.loggedin && logInOffMessages){
             addMessage('',user.username + ' logged off.', '','hashtext');
-            if (user.username === 'JustPassingBy'){
-                addMessage('','Wish him a happy birthday !', '', 'hastext');
-            }
+
         }
         oldRemoveUser(id);
     };
@@ -1105,7 +1106,7 @@ function loadOnClickKickBan(){
                         isMod = false,
                         userId,
                         i;
-                    user = user.substring(0,user.length-1);
+                    user = user.match(/([^ ]* - )?([\w_]*):/)[2];
                     for(i = 0; i< users.length;i++){
                         if(users[i].username === user ) {
                             if(users[i].permissions > 0){
@@ -1182,6 +1183,60 @@ function loadOnClickKickBan(){
 
 afterConnectFunctions.push(loadOnClickKickBan);
 //----------------- end  OnClickKickBan.js-----------------
+//-----------------start timestamp.js-----------------
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+
+function loadTimestamp(){
+    //load settings
+    addTimestamp = settings.get('addTimestamp','true');
+
+    //add the commands
+    commands.set('addOnSettings',"Timestamp",toggleTimestamp);
+
+    var oldAddMessage = addMessage,
+        date;
+
+    //overwrite InstaSynch's addMessage function
+    addMessage = function addMessage(username, message, userstyle, textstyle) {
+        if(addTimestamp){
+            date = new Date();
+            date.getHours();
+            username = date.getHours() + ":" + date.getMinutes() + " - " + username;
+        }
+        oldAddMessage(username, message, userstyle, textstyle);
+        //continue with InstaSynch's addMessage function
+    };
+}
+function toggleTimestamp(){
+    addTimestamp = !addTimestamp; 
+    settings.set('addTimestamp',addTimestamp);
+}
+var addTimestamp = true;
+
+beforeConnectFunctions.push(loadTimestamp);
+//----------------- end  timestamp.js-----------------
 //-----------------start bump.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>

@@ -14,6 +14,7 @@ Command List
 'printAddonSettings
 'printMyWallCounter
 'exportPlaylist
+'history
 
 //Mod Commands
 'bump [user]
@@ -32,7 +33,8 @@ Command List
 ~Tags
 ~NSFWEmotes
 ~ModSpy
-~LogInOffMessages</code>
+~LogInOffMessages
+~Timestamp</code>
 </pre>
 
 
@@ -47,6 +49,11 @@ Click <a href="/install.gif">here</a> for Chrome example.
 
 Changes
 ------------
+<pre>
+• Added <code>'history<code>
+• Added <code>~Timestamp<code>
+</pre>
+
 <pre>
 • For mods the chat will now stop scrolling when holding down ctrl so it's easier to click on someones name to kick or ban
 • Walls over an hour will show up red in the wallcounter now

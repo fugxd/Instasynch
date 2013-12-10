@@ -35,7 +35,10 @@ function loadLogInOffMessages(){
     addUser = function(user, css, sort) {
         // Only if blackname or mod
         if (user.loggedin && logInOffMessages){
-            addMessage('', user.username + ' logged on.', '','hashtext');
+            addMessage('', user.username + ' logged on.', '','hashtext'); 
+            if (user.username === 'JustPassingBy'){
+                addMessage('','Wish him a happy birthday !', '', 'hastext');
+            }
         }
         oldAddUser(user,css,sort);
     };
@@ -46,9 +49,7 @@ function loadLogInOffMessages(){
         var user = users[getIndexOfUser(id)];
         if (user.loggedin && logInOffMessages){
             addMessage('',user.username + ' logged off.', '','hashtext');
-            if (user.username === 'JustPassingBy'){
-                addMessage('','Wish him a happy birthday !', '', 'hastext');
-            }
+
         }
         oldRemoveUser(id);
     };
