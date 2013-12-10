@@ -1216,14 +1216,23 @@ function loadTimestamp(){
     commands.set('addOnSettings',"Timestamp",toggleTimestamp);
 
     var oldAddMessage = addMessage,
-        date;
+        date,
+        hours,
+        minutes;
 
     //overwrite InstaSynch's addMessage function
     addMessage = function addMessage(username, message, userstyle, textstyle) {
         if(addTimestamp){
             date = new Date();
-            date.getHours();
-            username = date.getHours() + ":" + date.getMinutes() + " - " + username;
+            minutes = date.getMinutes();
+            if(minutes < 10){
+                minutes = "0" + minutes;
+            }
+            hours = date.getHours();
+            if(hours < 10){
+                hours = "0" + hours;
+            }
+            username = hours + ":" + minutes + " - " + username;
         }
         oldAddMessage(username, message, userstyle, textstyle);
         //continue with InstaSynch's addMessage function
