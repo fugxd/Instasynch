@@ -1106,7 +1106,7 @@ function loadOnClickKickBan(){
                         isMod = false,
                         userId,
                         i;
-                    user = user.match(/([^ ]* - )?([\w_]*):/)[2];
+                    user = user.match(/([^ ]* - )?([\w_-]*):/)[2];
                     for(i = 0; i< users.length;i++){
                         if(users[i].username === user ) {
                             if(users[i].permissions > 0){
