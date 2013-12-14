@@ -32,6 +32,7 @@ function loadAutoComplete() {
     autocompleteCommands = settings.get('autocompleteCommands','true');
     autocompleteAddonSettings = settings.get('autocompleteAddonSettings','true');
     autocompleteNames = settings.get('autocompleteNames','true');
+    autocompleteBotCommands = settings.get('autocompleteBotCommands','true');
 
     //add the commands
     commands.set('addOnSettings',"TagsAutoComplete",toggleTagsAutocomplete);
@@ -39,6 +40,7 @@ function loadAutoComplete() {
     commands.set('addOnSettings',"CommandsAutoComplete",toggleCommandsAutocomplete);
     commands.set('addOnSettings',"AddOnSettingsAutoComplete",toggleAddonSettingsAutocomplete);
     commands.set('addOnSettings',"NamesAutoComplete",toggleNamesAutocomplete);
+    commands.set('addOnSettings',"BotCommandsAutocomplete",toggleBotCommandsAutocomplete);
 
     var i,
         emotes = (
@@ -81,7 +83,7 @@ function loadAutoComplete() {
             }
             var message = request.term,
                 caretPosition = doGetCaretPosition(cin),
-                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@']),
+                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@','$']),
                 partToComplete = message.substring(lastIndex,caretPosition),
                 matches = [];
 
@@ -92,6 +94,7 @@ function loadAutoComplete() {
                     case '[': if(!autocompleteTags) return; break;
                     case '~': if(!autocompleteAddonSettings) return; break; 
                     case '@': if(!autocompleteNames)return; break;
+                    case '$': if(!autocompleteBotCommands)return; break;
 
                 }
                 if(partToComplete[0] ==='@'){
@@ -121,7 +124,7 @@ function loadAutoComplete() {
 
             var message = this.value,
                 caretPosition = doGetCaretPosition(cin),
-                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@']);
+                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@','$']);
             //prevent it from autocompleting when a little changed has been made and its already there
             if(message.indexOf(ui.item.value) === lastIndex && lastIndex+ui.item.value.length !== caretPosition){
                 doSetCaretPosition(cin,lastIndex+ui.item.value.length);
@@ -131,7 +134,7 @@ function loadAutoComplete() {
             this.value = message.substring(0,lastIndex) + ui.item.value + message.substring(caretPosition,message.length);
             doSetCaretPosition(cin,lastIndex+ui.item.value.length);
             //if the selected item is a emote trigger a fake enter event
-            if(lastIndex === 0 && ((ui.item.value[0] === '/') || ((ui.item.value[0] === '\''|| ui.item.value[0] === '~') && ui.item.value[ui.item.value.length-1] !== ' '))){
+            if(lastIndex === 0 && ((ui.item.value[0] === '/') || ((ui.item.value[0] === '\''|| ui.item.value[0] === '~' || ui.item.value[0] === '$') && ui.item.value[ui.item.value.length-1] !== ' '))){
                 $(this).trigger($.Event( 'keypress', { which: 13,keyCode : 13 })); 
             }
             return false;
@@ -164,8 +167,12 @@ var isAutocompleteMenuActive = false,
     autocompleteTags = true,
     autocompleteAddonSettings = true,
     autocompleteNames = true,
+    autocompleteBotCommands= true,
     autocompleteData = [];
-
+function toggleBotCommandsAutocomplete(){
+    autocompleteBotCommands = !autocompleteBotCommands; 
+    settings.set('autocompleteBotCommands',autocompleteBotCommands);
+}
 function toggleTagsAutocomplete(){
     autocompleteTags = !autocompleteTags; 
     settings.set('autocompleteTags',autocompleteTags);

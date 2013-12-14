@@ -58,6 +58,7 @@ function loadAutoComplete() {
     autocompleteCommands = settings.get('autocompleteCommands','true');
     autocompleteAddonSettings = settings.get('autocompleteAddonSettings','true');
     autocompleteNames = settings.get('autocompleteNames','true');
+    autocompleteBotCommands = settings.get('autocompleteBotCommands','true');
 
     //add the commands
     commands.set('addOnSettings',"TagsAutoComplete",toggleTagsAutocomplete);
@@ -65,6 +66,7 @@ function loadAutoComplete() {
     commands.set('addOnSettings',"CommandsAutoComplete",toggleCommandsAutocomplete);
     commands.set('addOnSettings',"AddOnSettingsAutoComplete",toggleAddonSettingsAutocomplete);
     commands.set('addOnSettings',"NamesAutoComplete",toggleNamesAutocomplete);
+    commands.set('addOnSettings',"BotCommandsAutocomplete",toggleBotCommandsAutocomplete);
 
     var i,
         emotes = (
@@ -107,7 +109,7 @@ function loadAutoComplete() {
             }
             var message = request.term,
                 caretPosition = doGetCaretPosition(cin),
-                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@']),
+                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@','$']),
                 partToComplete = message.substring(lastIndex,caretPosition),
                 matches = [];
 
@@ -118,6 +120,7 @@ function loadAutoComplete() {
                     case '[': if(!autocompleteTags) return; break;
                     case '~': if(!autocompleteAddonSettings) return; break; 
                     case '@': if(!autocompleteNames)return; break;
+                    case '$': if(!autocompleteBotCommands)return; break;
 
                 }
                 if(partToComplete[0] ==='@'){
@@ -147,7 +150,7 @@ function loadAutoComplete() {
 
             var message = this.value,
                 caretPosition = doGetCaretPosition(cin),
-                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@']);
+                lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@','$']);
             //prevent it from autocompleting when a little changed has been made and its already there
             if(message.indexOf(ui.item.value) === lastIndex && lastIndex+ui.item.value.length !== caretPosition){
                 doSetCaretPosition(cin,lastIndex+ui.item.value.length);
@@ -157,7 +160,7 @@ function loadAutoComplete() {
             this.value = message.substring(0,lastIndex) + ui.item.value + message.substring(caretPosition,message.length);
             doSetCaretPosition(cin,lastIndex+ui.item.value.length);
             //if the selected item is a emote trigger a fake enter event
-            if(lastIndex === 0 && ((ui.item.value[0] === '/') || ((ui.item.value[0] === '\''|| ui.item.value[0] === '~') && ui.item.value[ui.item.value.length-1] !== ' '))){
+            if(lastIndex === 0 && ((ui.item.value[0] === '/') || ((ui.item.value[0] === '\''|| ui.item.value[0] === '~' || ui.item.value[0] === '$') && ui.item.value[ui.item.value.length-1] !== ' '))){
                 $(this).trigger($.Event( 'keypress', { which: 13,keyCode : 13 })); 
             }
             return false;
@@ -190,8 +193,12 @@ var isAutocompleteMenuActive = false,
     autocompleteTags = true,
     autocompleteAddonSettings = true,
     autocompleteNames = true,
+    autocompleteBotCommands= true,
     autocompleteData = [];
-
+function toggleBotCommandsAutocomplete(){
+    autocompleteBotCommands = !autocompleteBotCommands; 
+    settings.set('autocompleteBotCommands',autocompleteBotCommands);
+}
 function toggleTagsAutocomplete(){
     autocompleteTags = !autocompleteTags; 
     settings.set('autocompleteTags',autocompleteTags);
@@ -1246,6 +1253,54 @@ var addTimestamp = true;
 
 beforeConnectFunctions.push(loadTimestamp);
 //----------------- end  timestamp.js-----------------
+//-----------------start botCommands.js-----------------
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadBotCommands(){
+    var emptyFunc = function (){};
+
+     commands.set('modCommands',"$autoclean",emptyFunc);
+     commands.set('modCommands',"$addRandom ",emptyFunc);
+
+     commands.set('regularCommands',"$translateTitle",emptyFunc);
+     commands.set('regularCommands',"$greet",emptyFunc);
+     commands.set('regularCommands',"$derka ",emptyFunc);
+     commands.set('regularCommands',"$ask ",emptyFunc);
+     commands.set('regularCommands',"$askC ",emptyFunc);
+     commands.set('regularCommands',"$askJ ",emptyFunc);
+     commands.set('regularCommands',"$eval ",emptyFunc);
+     commands.set('regularCommands',"$emotes",emptyFunc);
+     commands.set('regularCommands',"$script",emptyFunc);
+     commands.set('regularCommands',"$wolfram ",emptyFunc);
+     commands.set('regularCommands',"$8Ball ",emptyFunc);
+     commands.set('regularCommands',"$roll ",emptyFunc);
+     commands.set('regularCommands',"$quote ",emptyFunc);
+     commands.set('regularCommands',"$help ",emptyFunc);
+}
+
+beforeConnectFunctions.push(loadBotCommands);
+//----------------- end  botCommands.js-----------------
 //-----------------start bump.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
@@ -1419,7 +1474,9 @@ function loadCommandLoader(){
             "'reload",
             "'resynch",
             "'toggleFilter",
-            "'toggleAutosynch"
+            "'toggleAutosynch",
+            "'mute",
+            "'unmute"
         ]; 
         items.modCommands = [
             "'togglePlaylistLock",
@@ -1453,10 +1510,12 @@ function loadCommandLoader(){
         items.commandFunctionMap = {};
         return {
             "set": function(arrayName, funcName, func) {
-                if(arrayName === 'addOnSettings'){
-                    funcName = "~"+funcName;
-                }else{
-                    funcName = "'"+funcName;
+                if(funcName[0] !== '$'){
+                    if(arrayName === 'addOnSettings'){
+                        funcName = "~"+funcName;
+                    }else{
+                        funcName = "'"+funcName;
+                    }
                 }
                 items[arrayName].push(funcName);
                 items.commandFunctionMap[funcName.toLowerCase()] = func;
@@ -1470,6 +1529,9 @@ function loadCommandLoader(){
             "execute":function(funcName, params){
                 commandExecuted = false;
                 funcName = funcName.toLowerCase();
+                if(funcName[0] === '$'){
+                    return;
+                }
                 if(items.commandFunctionMap.hasOwnProperty(funcName)){
                     items.commandFunctionMap[funcName](params);
                     commandExecuted = true;

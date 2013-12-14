@@ -28,7 +28,9 @@ function loadCommandLoader(){
             "'reload",
             "'resynch",
             "'toggleFilter",
-            "'toggleAutosynch"
+            "'toggleAutosynch",
+            "'mute",
+            "'unmute"
         ]; 
         items.modCommands = [
             "'togglePlaylistLock",
@@ -62,10 +64,12 @@ function loadCommandLoader(){
         items.commandFunctionMap = {};
         return {
             "set": function(arrayName, funcName, func) {
-                if(arrayName === 'addOnSettings'){
-                    funcName = "~"+funcName;
-                }else{
-                    funcName = "'"+funcName;
+                if(funcName[0] !== '$'){
+                    if(arrayName === 'addOnSettings'){
+                        funcName = "~"+funcName;
+                    }else{
+                        funcName = "'"+funcName;
+                    }
                 }
                 items[arrayName].push(funcName);
                 items.commandFunctionMap[funcName.toLowerCase()] = func;
@@ -79,6 +83,9 @@ function loadCommandLoader(){
             "execute":function(funcName, params){
                 commandExecuted = false;
                 funcName = funcName.toLowerCase();
+                if(funcName[0] === '$'){
+                    return;
+                }
                 if(items.commandFunctionMap.hasOwnProperty(funcName)){
                     items.commandFunctionMap[funcName](params);
                     commandExecuted = true;
