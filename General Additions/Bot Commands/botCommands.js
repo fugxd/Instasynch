@@ -26,6 +26,7 @@ function loadBotCommands(){
 
      commands.set('modCommands',"$autoclean",emptyFunc);
      commands.set('modCommands',"$addRandom ",emptyFunc);
+     commands.set('modCommands',"$addToUserBlacklist ",emptyFunc);
 
      commands.set('regularCommands',"$translateTitle",emptyFunc);
      commands.set('regularCommands',"$greet",emptyFunc);
