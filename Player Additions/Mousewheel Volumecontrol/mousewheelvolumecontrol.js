@@ -23,12 +23,14 @@
 
 function loadMouseWheelVolumecontrol(){
 
+    autocompleteBotCommands = settings.get('mouseWheelVolumecontrol','true');
+    commands.set('addOnSettings',"MouseWheelVolumecontrol",toggleMouseWheelVolumecontrol);
     //TODO: find firefox fix, mousescroll event doesnt fire while over youtube player
     
     //prevent the site from scrolling while over the player
     function preventScroll(event)
     {
-        if(mouserOverPlayer){
+        if(mouseWheelVolumecontrol&&mouserOverPlayer){
             event.preventDefault();
             event.returnValue=!mouserOverPlayer;
             if(event.wheelDeltaY < 0){
@@ -102,8 +104,13 @@ function loadMouseWheelVolumecontrol(){
 var isPlayerRead = false,
     globalVolume = 50,
     mouserOverPlayer = false,
-    oldProvider = 'youtube';
+    oldProvider = 'youtube',
+    mouseWheelVolumecontrol = true;
 
+function toggleMouseWheelVolumecontrol(){
+    mouseWheelVolumecontrol = !mouseWheelVolumecontrol; 
+    settings.set('mouseWheelVolumecontrol',mouseWheelVolumecontrol);
+}
 function initGlobalVolume(){
     if(isPlayerRead){
         setVol();
