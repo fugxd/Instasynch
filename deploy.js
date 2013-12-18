@@ -2292,11 +2292,11 @@ beforeConnectFunctions.push(loadVotePurgeCommand);
 */
 
 
-var indexOfSearch,
+var resultsPerPage = 9,
+    indexOfSearch,
     entries = [],
     partialEntries = [],
     isPlaylist,
-    numberOfVids,
     startIndex = 1,
     searchTimeout;
 
@@ -2351,16 +2351,23 @@ function search(){
         if (!urlInfo){ // is not a link
             isPlaylist = false;
             url = "https://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5&max-results=45&q=" + query;
-            $.getJSON(url, function(data){showResults(data);});
+            $.getJSON(url,
+                function(data){
+                    var feed = data.feed;
+                    entries = feed.entry;
+                    showResults(entries,0);
+                }
+            );
         }else{ // is a link
             if (!urlInfo.playlistId){ // not a playlist
                 return;
             }else{ // is a playlist
+                entries = [];
                 var buildMoreEntries = true;
                 startIndex = 1;
                 isPlaylist = true;
                 while (buildMoreEntries){
-                    url = "http://gdata.youtube.com/feeds/api/playlists/" + urlInfo.playlistId + "?v=2&alt=json&max-results=50&start-index=" + startIndex;
+                    url = "https://gdata.youtube.com/feeds/api/playlists/" + urlInfo.playlistId + "?v=2&alt=json&max-results=50&start-index=" + startIndex;
                     $.ajax({
                         async: false,
                         url: url,
@@ -2368,7 +2375,7 @@ function search(){
                         success: function(data){
                             var feed = data.feed;
                             partialEntries = feed.entry;
-                            
+
                             if (entries.length === 0){
                                 entries = partialEntries;
                             }else{
@@ -2386,33 +2393,34 @@ function search(){
                         }
                     });
                 }
-                showResults();
+                showResults(entries, 0);
             }
         }
     }
 }
-    
+
 // Parse data and display it
-function showResults(data) {
-    indexOfSearch = 0; 
-    if (!isPlaylist){
-      var feed = data.feed;
-      entries = feed.entry;
-    }
+function showResults(entries, index) {
+    indexOfSearch = index;
     var html = [],
         i,
         entry;
   
-    numberOfVids = (isPlaylist) ? entries.length : 45;
-  
-    for (i = 0; i < 9; i++) {
+    $("#searchResults").empty();
+    if (entries.length === 0) {
+        return;
+    }
+    for (i = indexOfSearch; i < Math.min(indexOfSearch+resultsPerPage, entries.length); i++) {
         entry = entries[i];
-        if (entries[i].media$group.media$thumbnail !== undefined){ // won't do shit if the video was removed by youtube.
-            var thumbnailUrl = entries[i].media$group.media$thumbnail[0].url,
-                thumbnail = "<img src='" + thumbnailUrl + "'>",
+        if (entry.media$group.media$thumbnail !== undefined){ // won't do shit if the video was removed by youtube.
+            var date = new Date(null),
+                durationSeconds = entry.media$group.yt$duration.seconds, // video duration in seconds
+                durationColor = 'white', // color of shown duration
+                duration = '', // the displayed duration text
+                thumbnailUrl = entry.media$group.media$thumbnail[0].url,
                 title = entry.title.$t,
                 id,
-                link = "http://www.youtube.com/watch?v="; 
+                link = "http://www.youtube.com/watch?v=";
             if (!isPlaylist){
                 var idtag = [];
                 idtag = entry.id.$t.split(':');
@@ -2422,64 +2430,60 @@ function showResults(data) {
                     infoURL = parseUrl(feedURL);
                 id = infoURL.id;
             }
-            link += id;
-            
-            html.push("<div onmouseover='showTitle(this)' onmouseout='hideTitle(this)'><div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px;z-index:2;cursor:pointer;'  onClick='addLinkToPl(this)'>" + thumbnail + "<p  style='position:absolute;top:10px;visibility:hidden'><span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span></p><p style='display:none'>" + link + "</p> </div></div>");
-        }else{
-            html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'> Video Removed By Youtube </div>");
-    }
-  }
-  $(html.join('')).appendTo("#searchResults");
-  
-  applyStyle(divmore);
-  divresults.insertBefore(divremove,divresults.firstChild); // Somehow adding it before won't work
-  divresults.appendChild(divmore);
-  divresults.style.display = "block";
-  divremove.style.display = "block";
-} 
-
-function getMoreResults(param){
-    if (param === "prev"){
-        indexOfSearch = indexOfSearch - 9;
-    }else{
-        indexOfSearch = indexOfSearch + 9;
-    }
-    $("#searchResults").empty();
-    var max = Math.min(indexOfSearch+9 , entries.length),
-        html = [],
-        entry,
-        i;
-    for (i = indexOfSearch; i < max; i++) {
-        entry = entries[i];
-        if (entry.media$group.media$thumbnail !== undefined){ // check if video was removed by youtube
-            var thumbnailUrl = entry.media$group.media$thumbnail[0].url,
-                thumbnail = "<img src='" + thumbnailUrl + "'>",
-                title = entry.title.$t,
-                id,
-                link = "http://www.youtube.com/watch?v="; 
-            if (!isPlaylist){
-                var idtag = [];
-                idtag = entry.id.$t.split(':');
-                id = idtag[3];
-            }else{   
-                var feedURL = entry.link[1].href,   
-                    infoURL = parseUrl(feedURL);
-                id = infoURL.id;
+            if (durationSeconds > 60*15) {
+                durationColor = 'orange';
             }
+            if (durationSeconds > 60*25) {
+                durationColor = 'red';
+            }
+
+            // create duration text "12h34m56s", skipping leading zeros for hours and minutes
+            date.setSeconds(durationSeconds);
+            if (date.getUTCHours() != 0) {
+                duration = date.getUTCHours() + 'h';
+            }
+            if ((date.getUTCMinutes() != 0) || duration) {
+                duration += date.getUTCMinutes() + 'm';
+            }
+            if ((date.getUTCSeconds() != 0) || duration) {
+                duration += date.getUTCSeconds() + 's'
+            }
+
             link += id;
-            html.push("<div onmouseover='showTitle(this)' onmouseout='hideTitle(this)'><div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px;z-index:2;cursor:pointer;'  onClick='addLinkToPl(this)'>" + thumbnail + "<p  style='position:absolute;top:10px;visibility:hidden'><span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span></p><p style='display:none'>" + link + "</p> </div></div>");
+            html.push("<div onmouseover='showTitle(this)' onmouseout='hideTitle(this)'>");
+            html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px;z-index:2;cursor:pointer;' onClick='addLinkToPl(this)'>");
+            html.push("<img src=\"" + thumbnailUrl + "\">");
+            html.push("<p  style='position:absolute;top:5px;left:5px;visibility:hidden'>");
+            html.push("<span style='background:rgba(0, 0, 0, 0.7);color:white'>" + title +  "</span>");
+            html.push("</p>");
+            html.push("<p style='display:none'>" + link + "</p>");
+            html.push("<p  style='position:absolute;bottom:0px;right:0px'>");
+            html.push("<span style='background:rgba(0, 0, 0, 0.7);color:" + durationColor + "'>" + duration +  "</span>");
+            html.push("</p>");
+            html.push("</div>");
+            html.push("</div>");
         }else{
             html.push("<div style='overflow:hidden;position:relative;float:left;height:90px;width:120px;margin:1px'> Video Removed By Youtube </div>");
         }
-  }
-  $(html.join('')).appendTo("#searchResults");
-  applyStyle(divmore);
-  divresults.insertBefore(divremove,divresults.firstChild); // Somehow adding it before won't work
-  divresults.appendChild(divmore);
-  divresults.style.display = "block";
-  divremove.style.display = "block";
-    
+    }
+    $(html.join('')).appendTo("#searchResults");
+    applyStyle(divmore);
+    divresults.insertBefore(divremove,divresults.firstChild); // Somehow adding it before won't work
+    divresults.appendChild(divmore);
+    divresults.style.display = "block";
+    divremove.style.display = "block";
+} 
+
+function getNextResultPage() {
+    indexOfSearch += resultsPerPage;
+    showResults(entries, indexOfSearch);
 }
+
+function getPreviousResultPage() {
+    indexOfSearch -= resultsPerPage;
+    showResults(entries, indexOfSearch);
+}
+
 // shows the video title on hover
 function showTitle(e){
     var titleToShow = e.firstChild.childNodes[1];
@@ -2532,15 +2536,15 @@ function applyStyle(e){
         divremove.style.top = "0px";    
     }
     if (e.id === "divmore"){
-        if (indexOfSearch === 0){
-            divmore.innerHTML = "<input type='button' style='cursor:pointer' onClick=getMoreResults('next') value='Next &gt&gt'/>";
-        }else{
-            if (indexOfSearch >= numberOfVids - 9){
-                divmore.innerHTML = "<input type='button' style='cursor:pointer' onClick=getMoreResults('prev') value='&lt&lt Prev'/> </span>";
-            }else{
-                divmore.innerHTML = "<input type='button' style='cursor:pointer' onClick=getMoreResults('prev') value='&lt&lt Prev' /> <input type='button' style='cursor:pointer' onClick=getMoreResults('next') value='Next &gt&gt' />";
-            }
-        }
+        var nextDisabled = false;
+        var prevDisabled = false;
+        prevDisabled = (indexOfSearch > 0) ? '' : 'disabled';
+        nextDisabled = (indexOfSearch < entries.length - 9) ? '' : 'disabled';
+
+        divmore.innerHTML = "<input "+ prevDisabled +" type='button' style='cursor:pointer' onClick=getPreviousResultPage() value='&lt&lt Prev'/> </span>";
+        divmore.innerHTML += "<input "+ nextDisabled +" type='button' style='cursor:pointer' onClick=getNextResultPage() value='Next &gt&gt'/>";
+
+
         divmore.style.textAlign="center";
         //divmore.style.cursor="pointer";
         divmore.style.height="300px";
