@@ -27,7 +27,6 @@ var resultsPerPage = 9,
     entries = [],
     partialEntries = [],
     isPlaylist,
-    numberOfVids,
     startIndex = 1,
     searchTimeout;
 
@@ -82,16 +81,23 @@ function search(){
         if (!urlInfo){ // is not a link
             isPlaylist = false;
             url = "https://gdata.youtube.com/feeds/api/videos?v=2&alt=json&format=5&max-results=45&q=" + query;
-            $.getJSON(url, function(data){showResults(data,0);});
+            $.getJSON(url,
+                function(data){
+                    var feed = data.feed;
+                    entries = feed.entry;
+                    showResults(entries,0);
+                }
+            );
         }else{ // is a link
             if (!urlInfo.playlistId){ // not a playlist
                 return;
             }else{ // is a playlist
+                entries = [];
                 var buildMoreEntries = true;
                 startIndex = 1;
                 isPlaylist = true;
                 while (buildMoreEntries){
-                    url = "http://gdata.youtube.com/feeds/api/playlists/" + urlInfo.playlistId + "?v=2&alt=json&max-results=50&start-index=" + startIndex;
+                    url = "https://gdata.youtube.com/feeds/api/playlists/" + urlInfo.playlistId + "?v=2&alt=json&max-results=50&start-index=" + startIndex;
                     $.ajax({
                         async: false,
                         url: url,
@@ -99,7 +105,7 @@ function search(){
                         success: function(data){
                             var feed = data.feed;
                             partialEntries = feed.entry;
-                            
+
                             if (entries.length === 0){
                                 entries = partialEntries;
                             }else{
@@ -117,26 +123,24 @@ function search(){
                         }
                     });
                 }
-                showResults(null, 0);
+                showResults(entries, 0);
             }
         }
     }
 }
 
 // Parse data and display it
-function showResults(data, index) {
+function showResults(entries, index) {
     indexOfSearch = index;
-    if (!isPlaylist && data){
-      var feed = data.feed;
-      entries = feed.entry;
-      numberOfVids = entries.length;
-    }
     var html = [],
         i,
         entry;
   
     $("#searchResults").empty();
-    for (i = indexOfSearch; i < Math.min(indexOfSearch+resultsPerPage, numberOfVids); i++) {
+    if (entries.length === 0) {
+        return;
+    }
+    for (i = indexOfSearch; i < Math.min(indexOfSearch+resultsPerPage, entries.length); i++) {
         entry = entries[i];
         if (entry.media$group.media$thumbnail !== undefined){ // won't do shit if the video was removed by youtube.
             var date = new Date(null),
@@ -202,12 +206,12 @@ function showResults(data, index) {
 
 function getNextResultPage() {
     indexOfSearch += resultsPerPage;
-    showResults(null, indexOfSearch);
+    showResults(entries, indexOfSearch);
 }
 
 function getPreviousResultPage() {
     indexOfSearch -= resultsPerPage;
-    showResults(null, indexOfSearch);
+    showResults(entries, indexOfSearch);
 }
 
 // shows the video title on hover
@@ -265,7 +269,7 @@ function applyStyle(e){
         var nextDisabled = false;
         var prevDisabled = false;
         prevDisabled = (indexOfSearch > 0) ? '' : 'disabled';
-        nextDisabled = (indexOfSearch < numberOfVids - 9) ? '' : 'disabled';
+        nextDisabled = (indexOfSearch < entries.length - 9) ? '' : 'disabled';
 
         divmore.innerHTML = "<input "+ prevDisabled +" type='button' style='cursor:pointer' onClick=getPreviousResultPage() value='&lt&lt Prev'/> </span>";
         divmore.innerHTML += "<input "+ nextDisabled +" type='button' style='cursor:pointer' onClick=getNextResultPage() value='Next &gt&gt'/>";
