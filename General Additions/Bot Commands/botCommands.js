@@ -44,6 +44,7 @@ function loadBotCommands(){
      commands.set('regularCommands',"$quote ",emptyFunc);
      commands.set('regularCommands',"$help ",emptyFunc);
      commands.set('regularCommands',"$stats",emptyFunc);
+     commands.set('regularCommands',"$skiprate",emptyFunc);
 }
 
 beforeConnectFunctions.push(loadBotCommands);
