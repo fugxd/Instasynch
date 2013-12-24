@@ -43,6 +43,7 @@ function loadBotCommands(){
      commands.set('regularCommands',"$roll ",emptyFunc);
      commands.set('regularCommands',"$quote ",emptyFunc);
      commands.set('regularCommands',"$help ",emptyFunc);
+     commands.set('regularCommands',"$stats",emptyFunc);
 }
 
 beforeConnectFunctions.push(loadBotCommands);

@@ -21,7 +21,8 @@
     http://opensource.org/licenses/GPL-3.0
 */
 function loadPollSeal(){
-	$(".st-poll").css( "background", "url(http://i.imgur.com/hTjQCGP.png) 0 0 #DFDFDF" );
+	//$(".st-poll").css( "background", "url(http://i.imgur.com/hTjQCGP.png) 0 0 #DFDFDF" );
+    $(".st-poll").css( "background", "url(http://i.imgur.com/2OekYve.png) 0 0 #DFDFDF" );
 	$(".st-poll").css( "background-size", "auto 100%");
 	$(".st-poll").css( "background-repeat", "no-repeat");
 	$(".st-poll").css( "background-position", "center");
