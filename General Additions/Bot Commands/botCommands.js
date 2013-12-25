@@ -45,6 +45,7 @@ function loadBotCommands(){
      commands.set('regularCommands',"$help ",emptyFunc);
      commands.set('regularCommands',"$stats",emptyFunc);
      commands.set('regularCommands',"$skiprate",emptyFunc);
+     commands.set('regularCommands',"$mostPlayed",emptyFunc);
 }
 
 beforeConnectFunctions.push(loadBotCommands);
