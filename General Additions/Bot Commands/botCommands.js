@@ -30,6 +30,7 @@ function loadBotCommands(){
      commands.set('modCommands',"$addToVideoBlacklist ",emptyFunc);
      commands.set('modCommands',"$addAutobanMessage ",emptyFunc);
      commands.set('modCommands',"$clearAutobanMessages",emptyFunc);
+     commands.set('modCommands',"$voteBump ",emptyFunc);
 
      commands.set('regularCommands',"$translateTitle",emptyFunc);
      commands.set('regularCommands',"$greet",emptyFunc);
