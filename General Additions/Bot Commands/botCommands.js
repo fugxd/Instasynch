@@ -31,6 +31,7 @@ function loadBotCommands(){
      commands.set('modCommands',"$addAutobanMessage ",emptyFunc);
      commands.set('modCommands',"$clearAutobanMessages",emptyFunc);
      commands.set('modCommands',"$voteBump ",emptyFunc);
+     commands.set('modCommands',"$shuffle ",emptyFunc);
      commands.set('modCommands',"$exportUserBlacklist",emptyFunc);
 
      commands.set('regularCommands',"$translateTitle",emptyFunc);

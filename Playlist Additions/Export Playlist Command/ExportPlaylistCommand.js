@@ -40,4 +40,4 @@ function exportPlaylist(){
     }
     window.prompt ("Copy to clipboard: Ctrl+C, Enter", output);
 }
-beforeConnectFunctions.push(loadExportPlaylist);
+//beforeConnectFunctions.push(loadExportPlaylist);
