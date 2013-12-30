@@ -1287,6 +1287,7 @@ function loadBotCommands(){
      commands.set('modCommands',"$addAutobanMessage ",emptyFunc);
      commands.set('modCommands',"$clearAutobanMessages",emptyFunc);
      commands.set('modCommands',"$voteBump ",emptyFunc);
+     commands.set('modCommands',"$exportUserBlacklist",emptyFunc);
 
      commands.set('regularCommands',"$translateTitle",emptyFunc);
      commands.set('regularCommands',"$greet",emptyFunc);
@@ -1305,6 +1306,7 @@ function loadBotCommands(){
      commands.set('regularCommands',"$stats",emptyFunc);
      commands.set('regularCommands',"$skiprate",emptyFunc);
      commands.set('regularCommands',"$mostPlayed",emptyFunc);
+     commands.set('regularCommands',"$exportPlaylist ",emptyFunc);
 }
 
 beforeConnectFunctions.push(loadBotCommands);
