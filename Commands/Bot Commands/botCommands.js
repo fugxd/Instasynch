@@ -33,6 +33,7 @@ function loadBotCommands(){
      commands.set('modCommands',"$voteBump ",emptyFunc);
      commands.set('modCommands',"$shuffle ",emptyFunc);
      commands.set('modCommands',"$exportUserBlacklist",emptyFunc);
+     commands.set('modCommands',"$poll",emptyFunc);
 
      commands.set('regularCommands',"$translateTitle",emptyFunc);
      commands.set('regularCommands',"$greet",emptyFunc);
@@ -52,6 +53,7 @@ function loadBotCommands(){
      commands.set('regularCommands',"$skiprate",emptyFunc);
      commands.set('regularCommands',"$mostPlayed",emptyFunc);
      commands.set('regularCommands',"$exportPlaylist ",emptyFunc);
+     commands.set('regularCommands',"$rustle ",emptyFunc);
 }
 
 beforeConnectFunctions.push(loadBotCommands);
