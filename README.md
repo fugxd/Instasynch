@@ -19,9 +19,10 @@ Command List
 //Mod Commands
 'bump [user]
 'removeLast [user]
-'trimWall [user] [maxMinutes]
-'purgeTooLong [maxMinutes]
+'trimWall [user] [maxMinutes](optional)
+'purgeTooLong [maxMinutes](optional)
 'votePurge [user]
+'shuffle [user](optional)
 
 //Settings
 ~TagsAutocomplete
@@ -50,6 +51,7 @@ Click <a href="/install.gif">here</a> for Chrome example.
 Changes
 ------------
 <pre>
+• Added <code><a href="#Shuffle">History</a><code>
 • Added <code><a href="#History">History</a><code>
 • Added <code><a href="#Timestamp">Timestamp</a><code>
 </pre>
@@ -196,6 +198,11 @@ History
 
 Shows the last 9 Videos on the <a href="#youtube-search">YouTube Search</a> panel.
 
+Shuffle
+------------------
+
+Shuffles the current playlist or the wall of the specified user.
+
 Notifications
 -------------
 
@@ -253,7 +260,7 @@ To clear all the messages from the chat use the command <code>'clearChat</code>.
 
 Export Playlist Command
 -----------------------
-<b>Deprecated used $exportPlaylist with postvenge</b>
+<b>Deprecated use $exportPlaylist with postvenge instead</b>
 
 To export all the videos in the playlist use the command <code>'exportPlaylist</code>.
 A popup with all the links will open. Just copy them and close it.
