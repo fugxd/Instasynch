@@ -2039,11 +2039,14 @@ function loadGeneralStuff(){
     //get Username
     thisUsername = $.cookie('username');
     addMessage('', '<strong>Scripts loaded. Recent changes:<br>'+
+                    '&bull; PlayMessages (turn off with ~PlayMessages) <br>'+
+                    '&bull; BigPlaylist: bigger playlist with thumbnails (turn off with ~BigPlaylist) <br>'+
                     '&bull; \'Shuffle: shuffles a wall or the playlist <br>'+
                     '&bull; \'History: shows the last 9 videos <br>'+
                     '&bull; Timestamps: (turn off with ~Timestamp) <br>'+
                     '&bull; YouTube Search: type the search term into the add video field <br>'+
                     '&bull; Notifications: the favicon on the browser tab will change when someone says your name like @username</strong>','' ,'hashtext'); 
+    addMessage('','<font color="#FF0000">If you are having issues with the playlist loading please load the script again from https://raw.github.com/Bibbytube/Instasynch/master/loadAll.js<font>','','hashtext');
 }
 function getActiveVideoIndex(){
     return $('.active').index();
@@ -2273,9 +2276,12 @@ beforeConnectFunctions.push(loadLeaderSeal);
     
     http://opensource.org/licenses/GPL-3.0
 */
+
 function loadPollSeal(){
-	//$(".st-poll").css( "background", "url(http://i.imgur.com/hTjQCGP.png) 0 0 #DFDFDF" );
-    $(".st-poll").css( "background", "url(http://i.imgur.com/LYqdO1G.png) 0 0 #DFDFDF" );
+	//$(".st-poll").css( "background", "url(https://raw.github.com/Bibbytube/Instasynch/tree/master/General%20Additions/Pollseal/RegularSeal.png) 0 0 #DFDFDF" );
+    //$(".st-poll").css( "background", "url(https://raw.github.com/Bibbytube/Instasynch/tree/master/General%20Additions/Pollseal/ChristmasSeal.png) 0 0 #DFDFDF" );
+    $(".st-poll").css( "background", "url(https://raw.github.com/Bibbytube/Instasynch/tree/master/General%20Additions/Pollseal/NewYearSeal.png) 0 0 #DFDFDF" );
+
 	$(".st-poll").css( "background-size", "auto 100%");
 	$(".st-poll").css( "background-repeat", "no-repeat");
 	$(".st-poll").css( "background-position", "center");
@@ -2752,7 +2758,7 @@ function loadMirrorPlayer(){
     //checking the current video after loading the first time
     if(playlist.length != 0){
         setTimeout(function(){
-            if(containsMirrored(playlist[getActiveVideoIndex()].title)){
+            if(playlist && playlist[getActiveVideoIndex()] && containsMirrored(playlist[getActiveVideoIndex()].title)){
                 toggleMirrorPlayer();
             }
         },2500);
@@ -3071,14 +3077,12 @@ function loadBigPlaylist() {
                 $('<tr>', {'data':{info: vidinfo.info}}).append(
                     $('<td>').append(
                         $('<a>',{'href':vidlink,'target':'_blank'}).append(
-                            $('<img>',{'src':vidinfo.info.thumbnail}).css('width','40px')
+                            $('<img>',{'src':vidinfo.info.thumbnail}).css('width','45px')
                         )
-                    )
+                    ).css('padding','0px')
                 ).append(
                     $('<td>').append(
-                        $('<div>',{'title':vidinfo.title}).text(((vidinfo.title.length>100)?vidinfo.title.substring(0,100)+"...":vidinfo.title)).css('overflow','hidden').css('text-overflow','ellipsis').css('max-width','350px')
-                    ).append(
-                        $('<div>').html(secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('float','right').css('text-align','right')
+                        $('<div>',{'title':vidinfo.title}).text(((vidinfo.title.length>100)?vidinfo.title.substring(0,100)+"...":vidinfo.title)).css('overflow','hidden')
                     ).on('click', function() {
                             if (isLeader) {
                                 sendcmd('play', {info: $(this).parent().data('info')});
@@ -3088,6 +3092,8 @@ function loadBigPlaylist() {
                                 }
                         }
                     ).css('cursor','pointer')
+                ).append(
+                    $('<td>').html(secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align','right')
                 ).append(
                     $('<td>').append(removeBtn)
                 )

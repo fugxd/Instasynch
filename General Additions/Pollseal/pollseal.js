@@ -20,9 +20,12 @@
     
     http://opensource.org/licenses/GPL-3.0
 */
+
 function loadPollSeal(){
-	//$(".st-poll").css( "background", "url(http://i.imgur.com/hTjQCGP.png) 0 0 #DFDFDF" );
-    $(".st-poll").css( "background", "url(http://i.imgur.com/LYqdO1G.png) 0 0 #DFDFDF" );
+	//$(".st-poll").css( "background", "url(https://raw.github.com/Bibbytube/Instasynch/tree/master/General%20Additions/Pollseal/RegularSeal.png) 0 0 #DFDFDF" );
+    //$(".st-poll").css( "background", "url(https://raw.github.com/Bibbytube/Instasynch/tree/master/General%20Additions/Pollseal/ChristmasSeal.png) 0 0 #DFDFDF" );
+    $(".st-poll").css( "background", "url(https://raw.github.com/Bibbytube/Instasynch/tree/master/General%20Additions/Pollseal/NewYearSeal.png) 0 0 #DFDFDF" );
+
 	$(".st-poll").css( "background-size", "auto 100%");
 	$(".st-poll").css( "background-repeat", "no-repeat");
 	$(".st-poll").css( "background-position", "center");
