@@ -1215,7 +1215,7 @@ function loadPlayMessages(){
     playMessages = settings.get('playMessages','true');
     
     //add the command
-    commands.set('addOnSettings',"playMessages",togglePlayMessages);
+    commands.set('addOnSettings',"PlayMessages",togglePlayMessages);
     
     // Overwriting Adduser
     var oldPlayVideo = playVideo;
@@ -3032,7 +3032,7 @@ afterConnectFunctions.push(loadTogglePlayer);
 
 function loadBigPlaylist() {
     bigPlaylist = settings.get('bigPlaylist','true');
-    commands.set('addOnSettings','bigPlaylist',toggleBigPlaylist);
+    commands.set('addOnSettings','BigPlaylist',toggleBigPlaylist);
     if (bigPlaylist) {
         // change playlist to table based
         $('<style type="text/css"> #tablePlaylistBody tr:hover{background:#555;} #tablePlaylistBody td {padding:3px;border:solid #666 3px;} .active{color:#000; background:#D1E1FA;} </style>').appendTo('head');

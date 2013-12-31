@@ -22,7 +22,7 @@ function loadPlayMessages(){
     playMessages = settings.get('playMessages','true');
     
     //add the command
-    commands.set('addOnSettings',"playMessages",togglePlayMessages);
+    commands.set('addOnSettings',"PlayMessages",togglePlayMessages);
     
     // Overwriting Adduser
     var oldPlayVideo = playVideo;
