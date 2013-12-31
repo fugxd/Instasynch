@@ -786,7 +786,7 @@ var filterTags = true,
 
 preConnectFunctions.push(loadMessageFilter);
 //----------------- end  messagefilter.js-----------------
-//-----------------start modSpy.js-----------------
+//-----------------start ModSpy.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -870,7 +870,7 @@ var modSpy = false,
 	bumpCheck = false;
 
 preConnectFunctions.push(loadModSpy);
-//----------------- end  modSpy.js-----------------
+//----------------- end  ModSpy.js-----------------
 //-----------------start nameAutocomplete.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
@@ -1936,7 +1936,7 @@ function votePurge(params)
 
 preConnectFunctions.push(loadVotePurgeCommand);
 //----------------- end  votePurge.js-----------------
-//-----------------start description.js-----------------
+//-----------------start Description.js-----------------
 /*
     Copyright (C) 2013  Bibbytube
    
@@ -2011,8 +2011,8 @@ function loadDescription(){
  
  
 preConnectFunctions.push(loadDescription);
-//----------------- end  description.js-----------------
-//-----------------start general.js-----------------
+//----------------- end  Description.js-----------------
+//-----------------start General.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -2169,7 +2169,7 @@ function openInNewTab(url){
     var win=window.open(url, '_blank');
     win.focus();
 }
-//----------------- end  general.js-----------------
+//----------------- end  General.js-----------------
 //-----------------start greynameCount.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
@@ -2800,7 +2800,7 @@ function toggleMirrorPlayer(){
 
 postConnectFunctions.push(loadMirrorPlayer);
 //----------------- end  mirrorPlayer.js-----------------
-//-----------------start mousewheelVolumeControl.js-----------------
+//-----------------start mousewheelvolumecontrol.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -2935,7 +2935,7 @@ function setVol(){
 }
 
 preConnectFunctions.push(loadMouseWheelVolumecontrol);
-//----------------- end  mousewheelVolumeControl.js-----------------
+//----------------- end  mousewheelvolumecontrol.js-----------------
 //-----------------start togglePlayer.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
@@ -3044,6 +3044,27 @@ function loadBigPlaylist() {
         $('#tablePlaylist').append(
             $('<tbody>',{'id':'tablePlaylistBody'})
         );
+        var oldMakeLeader = makeLeader;
+        makeLeader = function makeLeader(userId){
+            oldMakeLeader(userId);
+            if(window.isLeader){
+                $( "#tablePlaylistBody" ).sortable(
+                {
+                    update : function (event, ui){
+                                sendcmd('move', {info: ui.item.data("info"), position: ui.item.index()});
+                                $( "#tablePlaylistBody" ).sortable( "cancel" );
+                             },
+                     start: function(event,ui)
+                     {
+                         //Prevents click event from triggering when sorting videos
+                         $("#tablePlaylistBody").addClass('noclick');
+                     }
+                });
+                $("#tablePlaylistBody").sortable( "enable" );
+            }else{
+                $("#tablePlaylistBody").sortable( "disable" );
+            }
+        }
 
         // override functions from instasynchs io.js, version 0.9.7
         // overrides addVideo, removeVideo, moveVideo and playVideo
@@ -3084,12 +3105,19 @@ function loadBigPlaylist() {
                     $('<td>').append(
                         $('<div>',{'title':vidinfo.title}).text(((vidinfo.title.length>100)?vidinfo.title.substring(0,100)+"...":vidinfo.title)).css('overflow','hidden')
                     ).on('click', function() {
-                            if (isLeader) {
-                                sendcmd('play', {info: $(this).parent().data('info')});
-                            } else {
-                                    $('#cin').val($('#cin').val() + getVideoIndex($(this).parent().data('info')) + ' ');
-                                    $('#cin').focus();
+                            if ($("#tablePlaylistBody").hasClass("noclick"))
+                            {
+                                $("#tablePlaylistBody").removeClass('noclick');
+                            }
+                            else
+                            {
+                                if (isLeader) {
+                                    sendcmd('play', {info: $(this).parent().data('info')});
+                                } else {
+                                        $('#cin').val($('#cin').val() + getVideoIndex($(this).parent().data('info')) + ' ');
+                                        $('#cin').focus();
                                 }
+                            }
                         }
                     ).css('cursor','pointer')
                 ).append(

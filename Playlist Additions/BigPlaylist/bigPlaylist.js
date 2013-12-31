@@ -31,6 +31,27 @@ function loadBigPlaylist() {
         $('#tablePlaylist').append(
             $('<tbody>',{'id':'tablePlaylistBody'})
         );
+        var oldMakeLeader = makeLeader;
+        makeLeader = function makeLeader(userId){
+            oldMakeLeader(userId);
+            if(window.isLeader){
+                $( "#tablePlaylistBody" ).sortable(
+                {
+                    update : function (event, ui){
+                                sendcmd('move', {info: ui.item.data("info"), position: ui.item.index()});
+                                $( "#tablePlaylistBody" ).sortable( "cancel" );
+                             },
+                     start: function(event,ui)
+                     {
+                         //Prevents click event from triggering when sorting videos
+                         $("#tablePlaylistBody").addClass('noclick');
+                     }
+                });
+                $("#tablePlaylistBody").sortable( "enable" );
+            }else{
+                $("#tablePlaylistBody").sortable( "disable" );
+            }
+        }
 
         // override functions from instasynchs io.js, version 0.9.7
         // overrides addVideo, removeVideo, moveVideo and playVideo
@@ -71,12 +92,19 @@ function loadBigPlaylist() {
                     $('<td>').append(
                         $('<div>',{'title':vidinfo.title}).text(((vidinfo.title.length>100)?vidinfo.title.substring(0,100)+"...":vidinfo.title)).css('overflow','hidden')
                     ).on('click', function() {
-                            if (isLeader) {
-                                sendcmd('play', {info: $(this).parent().data('info')});
-                            } else {
-                                    $('#cin').val($('#cin').val() + getVideoIndex($(this).parent().data('info')) + ' ');
-                                    $('#cin').focus();
+                            if ($("#tablePlaylistBody").hasClass("noclick"))
+                            {
+                                $("#tablePlaylistBody").removeClass('noclick');
+                            }
+                            else
+                            {
+                                if (isLeader) {
+                                    sendcmd('play', {info: $(this).parent().data('info')});
+                                } else {
+                                        $('#cin').val($('#cin').val() + getVideoIndex($(this).parent().data('info')) + ' ');
+                                        $('#cin').focus();
                                 }
+                            }
                         }
                     ).css('cursor','pointer')
                 ).append(
