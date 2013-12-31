@@ -2114,8 +2114,6 @@ function openInNewTab(url){
     var win=window.open(url, '_blank');
     win.focus();
 }
-
-beforeConnectFunctions.splice(0,0,loadGeneralStuff);
 //----------------- end  general.js-----------------
 //-----------------start greynameCount.js-----------------
 /*
