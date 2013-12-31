@@ -163,7 +163,7 @@ function loadBigPlaylist() {
             var indexOfVid = getVideoIndex(vidinfo);
             if (indexOfVid > -1) 
             {
-                title = playlist[indexOfVid].title;
+                title = ((playlist[indexOfVid].title.length>240)?playlist[indexOfVid].title.substring(0,240)+"...":playlist[indexOfVid].title);
                 addedby = playlist[indexOfVid].addedby;
                 $('.active').removeClass('active');
                 $($('#tablePlaylistBody').children('tr')[indexOfVid]).addClass('active');

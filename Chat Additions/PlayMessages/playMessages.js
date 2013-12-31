@@ -31,7 +31,7 @@ function loadPlayMessages(){
         // Only if blackname or mod
         if (playMessages){
             indexOfVid = getVideoIndex(vidinfo);
-            title = playlist[indexOfVid].title;
+            title = ((playlist[indexOfVid].title.length>240)?playlist[indexOfVid].title.substring(0,240)+"...":playlist[indexOfVid].title);
             addMessage('', 'Now playing: ' + title, '','hashtext'); 
         }
         oldPlayVideo(vidinfo, time, playing);

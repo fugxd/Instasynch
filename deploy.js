@@ -1224,7 +1224,7 @@ function loadPlayMessages(){
         // Only if blackname or mod
         if (playMessages){
             indexOfVid = getVideoIndex(vidinfo);
-            title = playlist[indexOfVid].title;
+            title = ((playlist[indexOfVid].title.length>240)?playlist[indexOfVid].title.substring(0,240)+"...":playlist[indexOfVid].title);
             addMessage('', 'Now playing: ' + title, '','hashtext'); 
         }
         oldPlayVideo(vidinfo, time, playing);
@@ -3176,7 +3176,7 @@ function loadBigPlaylist() {
             var indexOfVid = getVideoIndex(vidinfo);
             if (indexOfVid > -1) 
             {
-                title = playlist[indexOfVid].title;
+                title = ((playlist[indexOfVid].title.length>240)?playlist[indexOfVid].title.substring(0,240)+"...":playlist[indexOfVid].title);
                 addedby = playlist[indexOfVid].addedby;
                 $('.active').removeClass('active');
                 $($('#tablePlaylistBody').children('tr')[indexOfVid]).addClass('active');
