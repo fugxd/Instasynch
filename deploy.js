@@ -1442,8 +1442,8 @@ function loadCommandFloodProtect(){
                 oldsendcmd(commandCache[0].command,commandCache[0].data);
                 //remove the sent command
                 commandCache.splice(0,1);
-                //after 750ms send the next command
-                setTimeout(function(){sendcmdReady = true;sendcmd();},1100);
+                //after 400ms send the next command
+                setTimeout(function(){sendcmdReady = true;sendcmd();},400);
             }
         }
     };
@@ -1565,354 +1565,7 @@ function loadCommandLoader(){
 }
 var commands;
     commandExecuted = false;
-
-beforeConnectFunctions.splice(0,0,loadCommandLoader);
 //----------------- end  commandLoader.js-----------------
-//-----------------start Description.js-----------------
-/*
-    Copyright (C) 2013  Bibbytube
-   
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-   
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-   
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-   
-    http://opensource.org/licenses/GPL-3.0
-*/
- 
-function loadDescription(){
-    if(!isBibbyRoom()){
-        return;
-    }
-    var descr="";
-    descr += "<p style=\"font-family: Palatino; text-align: center; \">";
-    descr += "  <span style=\"color:#003399;\"><strong style=\"font-size: 20pt; \">Bibbytube<\/strong><\/span><\/p>";
-    descr += "<p style=\"font-family: Palatino; font-size: 16pt; text-align: center; \">";
-    descr += "  <strong>instasynch&#39;s most <img src=\"http:\/\/i.imgur.com\/L1Nuk.gif\" \/> room<\/strong><\/p>";
-    descr += "<hr noshade color='black' width='550' size='5' align='center'>";
-    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
-    descr += "  <span style=\"font-size: 14pt; \">Playlist is always unlocked, so add videos for everyone to watch.<\/span><\/p>";
-    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
-    descr += "  <span style=\"color:#003399;\">New content\/OC is appreciated.<\/span><\/p>";
-    descr += "<p style=\"font-family: Palatino; font-size: 12pt; text-align: center; \">";
-    descr += "  Note: Many of our videos are NSFW.<\/p>";
-    descr += "<hr noshade color='black' width='550' size='5' align='center'>";
-    descr += "<p style=\"font-family: Palatino; font-size: 18pt; text-align: center; \">";
-    descr += "  <span style=\"color:#003399;\"><strong>Rules&nbsp;<\/strong><\/span><\/p>";
-    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
-    descr += "  1. No RWJ, Ponies, or Stale Videos. &nbsp;Insta-skip<\/p>";
-    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
-    descr += "  2. BEGGING FOR SKIPS IS FOR GAYLORDS<\/p>";
-    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
-    descr += "  3. &nbsp;NO SEAL JOKES<\/p>";
-    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
-    descr += "  &nbsp;<\/p>";
-    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
-    descr += "  If your video gets removed and shouldn't have been, try adding it later.<\/p>";
-    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
-    descr += "  MODS=GODS<\/p>";
-    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
-    descr += "  <strong><span style=\"color:#003399; font-family: Palatino; font-size: 18pt; \">Rules for the Reading Impaired<\/span><\/strong><\/p>";
-    descr += "<p style=\"text-align: center; \">";
-    descr += "  <a href=\"http:\/\/dl.dropbox.com\/u\/63790091\/BabbyRulesEnglish.mp3\"><img src=\"http:\/\/i.imgur.com\/LIXqI5Q.png?1\" \/><\/a><a href=\"http:\/\/dl.dropbox.com\/u\/63790091\/BabbyRulesDutch.mp3\"><img src=\"http:\/\/i.imgur.com\/giykE7C.jpg?1\" \/><\/a><a href=\"http:\/\/dl.dropbox.com\/u\/63790091\/BabbyRulesFrench.mp3\"><img src=\"http:\/\/i.imgur.com\/BucOmRs.png?1\" \/><\/a><a href=\"http:\/\/dl.dropbox.com\/u\/63790091\/BabbyRulesGerman.mp3\"><img src=\"http:\/\/i.imgur.com\/bTwmX9v.png?1\" \/><\/a><a href=\"http:\/\/dl.dropbox.com\/u\/63790091\/BabbyRulesSpanish.mp3\"><img src=\"http:\/\/i.imgur.com\/aZvktnt.png?1\" \/><\/a><\/p>";
-    descr += "<p style=\"text-align: center; \">";
-    descr += "  &nbsp;<\/p>";
-    descr += "<p style=\"text-align: center; \">";
-    descr += "  &nbsp;<\/p>";
-    descr += "<p style=\"text-align: center; \">";
-    descr += "  &nbsp;<\/p>";
-    descr += "<p style=\"text-align: center; \">";
-    descr += "  <strong><span style=\"color:#003399;\"><span style=\" font-family: Palatino; font-size: 18pt; \">Connect with Bibbytube in other ways!<\/span><\/span><\/strong><\/p>";
-    descr += "<p style=\"text-align: center; \">";
-    descr += "  &nbsp;<\/p>";
-    descr += "<p style=\"text-align: center; \">";
-    descr += "  <a href=\"http:\/\/steamcommunity.com\/groups\/Babbytube\"><img src=\"http:\/\/i.imgur.com\/AZHszva.png?1\" \/><\/a><\/p>";
-    descr += "<p style=\"text-align: center; \">";
-    descr += "  <a href=\"http:\/\/facebook.com\/babbytube\"><img src=\"http:\/\/i.imgur.com\/NuT2Bti.png?4\" \/><\/a><a href=\"http:\/\/twitter.com\/bibbytube_\/\"><img src=\"http:\/\/i.imgur.com\/T6oWmfB.png?4\" \/><\/a><\/p>";
-    descr += "<script type=\"text\/javascript\" src=\"http:\/\/script.footprintlive.com\/?site=www.synchtube.com\"><\/script><noscript><a href=\"http:\/\/www.footprintlive.com\" target=\"_blank\"><img src=\"http:\/\/img.footprintlive.com\/?cmd=nojs&site=www.synchtube.com\" alt=\"user analytics\" border=\"0\"><\/a><\/noscript>";
-    $("div.roomFooter ").html(descr);
-}
- 
- 
-beforeConnectFunctions.push(loadDescription);
-//----------------- end  Description.js-----------------
-//-----------------start General.js-----------------
-/*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2013  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2013  Bibbytube
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
-*/
-
-
-function loadGeneralStuff(){
-    //get Username
-    thisUsername = $.cookie('username');
-}
-function getActiveVideoIndex(){
-    return $('.active').index();
-}
-
-function isUserMod(){
-    return window.isMod;
-}
-
-function isBibbyRoom(){
-    return ROOMNAME.match(/bibby/i)?true:false;
-}
-
-function getIndexOfUser(id){
-    var i;
-    for (i = 0; i < users.length; i++){
-        if (id === users[i].id){
-            return i;
-        }
-    }
-    return -1;
-}
-
-function getUsernameArray(lowerCase){
-    var arr = [];
-    for(i = 0; i< users.length;i++){
-        if(users[i].username !== 'unnamed'){
-            if(!lowerCase){
-                arr.push(users[i].username);
-            }else{
-                arr.push(users[i].username.toLowerCase());
-            }
-        }
-    }
-    return arr;
-}
-
-var thisUsername;
-
-/*
-** Returns the caret (cursor) position of the specified text field.
-** Return value range is 0-oField.value.length.
-** http://flightschool.acylt.com/devnotes/caret-position-woes/
-*/
-function doGetCaretPosition(oField) {
-
-    // Initialize
-    var iCaretPos = 0;
-
-    // IE Support
-    if (document.selection) {
-        var oSel;
-        // Set focus on the element
-        oField.focus ();
-
-        // To get cursor position, get empty selection range
-        oSel = document.selection.createRange ();
-
-        // Move selection start to 0 position
-        oSel.moveStart ('character', -oField.value.length);
-
-        // The caret position is selection length
-        iCaretPos = oSel.text.length;
-    }
-
-    // Firefox support
-    else if (oField.selectionStart || oField.selectionStart == '0'){
-      iCaretPos = oField.selectionStart;
-    }
-
-    // Return results
-    return (iCaretPos);
-}
-
-function doSetCaretPosition(oField, position) {
-    //IE
-    if (document.selection) {
-        var oSel;
-        oField.focus ();
-        oSel = document.selection.createRange ();
-        oSel.moveStart('character', position);
-        oSel.moveEnd('character', position);
-    }
-
-    // Firefox support
-    else if (oField.selectionStart || oField.selectionStart == '0'){
-        oField.selectionStart = position;
-        oField.selectionEnd = position;
-    }
-}
-function pasteTextAtCaret(text) {
-    var sel, range;
-    if (window.getSelection) {
-        // IE9 and non-IE
-        sel = window.getSelection();
-        if (sel.getRangeAt && sel.rangeCount) {
-            var textNode;
-            range = sel.getRangeAt(0);
-            range.deleteContents();
-
-            textNode = document.createTextNode(text);
-            range.insertNode(textNode);
-
-            // Preserve the selection
-            range = range.cloneRange();
-            range.setStartAfter(textNode);
-            range.collapse(true);
-            sel.removeAllRanges();
-            sel.addRange(range);
-        }
-    } else if (document.selection && document.selection.type != "Control") {
-        // IE < 9
-        document.selection.createRange().text = text;
-    }
-}
-
-function openInNewTab(url){
-    var win=window.open(url, '_blank');
-    win.focus();
-}
-
-beforeConnectFunctions.splice(0,0,loadGeneralStuff);
-//----------------- end  General.js-----------------
-//-----------------start greynameCount.js-----------------
-/*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2013  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2013  Bibbytube
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
-*/
-
-function loadGreynameCount(){
-    var oldAddUser = addUser,
-        oldRemoveUser = removeUser;
-
-    addUser = function addUser(user, css, sort) {
-        oldAddUser(user, css, sort);
-        setViewerCount();
-    };    
-    removeUser = function removeUser(id) {
-        oldRemoveUser(id);
-        setViewerCount();
-    };
-    setViewerCount();
-}
-function setViewerCount(){
-    var greynameCount = 0,
-        i;
-    for (i = 0; i < users.length; i++) {
-        if(!users[i].loggedin){
-            greynameCount++;
-        }
-    };
-    $('#viewercount').html(users.length-greynameCount + '/' +greynameCount);
-}
-
-beforeConnectFunctions.push(loadGreynameCount);
-//----------------- end  greynameCount.js-----------------
-//-----------------start leaderseal.js-----------------
-/*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2013  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2013  Bibbytube
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
-*/
-
-function loadLeaderSeal(){
-    var oldMakeLeader = makeLeader;
-    makeLeader = function(userId){
-        oldMakeLeader(userId);
-        $("#leaderSymbol").attr("src","/favicon.ico");
-    };
-}
-
-beforeConnectFunctions.push(loadLeaderSeal);
-//----------------- end  leaderseal.js-----------------
-//-----------------start pollseal.js-----------------
-/*
-    <InstaSynch - Watch Videos with friends.>
-    Copyright (C) 2013  InstaSynch
-
-    <Bibbytube - Modified InstaSynch client code>
-    Copyright (C) 2013  Bibbytube
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-    
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    http://opensource.org/licenses/GPL-3.0
-*/
-function loadPollSeal(){
-	//$(".st-poll").css( "background", "url(http://i.imgur.com/hTjQCGP.png) 0 0 #DFDFDF" );
-    $(".st-poll").css( "background", "url(http://i.imgur.com/LYqdO1G.png) 0 0 #DFDFDF" );
-	$(".st-poll").css( "background-size", "auto 100%");
-	$(".st-poll").css( "background-repeat", "no-repeat");
-	$(".st-poll").css( "background-position", "center");
-}
-
-beforeConnectFunctions.push(loadPollSeal);
-//----------------- end  pollseal.js-----------------
 //-----------------start purgeTooLong.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
@@ -2023,7 +1676,7 @@ function removeLast(params){
 		
 beforeConnectFunctions.push(loadRemoveLast);
 //----------------- end  removeLast.js-----------------
-//-----------------start settingsLoader.js-----------------
+//-----------------start shuffle.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch
@@ -2047,78 +1700,31 @@ beforeConnectFunctions.push(loadRemoveLast);
     http://opensource.org/licenses/GPL-3.0
 */
 
-function loadSettingsLoader(){
-    var cookieName = 'InstaSynch Addons Settings',
-        expire = { expires: 10*365 }; //settings expire in 10 years
-    //slightly changed version of this: http://stackoverflow.com/a/1960049, so it saves a hashmap rather than just a array
-    settings = new function() {
-        var cookie = $.cookie(cookieName),
-            array = cookie ? cookie.split(/,/):[],
-            items = {},
-            i;
-    
-        for(i = 0; i<array.length;i+=2){
-            items[array[i]] = array[i+1];
+function loadShuffleCommand(){
+    commands.set('modCommands',"shuffle ",shuffle);
+}
+
+function shuffle(params){
+    var user = params[1],
+        i,
+        shuffleList = [];
+    for (i = getActiveVideoIndex()+1; i<playlist.length; i++) {
+        if(!user || playlist[i].addedby.toLowerCase() === user.toLowerCase()){
+            shuffleList.push({i: i, info: playlist[i].info});
         }
-    
-        return {
-            "set": function(key, val) {
-                if(!items.hasOwnProperty(key)){
-                    array.push(key);
-                    array.push(val);
-                }else{
-                    i = array.indexOf(key);
-                    array[i+1] = val; 
-                }
-                items[key] = val;
-                addMessage('', "["+key+": "+val+"] ", '', 'hashtext');
-                $.cookie(cookieName, array.join(','),expire);
-            },
-            "remove": function (key) { 
-    
-                i = array.indexOf(key); 
-                if(i!=-1) array.splice(i, 2); 
-    
-                delete items[key];
-                $.cookie(cookieName, array.join(','),expire);        
-            },
-            "clear": function() {
-                array = [];
-                items = {};
-                //clear the cookie.
-                $.cookie(cookieName, null);
-            },
-            "get": function(key, val) {
-                if(!items[key] && val){
-                    settings.set(key, val);
-                }
-                //Get all the array.
-                return items[key] === 'false'?false:true;
-            },
-            "getAll": function() {
-                return items;
-            }
-        };
-    };
-}
-var settings;
-
-function loadSettingsLoaderCommand(){
-    commands.set('regularCommands',"printAddOnSettings",printAddonSettings);
-}
-
-function printAddonSettings(){
-    var output ="",
-        key;
-    for(key in settings.getAll()){
-        output += "["+key+": "+settings.get(key)+"] ";
     }
-    addMessage('', output, '', 'hashtext');
+    var tempInfo,randIndex,newPosition;
+    for(i = 0; i< shuffleList.length;i++){
+        randIndex = Math.floor(Math.random()*shuffleList.length);
+        tempInfo = shuffleList[i].info;
+        newPosition = shuffleList[randIndex].i;
+        sendcmd('move', {info: tempInfo, position: newPosition});
+    }
 }
-//settings need to be loaded first
-beforeConnectFunctions.splice(0,0,loadSettingsLoader);
-beforeConnectFunctions.push(loadSettingsLoaderCommand);
-//----------------- end  settingsLoader.js-----------------
+
+
+beforeConnectFunctions.push(loadShuffleCommand);
+//----------------- end  shuffle.js-----------------
 //-----------------start skip.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>
@@ -2278,6 +1884,480 @@ function votePurge(params)
 
 beforeConnectFunctions.push(loadVotePurgeCommand);
 //----------------- end  votePurge.js-----------------
+//-----------------start description.js-----------------
+/*
+    Copyright (C) 2013  Bibbytube
+   
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+   
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+   
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+   
+    http://opensource.org/licenses/GPL-3.0
+*/
+ 
+function loadDescription(){
+    if(!isBibbyRoom()){
+        return;
+    }
+    var descr="";
+    descr += "<p style=\"font-family: Palatino; text-align: center; \">";
+    descr += "  <span style=\"color:#003399;\"><strong style=\"font-size: 20pt; \">Bibbytube<\/strong><\/span><\/p>";
+    descr += "<p style=\"font-family: Palatino; font-size: 16pt; text-align: center; \">";
+    descr += "  <strong>instasynch&#39;s most <img src=\"http:\/\/i.imgur.com\/L1Nuk.gif\" \/> room<\/strong><\/p>";
+    descr += "<hr noshade color='black' width='550' size='5' align='center'>";
+    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
+    descr += "  <span style=\"font-size: 14pt; \">Playlist is always unlocked, so add videos for everyone to watch.<\/span><\/p>";
+    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
+    descr += "  <span style=\"color:#003399;\">New content\/OC is appreciated.<\/span><\/p>";
+    descr += "<p style=\"font-family: Palatino; font-size: 12pt; text-align: center; \">";
+    descr += "  Note: Many of our videos are NSFW.<\/p>";
+    descr += "<hr noshade color='black' width='550' size='5' align='center'>";
+    descr += "<p style=\"font-family: Palatino; font-size: 18pt; text-align: center; \">";
+    descr += "  <span style=\"color:#003399;\"><strong>Rules&nbsp;<\/strong><\/span><\/p>";
+    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
+    descr += "  1. No RWJ, Ponies, or Stale Videos. &nbsp;Insta-skip<\/p>";
+    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
+    descr += "  2. BEGGING FOR SKIPS IS FOR GAYLORDS<\/p>";
+    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
+    descr += "  3. &nbsp;NO SEAL JOKES<\/p>";
+    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
+    descr += "  &nbsp;<\/p>";
+    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
+    descr += "  If your video gets removed and shouldn't have been, try adding it later.<\/p>";
+    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
+    descr += "  MODS=GODS<\/p>";
+    descr += "<p style=\"font-family: Palatino; font-size: 14pt; text-align: center; \">";
+    descr += "  <strong><span style=\"color:#003399; font-family: Palatino; font-size: 18pt; \">Rules for the Reading Impaired<\/span><\/strong><\/p>";
+    descr += "<p style=\"text-align: center; \">";
+    descr += "  <a href=\"http:\/\/dl.dropbox.com\/u\/63790091\/BabbyRulesEnglish.mp3\"><img src=\"http:\/\/i.imgur.com\/LIXqI5Q.png?1\" \/><\/a><a href=\"http:\/\/dl.dropbox.com\/u\/63790091\/BabbyRulesDutch.mp3\"><img src=\"http:\/\/i.imgur.com\/giykE7C.jpg?1\" \/><\/a><a href=\"http:\/\/dl.dropbox.com\/u\/63790091\/BabbyRulesFrench.mp3\"><img src=\"http:\/\/i.imgur.com\/BucOmRs.png?1\" \/><\/a><a href=\"http:\/\/dl.dropbox.com\/u\/63790091\/BabbyRulesGerman.mp3\"><img src=\"http:\/\/i.imgur.com\/bTwmX9v.png?1\" \/><\/a><a href=\"http:\/\/dl.dropbox.com\/u\/63790091\/BabbyRulesSpanish.mp3\"><img src=\"http:\/\/i.imgur.com\/aZvktnt.png?1\" \/><\/a><\/p>";
+    descr += "<p style=\"text-align: center; \">";
+    descr += "  &nbsp;<\/p>";
+    descr += "<p style=\"text-align: center; \">";
+    descr += "  &nbsp;<\/p>";
+    descr += "<p style=\"text-align: center; \">";
+    descr += "  &nbsp;<\/p>";
+    descr += "<p style=\"text-align: center; \">";
+    descr += "  <strong><span style=\"color:#003399;\"><span style=\" font-family: Palatino; font-size: 18pt; \">Connect with Bibbytube in other ways!<\/span><\/span><\/strong><\/p>";
+    descr += "<p style=\"text-align: center; \">";
+    descr += "  &nbsp;<\/p>";
+    descr += "<p style=\"text-align: center; \">";
+    descr += "  <a href=\"http:\/\/steamcommunity.com\/groups\/Babbytube\"><img src=\"http:\/\/i.imgur.com\/AZHszva.png?1\" \/><\/a><\/p>";
+    descr += "<p style=\"text-align: center; \">";
+    descr += "  <a href=\"http:\/\/facebook.com\/babbytube\"><img src=\"http:\/\/i.imgur.com\/NuT2Bti.png?4\" \/><\/a><a href=\"http:\/\/twitter.com\/bibbytube_\/\"><img src=\"http:\/\/i.imgur.com\/T6oWmfB.png?4\" \/><\/a><\/p>";
+    descr += "<script type=\"text\/javascript\" src=\"http:\/\/script.footprintlive.com\/?site=www.synchtube.com\"><\/script><noscript><a href=\"http:\/\/www.footprintlive.com\" target=\"_blank\"><img src=\"http:\/\/img.footprintlive.com\/?cmd=nojs&site=www.synchtube.com\" alt=\"user analytics\" border=\"0\"><\/a><\/noscript>";
+    $("div.roomFooter ").html(descr);
+}
+ 
+ 
+beforeConnectFunctions.push(loadDescription);
+//----------------- end  description.js-----------------
+//-----------------start general.js-----------------
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+
+function loadGeneralStuff(){
+    //get Username
+    thisUsername = $.cookie('username');
+    addMessage('', '<strong>Scripts loaded. Recent changes:<br>'+
+                    '&bull; \'Shuffle: shuffles a wall or the playlist <br>'+
+                    '&bull; \'History: shows the last 9 videos <br>'+
+                    '&bull; Timestamps: (turn off with ~Timestamp) <br>'+
+                    '&bull; YouTube Search: type the search term into the add video field <br>'+
+                    '&bull; Notifications: the favicon on the browser tab will change when someone says your name like @username</strong>','' ,'hashtext'); 
+}
+function getActiveVideoIndex(){
+    return $('.active').index();
+}
+
+function isUserMod(){
+    return window.isMod;
+}
+
+function isBibbyRoom(){
+    return ROOMNAME.match(/bibby/i)?true:false;
+}
+
+function getIndexOfUser(id){
+    var i;
+    for (i = 0; i < users.length; i++){
+        if (id === users[i].id){
+            return i;
+        }
+    }
+    return -1;
+}
+
+function getUsernameArray(lowerCase){
+    var arr = [];
+    for(i = 0; i< users.length;i++){
+        if(users[i].username !== 'unnamed'){
+            if(!lowerCase){
+                arr.push(users[i].username);
+            }else{
+                arr.push(users[i].username.toLowerCase());
+            }
+        }
+    }
+    return arr;
+}
+
+var thisUsername;
+
+/*
+** Returns the caret (cursor) position of the specified text field.
+** Return value range is 0-oField.value.length.
+** http://flightschool.acylt.com/devnotes/caret-position-woes/
+*/
+function doGetCaretPosition(oField) {
+
+    // Initialize
+    var iCaretPos = 0;
+
+    // IE Support
+    if (document.selection) {
+        var oSel;
+        // Set focus on the element
+        oField.focus ();
+
+        // To get cursor position, get empty selection range
+        oSel = document.selection.createRange ();
+
+        // Move selection start to 0 position
+        oSel.moveStart ('character', -oField.value.length);
+
+        // The caret position is selection length
+        iCaretPos = oSel.text.length;
+    }
+
+    // Firefox support
+    else if (oField.selectionStart || oField.selectionStart == '0'){
+      iCaretPos = oField.selectionStart;
+    }
+
+    // Return results
+    return (iCaretPos);
+}
+
+function doSetCaretPosition(oField, position) {
+    //IE
+    if (document.selection) {
+        var oSel;
+        oField.focus ();
+        oSel = document.selection.createRange ();
+        oSel.moveStart('character', position);
+        oSel.moveEnd('character', position);
+    }
+
+    // Firefox support
+    else if (oField.selectionStart || oField.selectionStart == '0'){
+        oField.selectionStart = position;
+        oField.selectionEnd = position;
+    }
+}
+function pasteTextAtCaret(text) {
+    var sel, range;
+    if (window.getSelection) {
+        // IE9 and non-IE
+        sel = window.getSelection();
+        if (sel.getRangeAt && sel.rangeCount) {
+            var textNode;
+            range = sel.getRangeAt(0);
+            range.deleteContents();
+
+            textNode = document.createTextNode(text);
+            range.insertNode(textNode);
+
+            // Preserve the selection
+            range = range.cloneRange();
+            range.setStartAfter(textNode);
+            range.collapse(true);
+            sel.removeAllRanges();
+            sel.addRange(range);
+        }
+    } else if (document.selection && document.selection.type != "Control") {
+        // IE < 9
+        document.selection.createRange().text = text;
+    }
+}
+
+function openInNewTab(url){
+    var win=window.open(url, '_blank');
+    win.focus();
+}
+
+beforeConnectFunctions.splice(0,0,loadGeneralStuff);
+//----------------- end  general.js-----------------
+//-----------------start greynameCount.js-----------------
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadGreynameCount(){
+    var oldAddUser = addUser,
+        oldRemoveUser = removeUser;
+
+    addUser = function addUser(user, css, sort) {
+        oldAddUser(user, css, sort);
+        setViewerCount();
+    };    
+    removeUser = function removeUser(id) {
+        oldRemoveUser(id);
+        setViewerCount();
+    };
+    setViewerCount();
+}
+function setViewerCount(){
+    var greynameCount = 0,
+        i;
+    for (i = 0; i < users.length; i++) {
+        if(!users[i].loggedin){
+            greynameCount++;
+        }
+    };
+    $('#viewercount').html(users.length-greynameCount + '/' +greynameCount);
+}
+
+beforeConnectFunctions.push(loadGreynameCount);
+//----------------- end  greynameCount.js-----------------
+//-----------------start leaderseal.js-----------------
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadLeaderSeal(){
+    var oldMakeLeader = makeLeader;
+    makeLeader = function(userId){
+        oldMakeLeader(userId);
+        $("#leaderSymbol").attr("src","/favicon.ico");
+    };
+}
+
+beforeConnectFunctions.push(loadLeaderSeal);
+//----------------- end  leaderseal.js-----------------
+//-----------------start pollseal.js-----------------
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+function loadPollSeal(){
+	//$(".st-poll").css( "background", "url(http://i.imgur.com/hTjQCGP.png) 0 0 #DFDFDF" );
+    $(".st-poll").css( "background", "url(http://i.imgur.com/LYqdO1G.png) 0 0 #DFDFDF" );
+	$(".st-poll").css( "background-size", "auto 100%");
+	$(".st-poll").css( "background-repeat", "no-repeat");
+	$(".st-poll").css( "background-position", "center");
+}
+
+beforeConnectFunctions.push(loadPollSeal);
+//----------------- end  pollseal.js-----------------
+//-----------------start priorityLoad.js-----------------
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+//Scripts that need to be loaded first
+function loadPriorityScripts(){
+    loadGeneralStuff();
+    loadCommandLoader();
+    loadSettingsLoader();
+}
+
+beforeConnectFunctions.splice(0,0,loadPriorityScripts);
+//----------------- end  priorityLoad.js-----------------
+//-----------------start settingsLoader.js-----------------
+/*
+    <InstaSynch - Watch Videos with friends.>
+    Copyright (C) 2013  InstaSynch
+
+    <Bibbytube - Modified InstaSynch client code>
+    Copyright (C) 2013  Bibbytube
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    
+    http://opensource.org/licenses/GPL-3.0
+*/
+
+function loadSettingsLoader(){
+    var cookieName = 'InstaSynch Addons Settings',
+        expire = { expires: 10*365 }; //settings expire in 10 years
+    commands.set('regularCommands',"printAddOnSettings",printAddonSettings);
+    //slightly changed version of this: http://stackoverflow.com/a/1960049, so it saves a hashmap rather than just a array
+    settings = new function() {
+        var cookie = $.cookie(cookieName),
+            array = cookie ? cookie.split(/,/):[],
+            items = {},
+            i;
+    
+        for(i = 0; i<array.length;i+=2){
+            items[array[i]] = array[i+1];
+        }
+    
+        return {
+            "set": function(key, val) {
+                if(!items.hasOwnProperty(key)){
+                    array.push(key);
+                    array.push(val);
+                }else{
+                    i = array.indexOf(key);
+                    array[i+1] = val; 
+                }
+                items[key] = val;
+                addMessage('', "["+key+": "+val+"] ", '', 'hashtext');
+                $.cookie(cookieName, array.join(','),expire);
+            },
+            "remove": function (key) { 
+    
+                i = array.indexOf(key); 
+                if(i!=-1) array.splice(i, 2); 
+    
+                delete items[key];
+                $.cookie(cookieName, array.join(','),expire);        
+            },
+            "clear": function() {
+                array = [];
+                items = {};
+                //clear the cookie.
+                $.cookie(cookieName, null);
+            },
+            "get": function(key, val) {
+                if(!items[key] && val){
+                    settings.set(key, val);
+                }
+                //Get all the array.
+                return items[key] === 'false'?false:true;
+            },
+            "getAll": function() {
+                return items;
+            }
+        };
+    };
+}
+var settings;
+
+
+function printAddonSettings(){
+    var output ="",
+        key;
+    for(key in settings.getAll()){
+        output += "["+key+": "+settings.get(key)+"] ";
+    }
+    addMessage('', output, '', 'hashtext');
+}
+//----------------- end  settingsLoader.js-----------------
 //-----------------start youtubeSearch.js-----------------
 /*
     <InstaSynch - Watch Videos with friends.>

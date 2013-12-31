@@ -108,5 +108,3 @@ function loadCommandLoader(){
 }
 var commands;
     commandExecuted = false;
-
-beforeConnectFunctions.splice(0,0,loadCommandLoader);

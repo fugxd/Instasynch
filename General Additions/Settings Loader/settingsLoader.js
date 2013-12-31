@@ -24,6 +24,7 @@
 function loadSettingsLoader(){
     var cookieName = 'InstaSynch Addons Settings',
         expire = { expires: 10*365 }; //settings expire in 10 years
+    commands.set('regularCommands',"printAddOnSettings",printAddonSettings);
     //slightly changed version of this: http://stackoverflow.com/a/1960049, so it saves a hashmap rather than just a array
     settings = new function() {
         var cookie = $.cookie(cookieName),
@@ -77,9 +78,6 @@ function loadSettingsLoader(){
 }
 var settings;
 
-function loadSettingsLoaderCommand(){
-    commands.set('regularCommands',"printAddOnSettings",printAddonSettings);
-}
 
 function printAddonSettings(){
     var output ="",
@@ -89,6 +87,3 @@ function printAddonSettings(){
     }
     addMessage('', output, '', 'hashtext');
 }
-//settings need to be loaded first
-beforeConnectFunctions.splice(0,0,loadSettingsLoader);
-beforeConnectFunctions.push(loadSettingsLoaderCommand);

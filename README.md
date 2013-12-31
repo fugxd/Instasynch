@@ -50,8 +50,8 @@ Click <a href="/install.gif">here</a> for Chrome example.
 Changes
 ------------
 <pre>
-• Added <code>'history<code>
-• Added <code>~Timestamp<code>
+• Added <code><a href="#History">History</a><code>
+• Added <code><a href="#Timestamp">Timestamp</a><code>
 </pre>
 
 <pre>
@@ -191,6 +191,11 @@ To browse a playlist simply paste the playlist link into the input field.
 
 Click <a href="General Additions/Youtube Search/youtubesearchexample.gif" >here</a> for the example.
 
+History
+------------------
+
+Shows the last 9 Videos on the <a href="#youtube-search">YouTube Search</a> panel.
+
 Notifications
 -------------
 
@@ -203,6 +208,11 @@ Login-Off Messages
 ------------------
 
 Messages can be recieved when a user logs in or off. To toggle the option use <code>~LogInOffMessages</code>
+
+Timestamp
+------------------
+
+Timestamp added to each message. To turn off use <code>~LogInOffMessages</code>
 
 Command Flood Protect
 ---------------------
@@ -243,6 +253,7 @@ To clear all the messages from the chat use the command <code>'clearChat</code>.
 
 Export Playlist Command
 -----------------------
+<b>Deprecated used $exportPlaylist with postvenge</b>
 
 To export all the videos in the playlist use the command <code>'exportPlaylist</code>.
 A popup with all the links will open. Just copy them and close it.

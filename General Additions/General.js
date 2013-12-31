@@ -25,6 +25,12 @@
 function loadGeneralStuff(){
     //get Username
     thisUsername = $.cookie('username');
+    addMessage('', '<strong>Scripts loaded. Recent changes:<br>'+
+                    '&bull; \'Shuffle: shuffles a wall or the playlist <br>'+
+                    '&bull; \'History: shows the last 9 videos <br>'+
+                    '&bull; Timestamps: (turn off with ~Timestamp) <br>'+
+                    '&bull; YouTube Search: type the search term into the add video field <br>'+
+                    '&bull; Notifications: the favicon on the browser tab will change when someone says your name like @username</strong>','' ,'hashtext'); 
 }
 function getActiveVideoIndex(){
     return $('.active').index();
