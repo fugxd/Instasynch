@@ -66,14 +66,12 @@ function loadBigPlaylist() {
                 $('<tr>', {'data':{info: vidinfo.info}}).append(
                     $('<td>').append(
                         $('<a>',{'href':vidlink,'target':'_blank'}).append(
-                            $('<img>',{'src':vidinfo.info.thumbnail}).css('width','40px')
+                            $('<img>',{'src':vidinfo.info.thumbnail}).css('width','45px')
                         )
-                    )
+                    ).css('padding','0px')
                 ).append(
                     $('<td>').append(
-                        $('<div>',{'title':vidinfo.title}).text(((vidinfo.title.length>100)?vidinfo.title.substring(0,100)+"...":vidinfo.title)).css('overflow','hidden').css('text-overflow','ellipsis').css('max-width','350px')
-                    ).append(
-                        $('<div>').html(secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('float','right').css('text-align','right')
+                        $('<div>',{'title':vidinfo.title}).text(((vidinfo.title.length>100)?vidinfo.title.substring(0,100)+"...":vidinfo.title)).css('overflow','hidden')
                     ).on('click', function() {
                             if (isLeader) {
                                 sendcmd('play', {info: $(this).parent().data('info')});
@@ -83,6 +81,8 @@ function loadBigPlaylist() {
                                 }
                         }
                     ).css('cursor','pointer')
+                ).append(
+                    $('<td>').html(secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align','right')
                 ).append(
                     $('<td>').append(removeBtn)
                 )
