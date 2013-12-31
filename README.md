@@ -51,9 +51,9 @@ Click <a href="/install.gif">here</a> for Chrome example.
 Changes
 ------------
 <pre>
-• Added <code><a href="#Shuffle">History</a><code>
-• Added <code><a href="#History">History</a><code>
-• Added <code><a href="#Timestamp">Timestamp</a><code>
+• Added <a href="#Shuffle">Shuffle</a>
+• Added <a href="#History">History</a>
+• Added <a href="#Timestamp">Timestamp</a>
 </pre>
 
 <pre>
