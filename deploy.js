@@ -3050,23 +3050,19 @@ function loadBigPlaylist() {
         addVideo = function addVideo(vidinfo) {
             playlist.push({info: vidinfo.info, title: vidinfo.title, addedby: vidinfo.addedby, duration: vidinfo.duration});
 
-            var vidlink = '';
+            var vidurl = '',
+                vidicon = '';
             if (vidinfo.info.provider === 'youtube') {
-                vidlink = 'http://www.youtube.com/watch?v=' + vidinfo.info.id;
+                vidurl = 'http://www.youtube.com/watch?v=' + vidinfo.info.id;
+                vidicon = 'https://www.youtube.com/favicon.ico';
             } else if (vidinfo.info.provider === 'vimeo') {
-                vidlink = 'http://vimeo.com/' + vidinfo.info.id;
-            } else if (vidinfo.info.provider === 'twitch') {
-                if (vidinfo.info.mediaType === 'stream')
-                    vidlink = 'http://twitch.tv/' + vidinfo.info.channel;
-            }        
-            var expand = $('<div/>', {
-                'class': 'expand'
-            }).append($('<a/>', {
-                'href': vidlink,
-                'target': '_blank'
-            }).append($('<img/>', {
-                'src': '/images/expand.png'
-            })));
+                vidurl = 'http://vimeo.com/' + vidinfo.info.id;
+                vidicon = 'https://vimeo.com/favicon.ico';
+            } else if (vidinfo.info.provider === 'twitch' && vidinfo.info.mediaType === 'stream') {
+                vidurl = 'http://twitch.tv/' + vidinfo.info.channel;
+                vidicon = ''; // no need for icon, thumbnail for twitch says 'twitch.tv'
+            }
+
             var removeBtn = $('<div/>', {
                 'class': 'removeBtn x',
                 'click': function () {
@@ -3078,10 +3074,12 @@ function loadBigPlaylist() {
             $('#tablePlaylistBody').append(
                 $('<tr>', {'data':{info: vidinfo.info}}).append(
                     $('<td>').append(
-                        $('<a>',{'href':vidlink,'target':'_blank'}).append(
+                        $('<a>',{'href':vidurl,'target':'_blank'}).append(
                             $('<img>',{'src':vidinfo.info.thumbnail}).css('width','45px')
+                        ).append( // overlay icon for youtube or vimeo, bottom right
+                            $('<img>',{'src':vidicon}).css('width','16').css('position','absolute').css('right','0px').css('bottom','0px')
                         )
-                    ).css('padding','0px')
+                    ).css('padding','0px').css('position','relative')
                 ).append(
                     $('<td>').append(
                         $('<div>',{'title':vidinfo.title}).text(((vidinfo.title.length>100)?vidinfo.title.substring(0,100)+"...":vidinfo.title)).css('overflow','hidden')
@@ -3097,7 +3095,7 @@ function loadBigPlaylist() {
                 ).append(
                     $('<td>').html(secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align','right')
                 ).append(
-                    $('<td>').append(removeBtn)
+                    $('<td>').append(removeBtn).append($('<br>'))
                 )
             );
             totalTime += vidinfo.duration;
