@@ -25,6 +25,7 @@ function loadPriorityScripts(){
     loadGeneralStuff();
     loadCommandLoader();
     loadSettingsLoader();
+    loadBigPlaylist();
 }
 
 beforeConnectFunctions.splice(0,0,loadPriorityScripts);

@@ -19,7 +19,7 @@
 
 function loadPlayMessages(){
     //load settings
-    playMessages = settings.get('playMessages','false');
+    playMessages = settings.get('playMessages','true');
     
     //add the command
     commands.set('addOnSettings',"playMessages",togglePlayMessages);
@@ -38,7 +38,7 @@ function loadPlayMessages(){
     };
 }
 
-var playMessages = false;
+var playMessages = true;
 
 function togglePlayMessages(){
     playMessages = !playMessages;

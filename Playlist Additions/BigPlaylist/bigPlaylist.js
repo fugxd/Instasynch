@@ -20,7 +20,7 @@
 */
 
 function loadBigPlaylist() {
-    bigPlaylist = settings.get('bigPlaylist','false');
+    bigPlaylist = settings.get('bigPlaylist','true');
     commands.set('addOnSettings','bigPlaylist',toggleBigPlaylist);
     if (bigPlaylist) {
         // change playlist to table based
@@ -71,7 +71,7 @@ function loadBigPlaylist() {
                     )
                 ).append(
                     $('<td>').append(
-                        $('<div>',{'title':vidinfo.title}).text(vidinfo.title).css('overflow','hidden').css('text-overflow','ellipsis').css('max-width','350px')
+                        $('<div>',{'title':vidinfo.title}).text(((vidinfo.title.length>100)?vidinfo.title.substring(0,100)+"...":vidinfo.title)).css('overflow','hidden').css('text-overflow','ellipsis').css('max-width','350px')
                     ).append(
                         $('<div>').html(secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('float','right').css('text-align','right')
                     ).on('click', function() {
@@ -142,11 +142,10 @@ function loadBigPlaylist() {
     }
 }
 
-var bigPlaylist = false;
+var bigPlaylist = true;
 
 function toggleBigPlaylist(){
     bigPlaylist = !bigPlaylist;
     settings.set('bigPlaylist',bigPlaylist);
+    addMessage('','This setting requires a reload of the Page.','','hashtext');
 }
-
-beforeConnectFunctions.push(loadBigPlaylist);
