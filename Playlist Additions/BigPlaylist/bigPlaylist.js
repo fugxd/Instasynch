@@ -1,7 +1,7 @@
 /*
     <InstaSynch - Watch Videos with friends.>
     Copyright (C) 2013  InstaSynch, original code
-    Copyright (C) 2013 fugXD, modification
+    Copyright (C) 2013  fugXD, Bibbytube modification
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,8 +31,36 @@ function loadBigPlaylist() {
         $('#tablePlaylist').append(
             $('<tbody>',{'id':'tablePlaylistBody'})
         );
+        var oldMakeLeader = makeLeader,
+            oldIsLeader;
+        makeLeader = function makeLeader(userId){
+            oldIsLeader = window.isLeader;
+            oldMakeLeader(userId);
+            //InstaSynch core.js, version 0.9.7
+            if (userId === window.userInfo.id)
+            {
+                $( "#tablePlaylistBody" ).sortable(
+                {
+                    update : function (event, ui){
+                                sendcmd('move', {info: ui.item.data("info"), position: ui.item.index()});
+                                $( "#tablePlaylistBody" ).sortable( "cancel" );
+                             },
+                     start: function(event,ui)
+                     {
+                         //Prevents click event from triggering when sorting videos
+                         $("#tablePlaylistBody").addClass('noclick');
+                     }
+                });
+                $("#tablePlaylistBody").sortable( "enable" );
+            }else{
+                if(oldIsLeader){
+                    $("#tablePlaylistBody").sortable( "disable" );
+                }
+            }
+        }
+        
 
-        // override functions from instasynchs io.js, version 0.9.7
+        // override functions from InstaSynch's io.js, version 0.9.7
         // overrides addVideo, removeVideo, moveVideo and playVideo
         addVideo = function addVideo(vidinfo) {
             playlist.push({info: vidinfo.info, title: vidinfo.title, addedby: vidinfo.addedby, duration: vidinfo.duration});
@@ -71,12 +99,20 @@ function loadBigPlaylist() {
                     $('<td>').append(
                         $('<div>',{'title':vidinfo.title}).text(((vidinfo.title.length>100)?vidinfo.title.substring(0,100)+"...":vidinfo.title)).css('overflow','hidden')
                     ).on('click', function() {
-                            if (isLeader) {
-                                sendcmd('play', {info: $(this).parent().data('info')});
-                            } else {
-                                    $('#cin').val($('#cin').val() + getVideoIndex($(this).parent().data('info')) + ' ');
-                                    $('#cin').focus();
+                            //InstaSynch io.js, version 0.9.7
+                            if ($("#tablePlaylistBody").hasClass("noclick"))
+                            {
+                                $("#tablePlaylistBody").removeClass('noclick');
+                            }
+                            else
+                            {
+                                if (isLeader) {
+                                    sendcmd('play', {info: $(this).parent().data('info')});
+                                } else {
+                                        $('#cin').val($('#cin').val() + getVideoIndex($(this).parent().data('info')) + ' ');
+                                        $('#cin').focus();
                                 }
+                            }
                         }
                     ).css('cursor','pointer')
                 ).append(
