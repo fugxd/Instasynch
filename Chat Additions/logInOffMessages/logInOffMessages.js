@@ -62,4 +62,4 @@ function toggleLogInOffMessages(){
     settings.set('logInOffMessages',logInOffMessages);
 }
 
-afterConnectFunctions.push(loadLogInOffMessages);
+postConnectFunctions.push(loadLogInOffMessages);

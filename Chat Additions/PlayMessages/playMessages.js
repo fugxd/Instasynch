@@ -45,4 +45,4 @@ function togglePlayMessages(){
     settings.set('playMessages',playMessages);
 }
 
-afterConnectFunctions.push(loadPlayMessages);
+postConnectFunctions.push(loadPlayMessages);

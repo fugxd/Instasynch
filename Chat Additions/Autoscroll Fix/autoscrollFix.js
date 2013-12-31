@@ -77,4 +77,4 @@ function loadAutoscrollFix(){
 }
 
 //now added oficially on InstaSynch
-//afterConnectFunctions.push(loadAutoscrollFix);
+//postConnectFunctions.push(loadAutoscrollFix);

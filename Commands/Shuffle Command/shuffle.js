@@ -44,4 +44,4 @@ function shuffle(params){
 }
 
 
-beforeConnectFunctions.push(loadShuffleCommand);
+preConnectFunctions.push(loadShuffleCommand);

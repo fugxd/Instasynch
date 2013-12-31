@@ -47,4 +47,4 @@ function purgeTooLong(params){
     }
 }
 
-beforeConnectFunctions.push(loadPurgeTooLongCommand);
+preConnectFunctions.push(loadPurgeTooLongCommand);

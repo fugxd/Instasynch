@@ -47,4 +47,4 @@ function loadCommandFloodProtect(){
 var sendcmdReady = true,
     commandCache = [];
     
-beforeConnectFunctions.push(loadCommandFloodProtect);
+preConnectFunctions.push(loadCommandFloodProtect);

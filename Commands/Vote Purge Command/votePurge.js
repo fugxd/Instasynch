@@ -46,4 +46,4 @@ function votePurge(params)
 	sendcmd("poll-create", poll);
 }
 
-beforeConnectFunctions.push(loadVotePurgeCommand);
+preConnectFunctions.push(loadVotePurgeCommand);

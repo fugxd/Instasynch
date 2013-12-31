@@ -28,4 +28,4 @@ function loadPriorityScripts(){
     loadBigPlaylist();
 }
 
-beforeConnectFunctions.splice(0,0,loadPriorityScripts);
+preConnectFunctions.splice(0,0,loadPriorityScripts);

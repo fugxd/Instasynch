@@ -92,4 +92,4 @@ function toggleNotify(){
     }
 }
 
-beforeConnectFunctions.push(loadNameNotification);
+preConnectFunctions.push(loadNameNotification);

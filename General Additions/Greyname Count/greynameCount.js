@@ -46,4 +46,4 @@ function setViewerCount(){
     $('#viewercount').html(users.length-greynameCount + '/' +greynameCount);
 }
 
-beforeConnectFunctions.push(loadGreynameCount);
+preConnectFunctions.push(loadGreynameCount);

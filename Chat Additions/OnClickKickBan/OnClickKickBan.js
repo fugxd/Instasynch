@@ -134,4 +134,4 @@ function loadOnClickKickBan(){
     });
 }
 
-afterConnectFunctions.push(loadOnClickKickBan);
+postConnectFunctions.push(loadOnClickKickBan);

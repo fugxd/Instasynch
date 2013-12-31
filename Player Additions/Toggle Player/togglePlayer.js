@@ -69,4 +69,4 @@ function togglePlayer(){
 
 var playerActive = true;
 
-afterConnectFunctions.push(loadTogglePlayer);
+postConnectFunctions.push(loadTogglePlayer);

@@ -29,4 +29,4 @@ function skip(){
 	sendcmd("skip", null);
 }
 
-beforeConnectFunctions.push(loadSkipCommand);
+preConnectFunctions.push(loadSkipCommand);

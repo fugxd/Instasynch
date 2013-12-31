@@ -29,4 +29,4 @@ function loadLeaderSeal(){
     };
 }
 
-beforeConnectFunctions.push(loadLeaderSeal);
+preConnectFunctions.push(loadLeaderSeal);

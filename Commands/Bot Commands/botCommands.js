@@ -56,4 +56,4 @@ function loadBotCommands(){
      commands.set('regularCommands',"$rustle ",emptyFunc);
 }
 
-beforeConnectFunctions.push(loadBotCommands);
+preConnectFunctions.push(loadBotCommands);

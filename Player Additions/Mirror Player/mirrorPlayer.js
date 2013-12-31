@@ -93,4 +93,4 @@ function toggleMirrorPlayer(){
     isPlayerMirrored = !isPlayerMirrored;
 }
 
-afterConnectFunctions.push(loadMirrorPlayer);
+postConnectFunctions.push(loadMirrorPlayer);

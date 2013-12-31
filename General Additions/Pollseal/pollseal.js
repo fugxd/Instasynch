@@ -31,4 +31,4 @@ function loadPollSeal(){
 	$(".st-poll").css( "background-position", "center");
 }
 
-beforeConnectFunctions.push(loadPollSeal);
+preConnectFunctions.push(loadPollSeal);

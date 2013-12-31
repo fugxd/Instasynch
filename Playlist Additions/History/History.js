@@ -68,5 +68,5 @@ function closeResults(){
 }
 				
 var history = [];
-beforeConnectFunctions.push(loadHistory);
+preConnectFunctions.push(loadHistory);
 

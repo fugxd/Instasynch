@@ -320,4 +320,4 @@ var filterTags = true,
 };
 
 
-beforeConnectFunctions.push(loadMessageFilter);
+preConnectFunctions.push(loadMessageFilter);

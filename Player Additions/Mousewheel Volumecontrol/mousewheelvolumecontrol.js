@@ -131,4 +131,4 @@ function setVol(){
     }
 }
 
-beforeConnectFunctions.push(loadMouseWheelVolumecontrol);
+preConnectFunctions.push(loadMouseWheelVolumecontrol);

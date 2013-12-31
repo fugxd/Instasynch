@@ -71,4 +71,4 @@ function loadDescription(){
 }
  
  
-beforeConnectFunctions.push(loadDescription);
+preConnectFunctions.push(loadDescription);

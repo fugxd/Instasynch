@@ -114,4 +114,4 @@ function printMyWallCounter(){
     addMessage('', output, '', 'hashtext');
 }
 
-afterConnectFunctions.push(loadWallCounter);
+postConnectFunctions.push(loadWallCounter);

@@ -53,4 +53,4 @@ function removeLast(params){
 		
 }
 		
-beforeConnectFunctions.push(loadRemoveLast);
+preConnectFunctions.push(loadRemoveLast);

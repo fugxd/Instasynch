@@ -32,4 +32,4 @@ function clearChat(){
 }
 
 
-beforeConnectFunctions.push(loadClearChatCommand);
+preConnectFunctions.push(loadClearChatCommand);

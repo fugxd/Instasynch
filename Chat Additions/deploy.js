@@ -1,5 +1,5 @@
-var afterConnectFunctions = [],
-    beforeConnectFunctions = [],
+var preConnectFunctions = [],
+    postConnectFunctions = [],
     scriptErrors = [];
 function executeFunctions(funcArray){
     var i;
@@ -12,16 +12,16 @@ function executeFunctions(funcArray){
         }
     }
 }
-function afterConnect(){
+function postConnect(){
 	if (messages < 4) {
-	    setTimeout(function () {afterConnect();}, 100);
+	    setTimeout(function () {postConnect();}, 100);
 	    return;
 	}
 
-    executeFunctions(afterConnectFunctions);
+    executeFunctions(postConnectFunctions);
 }
-function beforeConnect(){
-    executeFunctions(beforeConnectFunctions);
+function preConnect(){
+    executeFunctions(preConnectFunctions);
 }
 //-----------------start autocomplete.js-----------------
 /*
@@ -48,8 +48,8 @@ function beforeConnect(){
 */
 
 function loadAutoComplete() {
-    if(afterConnectFunctions.lastIndexOf(loadAutoComplete) != afterConnectFunctions.length-1){
-        afterConnectFunctions.push(loadAutoComplete);
+    if(postConnectFunctions.lastIndexOf(loadAutoComplete) != postConnectFunctions.length-1){
+        postConnectFunctions.push(loadAutoComplete);
         return;
     }
     //load settings
@@ -220,7 +220,7 @@ function toggleNamesAutocomplete(){
     settings.set('autocompleteNames',autocompleteNames);
 }
 
-afterConnectFunctions.push(loadAutoComplete);
+postConnectFunctions.push(loadAutoComplete);
 //----------------- end  autocomplete.js-----------------
 //-----------------start autoscrollFix.js-----------------
 /*
@@ -302,7 +302,7 @@ function loadAutoscrollFix(){
 }
 
 //now added oficially on InstaSynch
-//afterConnectFunctions.push(loadAutoscrollFix);
+//postConnectFunctions.push(loadAutoscrollFix);
 //----------------- end  autoscrollFix.js-----------------
 //-----------------start inputHistory.js-----------------
 /*
@@ -392,7 +392,7 @@ function setInputHistoryIndex(index){
 var inputHistory = [""],
     inputHistoryIndex = 0;
 
-beforeConnectFunctions.push(loadInputHistory);
+preConnectFunctions.push(loadInputHistory);
 //----------------- end  inputHistory.js-----------------
 //-----------------start logInOffMessages.js-----------------
 /*
@@ -459,7 +459,7 @@ function toggleLogInOffMessages(){
     settings.set('logInOffMessages',logInOffMessages);
 }
 
-afterConnectFunctions.push(loadLogInOffMessages);
+postConnectFunctions.push(loadLogInOffMessages);
 //----------------- end  logInOffMessages.js-----------------
 //-----------------start messagefilter.js-----------------
 /*
@@ -784,7 +784,7 @@ var filterTags = true,
 };
 
 
-beforeConnectFunctions.push(loadMessageFilter);
+preConnectFunctions.push(loadMessageFilter);
 //----------------- end  messagefilter.js-----------------
 //-----------------start modSpy.js-----------------
 /*
@@ -869,7 +869,7 @@ function toggleModSpy(){
 var modSpy = false,
 	bumpCheck = false;
 
-beforeConnectFunctions.push(loadModSpy);
+preConnectFunctions.push(loadModSpy);
 //----------------- end  modSpy.js-----------------
 //-----------------start nameAutocomplete.js-----------------
 /*
@@ -952,7 +952,7 @@ function loadNameAutocomplete() {
 
 }
 
-beforeConnectFunctions.push(loadNameAutocomplete);
+preConnectFunctions.push(loadNameAutocomplete);
 //----------------- end  nameAutocomplete.js-----------------
 //-----------------start nameNotification.js-----------------
 /*
@@ -1049,7 +1049,7 @@ function toggleNotify(){
     }
 }
 
-beforeConnectFunctions.push(loadNameNotification);
+preConnectFunctions.push(loadNameNotification);
 //----------------- end  nameNotification.js-----------------
 //-----------------start OnClickKickBan.js-----------------
 /*
@@ -1188,7 +1188,7 @@ function loadOnClickKickBan(){
     });
 }
 
-afterConnectFunctions.push(loadOnClickKickBan);
+postConnectFunctions.push(loadOnClickKickBan);
 //----------------- end  OnClickKickBan.js-----------------
 //-----------------start playMessages.js-----------------
 /*
@@ -1238,7 +1238,7 @@ function togglePlayMessages(){
     settings.set('playMessages',playMessages);
 }
 
-afterConnectFunctions.push(loadPlayMessages);
+postConnectFunctions.push(loadPlayMessages);
 //----------------- end  playMessages.js-----------------
 //-----------------start timestamp.js-----------------
 /*
@@ -1301,7 +1301,7 @@ function toggleTimestamp(){
 }
 var addTimestamp = true;
 
-beforeConnectFunctions.push(loadTimestamp);
+preConnectFunctions.push(loadTimestamp);
 //----------------- end  timestamp.js-----------------
 //-----------------start botCommands.js-----------------
 /*
@@ -1362,7 +1362,7 @@ function loadBotCommands(){
      commands.set('regularCommands',"$rustle ",emptyFunc);
 }
 
-beforeConnectFunctions.push(loadBotCommands);
+preConnectFunctions.push(loadBotCommands);
 //----------------- end  botCommands.js-----------------
 //-----------------start bump.js-----------------
 /*
@@ -1415,7 +1415,7 @@ function bump(params){
 }
 
 
-beforeConnectFunctions.push(loadBumpCommand);
+preConnectFunctions.push(loadBumpCommand);
 //----------------- end  bump.js-----------------
 //-----------------start clearChat.js-----------------
 /*
@@ -1452,7 +1452,7 @@ function clearChat(){
 }
 
 
-beforeConnectFunctions.push(loadClearChatCommand);
+preConnectFunctions.push(loadClearChatCommand);
 //----------------- end  clearChat.js-----------------
 //-----------------start commandFloodProtect.js-----------------
 /*
@@ -1504,7 +1504,7 @@ function loadCommandFloodProtect(){
 var sendcmdReady = true,
     commandCache = [];
     
-beforeConnectFunctions.push(loadCommandFloodProtect);
+preConnectFunctions.push(loadCommandFloodProtect);
 //----------------- end  commandFloodProtect.js-----------------
 //-----------------start commandLoader.js-----------------
 /*
@@ -1668,7 +1668,7 @@ function purgeTooLong(params){
     }
 }
 
-beforeConnectFunctions.push(loadPurgeTooLongCommand);
+preConnectFunctions.push(loadPurgeTooLongCommand);
 //----------------- end  purgeTooLong.js-----------------
 //-----------------start removeLast.js-----------------
 /*
@@ -1726,7 +1726,7 @@ function removeLast(params){
 		
 }
 		
-beforeConnectFunctions.push(loadRemoveLast);
+preConnectFunctions.push(loadRemoveLast);
 //----------------- end  removeLast.js-----------------
 //-----------------start shuffle.js-----------------
 /*
@@ -1775,7 +1775,7 @@ function shuffle(params){
 }
 
 
-beforeConnectFunctions.push(loadShuffleCommand);
+preConnectFunctions.push(loadShuffleCommand);
 //----------------- end  shuffle.js-----------------
 //-----------------start skip.js-----------------
 /*
@@ -1809,7 +1809,7 @@ function skip(){
 	sendcmd("skip", null);
 }
 
-beforeConnectFunctions.push(loadSkipCommand);
+preConnectFunctions.push(loadSkipCommand);
 //----------------- end  skip.js-----------------
 //-----------------start trimWall.js-----------------
 /*
@@ -1883,7 +1883,7 @@ function trimWall(params){
     }
 }
 
-beforeConnectFunctions.push(loadTrimWallCommand);
+preConnectFunctions.push(loadTrimWallCommand);
 //----------------- end  trimWall.js-----------------
 //-----------------start votePurge.js-----------------
 /*
@@ -1934,7 +1934,7 @@ function votePurge(params)
 	sendcmd("poll-create", poll);
 }
 
-beforeConnectFunctions.push(loadVotePurgeCommand);
+preConnectFunctions.push(loadVotePurgeCommand);
 //----------------- end  votePurge.js-----------------
 //-----------------start description.js-----------------
 /*
@@ -2010,7 +2010,7 @@ function loadDescription(){
 }
  
  
-beforeConnectFunctions.push(loadDescription);
+preConnectFunctions.push(loadDescription);
 //----------------- end  description.js-----------------
 //-----------------start general.js-----------------
 /*
@@ -2219,7 +2219,7 @@ function setViewerCount(){
     $('#viewercount').html(users.length-greynameCount + '/' +greynameCount);
 }
 
-beforeConnectFunctions.push(loadGreynameCount);
+preConnectFunctions.push(loadGreynameCount);
 //----------------- end  greynameCount.js-----------------
 //-----------------start leaderseal.js-----------------
 /*
@@ -2253,7 +2253,7 @@ function loadLeaderSeal(){
     };
 }
 
-beforeConnectFunctions.push(loadLeaderSeal);
+preConnectFunctions.push(loadLeaderSeal);
 //----------------- end  leaderseal.js-----------------
 //-----------------start pollseal.js-----------------
 /*
@@ -2289,7 +2289,7 @@ function loadPollSeal(){
 	$(".st-poll").css( "background-position", "center");
 }
 
-beforeConnectFunctions.push(loadPollSeal);
+preConnectFunctions.push(loadPollSeal);
 //----------------- end  pollseal.js-----------------
 //-----------------start priorityLoad.js-----------------
 /*
@@ -2322,7 +2322,7 @@ function loadPriorityScripts(){
     loadBigPlaylist();
 }
 
-beforeConnectFunctions.splice(0,0,loadPriorityScripts);
+preConnectFunctions.splice(0,0,loadPriorityScripts);
 //----------------- end  priorityLoad.js-----------------
 //-----------------start settingsLoader.js-----------------
 /*
@@ -2798,7 +2798,7 @@ function toggleMirrorPlayer(){
     isPlayerMirrored = !isPlayerMirrored;
 }
 
-afterConnectFunctions.push(loadMirrorPlayer);
+postConnectFunctions.push(loadMirrorPlayer);
 //----------------- end  mirrorPlayer.js-----------------
 //-----------------start mousewheelVolumeControl.js-----------------
 /*
@@ -2934,7 +2934,7 @@ function setVol(){
     }
 }
 
-beforeConnectFunctions.push(loadMouseWheelVolumecontrol);
+preConnectFunctions.push(loadMouseWheelVolumecontrol);
 //----------------- end  mousewheelVolumeControl.js-----------------
 //-----------------start togglePlayer.js-----------------
 /*
@@ -3008,7 +3008,7 @@ function togglePlayer(){
 
 var playerActive = true;
 
-afterConnectFunctions.push(loadTogglePlayer);
+postConnectFunctions.push(loadTogglePlayer);
 //----------------- end  togglePlayer.js-----------------
 //-----------------start bigPlaylist.js-----------------
 /*
@@ -3204,7 +3204,7 @@ function exportPlaylist(){
     }
     window.prompt ("Copy to clipboard: Ctrl+C, Enter", output);
 }
-beforeConnectFunctions.push(loadExportPlaylist);
+preConnectFunctions.push(loadExportPlaylist);
 //----------------- end  ExportPlaylistCommand.js-----------------
 //-----------------start History.js-----------------
 /*
@@ -3277,7 +3277,7 @@ function closeResults(){
 }
 				
 var history = [];
-beforeConnectFunctions.push(loadHistory);
+preConnectFunctions.push(loadHistory);
 
 //----------------- end  History.js-----------------
 //-----------------start wallcounter.js-----------------
@@ -3397,7 +3397,7 @@ function printMyWallCounter(){
     addMessage('', output, '', 'hashtext');
 }
 
-afterConnectFunctions.push(loadWallCounter);
+postConnectFunctions.push(loadWallCounter);
 //----------------- end  wallcounter.js-----------------
 //-----------------start UrlParser.js-----------------
 
@@ -3544,5 +3544,5 @@ function parseUrl(URL){
 	};
 }
 //----------------- end  UrlParser.js-----------------
-beforeConnect();
-afterConnect();
+preConnect();
+postConnect();

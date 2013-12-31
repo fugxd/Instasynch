@@ -58,4 +58,4 @@ function toggleTimestamp(){
 }
 var addTimestamp = true;
 
-beforeConnectFunctions.push(loadTimestamp);
+preConnectFunctions.push(loadTimestamp);

@@ -78,4 +78,4 @@ function loadNameAutocomplete() {
 
 }
 
-beforeConnectFunctions.push(loadNameAutocomplete);
+preConnectFunctions.push(loadNameAutocomplete);

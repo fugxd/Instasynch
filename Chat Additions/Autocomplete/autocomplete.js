@@ -22,8 +22,8 @@
 */
 
 function loadAutoComplete() {
-    if(afterConnectFunctions.lastIndexOf(loadAutoComplete) != afterConnectFunctions.length-1){
-        afterConnectFunctions.push(loadAutoComplete);
+    if(postConnectFunctions.lastIndexOf(loadAutoComplete) != postConnectFunctions.length-1){
+        postConnectFunctions.push(loadAutoComplete);
         return;
     }
     //load settings
@@ -194,4 +194,4 @@ function toggleNamesAutocomplete(){
     settings.set('autocompleteNames',autocompleteNames);
 }
 
-afterConnectFunctions.push(loadAutoComplete);
+postConnectFunctions.push(loadAutoComplete);

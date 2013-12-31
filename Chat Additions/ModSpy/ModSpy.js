@@ -80,4 +80,4 @@ function toggleModSpy(){
 var modSpy = false,
 	bumpCheck = false;
 
-beforeConnectFunctions.push(loadModSpy);
+preConnectFunctions.push(loadModSpy);
