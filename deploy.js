@@ -13,7 +13,7 @@ function executeFunctions(funcArray){
     }
 }
 function afterConnect(){
-	if (messages < 3) {
+	if (messages < 4) {
 	    setTimeout(function () {afterConnect();}, 100);
 	    return;
 	}
@@ -2278,9 +2278,9 @@ beforeConnectFunctions.push(loadLeaderSeal);
 */
 
 function loadPollSeal(){
-	//$(".st-poll").css( "background", "url(https://raw.github.com/Bibbytube/Instasynch/tree/master/General%20Additions/Pollseal/RegularSeal.png) 0 0 #DFDFDF" );
-    //$(".st-poll").css( "background", "url(https://raw.github.com/Bibbytube/Instasynch/tree/master/General%20Additions/Pollseal/ChristmasSeal.png) 0 0 #DFDFDF" );
-    $(".st-poll").css( "background", "url(https://raw.github.com/Bibbytube/Instasynch/tree/master/General%20Additions/Pollseal/NewYearSeal.png) 0 0 #DFDFDF" );
+	//$(".st-poll").css( "background", "url(https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/Pollseal/RegularSeal.png) 0 0 #DFDFDF" );
+    //$(".st-poll").css( "background", "url(https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/Pollseal/ChristmasSeal.png) 0 0 #DFDFDF" );
+    $(".st-poll").css( "background", "url(https://raw.github.com/Bibbytube/Instasynch/master/General%20Additions/Pollseal/NewYearSeal.png) 0 0 #DFDFDF" );
 
 	$(".st-poll").css( "background-size", "auto 100%");
 	$(".st-poll").css( "background-repeat", "no-repeat");
