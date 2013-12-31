@@ -3044,10 +3044,13 @@ function loadBigPlaylist() {
         $('#tablePlaylist').append(
             $('<tbody>',{'id':'tablePlaylistBody'})
         );
-        var oldMakeLeader = makeLeader;
+        var oldMakeLeader = makeLeader,
+            oldIsLeader;
         makeLeader = function makeLeader(userId){
+            oldIsLeader = window.isLeader;
             oldMakeLeader(userId);
-            if(window.isLeader){
+            if (userId === window.userInfo.id)
+            {
                 $( "#tablePlaylistBody" ).sortable(
                 {
                     update : function (event, ui){
@@ -3062,9 +3065,12 @@ function loadBigPlaylist() {
                 });
                 $("#tablePlaylistBody").sortable( "enable" );
             }else{
-                $("#tablePlaylistBody").sortable( "disable" );
+                if(oldIsLeader){
+                    $("#tablePlaylistBody").sortable( "disable" );
+                }
             }
         }
+        
 
         // override functions from instasynchs io.js, version 0.9.7
         // overrides addVideo, removeVideo, moveVideo and playVideo
