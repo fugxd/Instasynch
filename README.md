@@ -51,6 +51,8 @@ Click <a href="/install.gif">here</a> for Chrome example.
 Changes
 ------------
 <pre>
+• Added <a href="#playmessages">PlayMessages</a>
+• Added <a href="#bigplaylist">BigPlaylist</a>
 • Added <a href="#shuffle">Shuffle</a>
 • Added <a href="#history">History</a>
 • Added <a href="#timestamp">Timestamp</a>
@@ -202,6 +204,13 @@ Shuffle
 ------------------
 
 Shuffles the current playlist or the wall of the specified user.
+
+BigPlaylist
+------------------
+
+Replacement for the old playlist that features thumbnails and a indicator for youtube/vimeo a
+
+Click <a href="Playlist Additions/BigPlaylist/bigplaylistexample.gif" >here</a> for the example.
 
 Notifications
 -------------

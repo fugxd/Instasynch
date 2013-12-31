@@ -27,7 +27,7 @@ function loadGeneralStuff(){
     thisUsername = $.cookie('username');
     addMessage('', '<strong>Scripts loaded. Recent changes:<br>'+
                     '&bull; PlayMessages (turn off with ~PlayMessages) <br>'+
-                    '&bull; BigPlaylist: bigger playlist with thumbnails (turn off with ~BigPlaylist thank fugXD) <br>'+
+                    '&bull; BigPlaylist: bigger playlist with thumbnails (turn off with ~BigPlaylist, also thanks fugXD) <br>'+
                     '&bull; \'Shuffle: shuffles a wall or the playlist <br>'+
                     '&bull; \'History: shows the last 9 videos <br>'+
                     '&bull; Timestamps: (turn off with ~Timestamp) <br>'+
