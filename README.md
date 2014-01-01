@@ -35,7 +35,9 @@ Command List
 ~NSFWEmotes
 ~ModSpy
 ~LogInOffMessages
-~Timestamp</code>
+~Timestamp
+~BigPlaylist
+~PlayMessages</code>
 </pre>
 
 
