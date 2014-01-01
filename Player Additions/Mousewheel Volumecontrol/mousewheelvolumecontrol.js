@@ -4,6 +4,7 @@
 
     <Bibbytube - Modified InstaSynch client code>
     Copyright (C) 2013  Bibbytube
+    Copyright (C) 2014  fugXD, filtering duplicate events, scroll speed dependent volume adjustments
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -21,6 +22,8 @@
     http://opensource.org/licenses/GPL-3.0
 */
 
+var previousVolumeScrollTime = new Date().getTime(); // used to measure speed of scrolling
+
 function loadMouseWheelVolumecontrol(){
 
     autocompleteBotCommands = settings.get('mouseWheelVolumecontrol','true');
@@ -30,16 +33,21 @@ function loadMouseWheelVolumecontrol(){
     //prevent the site from scrolling while over the player
     function preventScroll(event)
     {
-        if(mouseWheelVolumecontrol&&mouserOverPlayer){
+        if(mouseWheelVolumecontrol && mouserOverPlayer){
             event.preventDefault();
             event.returnValue=!mouserOverPlayer;
-            if(event.wheelDeltaY < 0){
-                globalVolume-=2;
-            }else if(event.wheelDeltaY > 0){
-                globalVolume+=2;
+            
+            var currentVolumeScrollTime = new Date().getTime();
+            var scrollDirection = 1.0*(event.wheelDeltaY/Math.abs(event.wheelDeltaY)); // -1 or 1 depending on direction, *1.0 forces float div
+            
+            if ((currentVolumeScrollTime - previousVolumeScrollTime) < 10) {
+                // discard near simultaneous events, to get rougly one event per 'scroll'
+            } else if ((currentVolumeScrollTime - previousVolumeScrollTime) > 200) { // 'slow' scrolling
+                adjustVolume(1.0*scrollDirection);
+            } else {
+                adjustVolume(6.66*scrollDirection); // faster scrolling
             }
-            globalVolume = (globalVolume<0)?0:(globalVolume>100)?100:globalVolume;
-            setVol();
+            previousVolumeScrollTime = currentVolumeScrollTime;
         }
     }
     window.onmousewheel=document.onmousewheel=preventScroll;
@@ -113,21 +121,32 @@ function toggleMouseWheelVolumecontrol(){
 }
 function initGlobalVolume(){
     if(isPlayerRead){
-        setVol();
+        setVol(globalVolume);
     }else{
         if(oldProvider === 'youtube'){
-            globalVolume = $('#media').tubeplayer('volume');
+            setVol($('#media').tubeplayer('volume'));
         }else if(oldProvider === 'vimeo'){
-            $f($('#vimeo')[0]).api('getVolume',function(vol){globalVolume = vol*100.0;});
+            $f($('#vimeo')[0]).api('getVolume',function(vol){setVol(vol*100.0);});
         }   
         isPlayerRead = true;
     }
 }
-function setVol(){
+
+// Increments or decrements the volume. This is to keep other code from having to know about globalVolume. Argument is desired change in volume.
+function adjustVolume(deltaVolume){
+    setVol(globalVolume + deltaVolume);
+}
+
+// Set volume to specific value, argument is number 0-100
+function setVol(volume){ 
+    // clamp input value
+    volume = Math.max(0,volume);
+    volume = Math.min(100,volume);
+    globalVolume = volume;
     if(oldProvider === 'youtube'){
-        $('#media').tubeplayer('volume',globalVolume);
+        $('#media').tubeplayer('volume',Math.round(volume));
     }else if(oldProvider === 'vimeo'){
-        $f($('#vimeo')[0]).api('setVolume',globalVolume/100.0);
+        $f($('#vimeo')[0]).api('setVolume',volume/100.0);
     }
 }
 
