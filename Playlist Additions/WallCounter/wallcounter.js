@@ -24,9 +24,9 @@
 
 function loadWallCounter(){
 
-    var oldAddVideo = addVideo,
-        oldRemoveVideo = removeVideo,
-        oldAddMessage = addMessage,
+    var oldAddVideo = window.addVideo,
+        //oldRemoveVideo = removeVideo,
+        oldAddMessage = window.addMessage,
         i,
         video,
         value;
@@ -37,12 +37,12 @@ function loadWallCounter(){
 
 
     //overwrite InstaSynch's addVideo
-    addVideo = function addVideo(vidinfo) {
+    window.addVideo = function(vidinfo) {
         resetWallCounter();
         value = wallCounter[vidinfo.addedby];
         if (isBibbyRoom() && value >= 3600 && vidinfo.addedby === thisUsername){
             var output = "Watch out " + thisUsername + " ! You're being a faggot by adding more than 1 hour of videos !";
-            addMessage('',output,'','hashtext');
+            window.addMessage('',output,'','hashtext');
         }
         oldAddVideo(vidinfo);
     };
@@ -51,9 +51,9 @@ function loadWallCounter(){
      * Commented since this shit isnt working and I have no idea why
     */
     // //overwrite InstaSynch's removeVideo
-    // removeVideo = function removeVideo(vidinfo){
+    // window.removeVideo = function(vidinfo){
     //     var indexOfVid = getVideoIndex(vidinfo);
-    //     video = playlist[indexOfVid];
+    //     video = window.playlist[indexOfVid];
     //     value = wallCounter[video.addedby];
     //     value -= video.duration;
 
@@ -66,12 +66,13 @@ function loadWallCounter(){
     //     oldRemoveVideo(vidinfo);
     // };    
 
-    // addMessage = function addMessage(username, message, userstyle, textstyle) {
-    //     if(username === '' && message === 'Video added succesfully.'){
-    //         message +='WallCounter: ['+secondsToTime(wallCounter[thisUsername])+']';
-    //     }
-    //     oldAddMessage(username, message, userstyle, textstyle);
-    // };    
+    window.window.addMessage = function(username, message, userstyle, textstyle) {
+        if(username === '' && message === 'Video added succesfully.'){
+            resetWallCounter();
+            message +='WallCounter: ['+window.secondsToTime(wallCounter[thisUsername])+']';
+        }
+        oldAddMessage(username, message, userstyle, textstyle);
+    };    
 
     //init the wallcounter
     resetWallCounter();
@@ -81,8 +82,8 @@ var wallCounter = {};
 function resetWallCounter(){
     var video,value;
     wallCounter = {};
-    for(i = 0; i < playlist.length;i++){
-        video = playlist[i];
+    for(i = 0; i < window.playlist.length;i++){
+        video = window.playlist[i];
         value = wallCounter[video.addedby];
         value =(value||0) + video.duration;
         wallCounter[video.addedby] = value;
@@ -95,23 +96,23 @@ function printWallCounter(){
         key;
     for(key in wallCounter){
         if(wallCounter[key] > 3600){
-            output += "<span style='color:red'>["+key + ": "+secondsToTime(wallCounter[key])+"]</span> ";
+            output += "<span style='color:red'>["+key + ": "+window.secondsToTime(wallCounter[key])+"]</span> ";
         }else{
-            output += "["+key + ": "+secondsToTime(wallCounter[key])+"] ";
+            output += "["+key + ": "+window.secondsToTime(wallCounter[key])+"] ";
         }
     }
-    addMessage('', output, '', 'hashtext');
+    window.addMessage('', output, '', 'hashtext');
 }
 
 function printMyWallCounter(){   
     resetWallCounter();
     var output = "";
     if(wallCounter[thisUsername]){
-        output = "["+ thisUsername +" : "+ secondsToTime(wallCounter[thisUsername])+"]";
+        output = "["+ thisUsername +" : "+ window.secondsToTime(wallCounter[thisUsername])+"]";
     }else{
         output = "["+ thisUsername +" : 00:00]";
     }
-    addMessage('', output, '', 'hashtext');
+    window.addMessage('', output, '', 'hashtext');
 }
 
 postConnectFunctions.push(loadWallCounter);

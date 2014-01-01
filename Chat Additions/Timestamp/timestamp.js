@@ -29,13 +29,13 @@ function loadTimestamp(){
     //add the commands
     commands.set('addOnSettings',"Timestamp",toggleTimestamp);
 
-    var oldAddMessage = addMessage,
+    var oldAddMessage = window.addMessage,
         date,
         hours,
         minutes;
 
     //overwrite InstaSynch's addMessage function
-    addMessage = function addMessage(username, message, userstyle, textstyle) {
+    window.addMessage = function(username, message, userstyle, textstyle) {
         if(addTimestamp){
             date = new Date();
             minutes = date.getMinutes();

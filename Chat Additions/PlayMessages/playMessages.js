@@ -25,14 +25,16 @@ function loadPlayMessages(){
     commands.set('addOnSettings',"PlayMessages",togglePlayMessages);
     
     // Overwriting Adduser
-    var oldPlayVideo = playVideo;
+    var oldPlayVideo = window.playVideo,
+        indexOfVid,
+        title;
 
-    playVideo = function(vidinfo, time, playing) {
+    window.playVideo = function(vidinfo, time, playing) {
         // Only if blackname or mod
         if (playMessages){
-            indexOfVid = getVideoIndex(vidinfo);
-            title = ((playlist[indexOfVid].title.length>240)?playlist[indexOfVid].title.substring(0,240)+"...":playlist[indexOfVid].title);
-            addMessage('', 'Now playing: ' + title, '','hashtext'); 
+            indexOfVid = window.getVideoIndex(vidinfo); 
+            title = ((window.playlist[indexOfVid].title.length>240)?window.playlist[indexOfVid].title.substring(0,240)+"...":window.playlist[indexOfVid].title);
+            window.addMessage('', 'Now playing: ' + title, '','hashtext'); 
         }
         oldPlayVideo(vidinfo, time, playing);
     };

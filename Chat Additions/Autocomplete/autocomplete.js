@@ -45,7 +45,7 @@ function loadAutoComplete() {
     var i,
         emotes = (
             function () {
-                var arr = Object.keys($codes);
+                var arr = Object.keys(window.$codes);
                 for (i = 0; i < arr.length; i++) {
                     arr[i] = '/' + arr[i];
                 }
@@ -89,7 +89,7 @@ function loadAutoComplete() {
 
             if(partToComplete.length>0){
                 switch(partToComplete[0]){
-                    case '/': if(!autocompleteEmotes|| (lastIndex!==0 && !message[lastIndex-1].match(/\s/))) return;  break;
+                    case '/': if(!autocompleteEmotes|| (lastIndex!==0 && (!message[lastIndex-1].match(/\s/)&&!message[lastIndex-1].match(/\]/)))) return;  break;
                     case '\'': if(!autocompleteCommands || (lastIndex!==0 && !message[lastIndex-1].match(/\s/))) return; break;
                     case '[': if(!autocompleteTags) return; break;
                     case '~': if(!autocompleteAddonSettings|| (lastIndex!==0 && !message[lastIndex-1].match(/\s/))) return;  break; 

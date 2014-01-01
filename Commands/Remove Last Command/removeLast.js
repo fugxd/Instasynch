@@ -30,7 +30,7 @@ function loadRemoveLast(){
 // Remove the last video from the user 
 function removeLast(params){
     if(!params[1]){
-        addMessage('','No user specified: \'removeLast [user]','','hashtext');
+        window.addMessage('','No user specified: \'removeLast [user]','','hashtext');
         return;
     }
 	var user = params[1],
@@ -38,17 +38,17 @@ function removeLast(params){
     	i;
 
 	// Look for the user last added video
-    for (i = playlist.length - 1; i >= 0; i--) {
-        if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
+    for (i = window.playlist.length - 1; i >= 0; i--) {
+        if(window.playlist[i].addedby.toLowerCase() === user.toLowerCase()){
             removeIndex = i;
             break;
         }
     }
 	
 	if (removeIndex === -1){
-		addMessage('',"The user didn't add any video",'','hashtext');
+		window.addMessage('',"The user didn't add any video",'','hashtext');
 	}else{
-		sendcmd('remove', {info: playlist[removeIndex].info});
+		window.sendcmd('remove', {info: window.playlist[removeIndex].info});
 	}
 		
 }

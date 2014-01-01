@@ -36,18 +36,18 @@ function loadTogglePlayer(){
         setTimeout(togglePlayer,1500);
     }
 
-    var oldPlayVideo = playVideo;
-    playVideo = function playVideo(vidinfo, time, playing){
+    var oldPlayVideo = window.playVideo;
+    window.playVideo = function(vidinfo, time, playing){
         if(playerActive){
             oldPlayVideo(vidinfo, time, playing);
         }else{
             //copied from InstaSynch's playVideo
             var addedby = '',
                 title = '',
-                indexOfVid = getVideoIndex(vidinfo);
+                indexOfVid = window.getVideoIndex(vidinfo);
             if (indexOfVid > -1) {
-                title = playlist[indexOfVid].title;
-                addedby = playlist[indexOfVid].addedby;
+                title = window.playlist[indexOfVid].title;
+                addedby = window.playlist[indexOfVid].addedby;
                 $('.active').removeClass('active');
                 $($('#ulPlay').children('li')[indexOfVid]).addClass('active');
                 $('#vidTitle').html(title + '<div class=\'via\'> via ' + addedby + '</div>');
@@ -61,7 +61,7 @@ function togglePlayer(){
     if(playerActive){
         video.destroyPlayer();
     }else{
-        sendcmd('reload', null);
+        window.sendcmd('reload', null);
     }
     playerActive = !playerActive;
     settings.set('playerActive',playerActive);

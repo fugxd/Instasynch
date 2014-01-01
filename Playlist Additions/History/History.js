@@ -23,14 +23,14 @@
 
 function loadHistory(){
     commands.set('regularCommands',"history",printHistory);
-	var oldPlayVideo = playVideo;
-	playVideo = function(vidinfo, time, playing) {
+	var oldPlayVideo = window.playVideo;
+	window.playVideo = function(vidinfo, time, playing) {
 		oldPlayVideo(vidinfo,time,playing);
 		//Keep the last 9 videos
 		if (history.length === 9){
 			history.shift();	
 		}
-		history.push([vidinfo,playlist[getVideoIndex(vidinfo)].title]);
+		history.push([vidinfo,window.playlist[window.getVideoIndex(vidinfo)].title]);
 	};
 }
 

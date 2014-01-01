@@ -33,15 +33,15 @@ function loadMirrorPlayer(){
     //appening the class until we got our css files
     //http://stackoverflow.com/a/3434665
     var mirrorClass =".mirror { -moz-transform: scaleX(-1); /* Gecko */ -o-transform: scaleX(-1); /* Operah */ -webkit-transform: scaleX(-1); /* webkit */ transform: scaleX(-1); /* standard */ filter: FlipH; /* IE 6/7/8 */}",
-        oldPlayVideo = playVideo,
+        oldPlayVideo = window.playVideo,
         indexOfVid,
         title;
     $('<style>'+mirrorClass+'</style>').appendTo('body');
 
 
-    playVideo = function playVideo(vidinfo, time, playing) {
-        indexOfVid = getVideoIndex(vidinfo);
-        title = playlist[indexOfVid].title;
+    window.playVideo = function(vidinfo, time, playing) {
+        indexOfVid = window.getVideoIndex(vidinfo);
+        title = window.playlist[indexOfVid].title;
         if(containsMirrored(title)){
             if(!isPlayerMirrored){
                 toggleMirrorPlayer();
@@ -53,9 +53,9 @@ function loadMirrorPlayer(){
     };
 
     //checking the current video after loading the first time
-    if(playlist.length != 0){
+    if(window.playlist.length != 0){
         setTimeout(function(){
-            if(playlist && playlist[getActiveVideoIndex()] && containsMirrored(playlist[getActiveVideoIndex()].title)){
+            if(window.playlist && window.playlist[getActiveVideoIndex()] && containsMirrored(window.playlist[getActiveVideoIndex()].title)){
                 toggleMirrorPlayer();
             }
         },2500);

@@ -30,7 +30,7 @@ function loadModSpy(){
 
 	// Overwriting console.log
 	var oldLog = console.log, 
-		oldMoveVideo = moveVideo,
+		oldMoveVideo = window.moveVideo,
 		filterList = [
 			/^Resynch requested\.\./,
 			/cleaned the playlist/,
@@ -56,15 +56,15 @@ function loadModSpy(){
 					message = message.replace("moved","bumped");
 					bumpCheck = false;
 				}
-				addMessage('', message, '','hashtext');   
+				window.addMessage('', message, '','hashtext');   
 			}
 		}
 		oldLog.apply(console,arguments);
 	};
 
 	// Overwriting moveVideo to differentiate bump and move
-	moveVideo = function(vidinfo, position) {
-		var oldPosition = getVideoIndex(vidinfo);
+	window.moveVideo = function(vidinfo, position) {
+		var oldPosition = window.getVideoIndex(vidinfo);
 		oldMoveVideo(vidinfo,position);
 		
 		if ( Math.abs(getActiveVideoIndex()-position) <= 10 && Math.abs(oldPosition-position) > 10){ // "It's a bump ! " - Amiral Ackbar

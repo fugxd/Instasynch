@@ -33,14 +33,14 @@ function loadMessageFilter() {
 
     //init
     if(NSFWEmotes){
-        $codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
-        $codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        window.$codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        window.$codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
     }
-    var oldLinkify = linkify,
-        oldAddMessage = addMessage,
-        oldCreatePoll = createPoll;
+    var oldLinkify = window.linkify,
+        oldAddMessage = window.addMessage,
+        oldCreatePoll = window.createPoll;
 
-    linkify = function linkify(str, buildHashtagUrl, includeW3, target) {
+    window.linkify = function(str, buildHashtagUrl, includeW3, target) {
         var emotes =[],
             index = 0;
         //remove image urls so they wont get linkified
@@ -53,7 +53,7 @@ function loadMessageFilter() {
 
 
     //overwrite InstaSynch's addMessage function
-    addMessage = function addMessage(username, message, userstyle, textstyle) {
+    window.addMessage = function(username, message, userstyle, textstyle) {
         var isChatMessage = true;
         if(username === ''){
             isChatMessage = false;
@@ -62,9 +62,9 @@ function loadMessageFilter() {
         //continue with InstaSynch's addMessage function
     };
 
-    createPoll = function createPoll(poll){
+    window.createPoll = function(poll){
         var i;
-        poll.title = linkify(parseMessage(poll.title,false), false, true);
+        poll.title = window.linkify(parseMessage(poll.title,false), false, true);
         for(i = 0; i< poll.options.length;i++){
             poll.options[i].option = parseMessage(poll.options[i].option,false);
         }
@@ -78,14 +78,14 @@ function toggleTags(){
 }
 function toggleNSFWEmotes(){
     if(!NSFWEmotes){
-        $codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
-        $codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        window.$codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        window.$codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
         autocompleteData.push('/boobies');
         autocompleteData.push('/meatspin');
         autocompleteData.sort();
     }else{
-        delete $codes.boobies;
-        delete $codes.meatspin;
+        delete window.$codes.boobies;
+        delete window.$codes.meatspin;
         autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1);
         autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1);
     }
@@ -101,7 +101,7 @@ function parseMessage(message,isChatMessage){
     //if the text matches [tag]/emote[/tag] or /emote
     if (match &&isChatMessage) {
         emoteFound = true;
-        emote = ($codes.hasOwnProperty(match[3].toLowerCase()))?$codes[match[3].toLowerCase()]: "/"+match[3];
+        emote = (window.$codes.hasOwnProperty(match[3].toLowerCase()))?window.$codes[match[3].toLowerCase()]: "/"+match[3];
         message = "<span class='cm'>" + match[1] + emote + match[4] + "</span>";
     } else {
         var greentext = false;
@@ -175,7 +175,7 @@ function parseMessage(message,isChatMessage){
         if(emoteStart == -1){
             end = true;
         }else{
-            possibleEmotes = Object.keys($codes);
+            possibleEmotes = Object.keys(window.$codes);
             exactMatches = [];
             emote = '';
             for(i = emoteStart+1; i< message.length;i++){
@@ -198,7 +198,7 @@ function parseMessage(message,isChatMessage){
                 }
             }
             if(exactMatches.length != 0){
-                code = $codes[exactMatches[exactMatches.length-1]];
+                code = window.$codes[exactMatches[exactMatches.length-1]];
                 message = message.substring(0,emoteStart) + code + message.substring(emoteStart+exactMatches[exactMatches.length-1].length+1);
                 i=emoteStart+ code.length;
             }
@@ -210,14 +210,14 @@ function parseMessage(message,isChatMessage){
 }
 function toggleNSFWEmotes(){
     if(!NSFWEmotes){
-        $codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
-        $codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
+        window.$codes.boobies = '<spamtag><img src="http://i.imgur.com/9g6b5.gif" width="51" height="60" spam="1"></spamtag>';
+        window.$codes.meatspin = '<img src="http://i.imgur.com/nLiEm.gif" width="30" height="30">';
         autocompleteData.push('/boobies');
         autocompleteData.push('/meatspin');
         autocompleteData.sort();
     }else{
-        delete $codes.boobies;
-        delete $codes.meatspin;
+        delete window.$codes.boobies;
+        delete window.$codes.meatspin;
         autocompleteData.splice(autocompleteData.indexOf('/boobies'), 1); 
         autocompleteData.splice(autocompleteData.indexOf('/meatspin'), 1); 
     }

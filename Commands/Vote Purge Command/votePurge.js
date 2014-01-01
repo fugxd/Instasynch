@@ -32,7 +32,7 @@ function votePurge(params)
 		option;
 				
 	if (!user){
-        addMessage('','No user specified: \'votePurge [user]','','hashtext');
+        window.addMessage('','No user specified: \'votePurge [user]','','hashtext');
 		return;
 	}
 	
@@ -43,7 +43,7 @@ function votePurge(params)
 	option = "No !";
 	poll.options.push(option);
 	
-	sendcmd("poll-create", poll);
+	window.sendcmd("poll-create", poll);
 }
 
 preConnectFunctions.push(loadVotePurgeCommand);

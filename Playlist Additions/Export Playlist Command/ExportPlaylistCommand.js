@@ -30,13 +30,13 @@ function exportPlaylist(){
     var output='',
         i;
 
-    for (i = 0; i < playlist.length; i++) {
-        switch(playlist[i].info.provider){
+    for (i = 0; i < window.playlist.length; i++) {
+        switch(window.playlist[i].info.provider){
             case 'youtube': output+='http://youtu.be/';break;
             case 'vimeo':output+='http://vimeo.com/';break;
             default: continue;
         }
-        output += playlist[i].info.id+'\n ';
+        output += window.playlist[i].info.id+'\n ';
     }
     window.prompt ("Copy to clipboard: Ctrl+C, Enter", output);
 }

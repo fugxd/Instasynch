@@ -46,7 +46,7 @@ function loadSettingsLoader(){
                     array[i+1] = val; 
                 }
                 items[key] = val;
-                addMessage('', "["+key+": "+val+"] ", '', 'hashtext');
+                window.addMessage('', "["+key+": "+val+"] ", '', 'hashtext');
                 $.cookie(cookieName, array.join(','),expire);
             },
             "remove": function (key) { 
@@ -85,5 +85,5 @@ function printAddonSettings(){
     for(key in settings.getAll()){
         output += "["+key+": "+settings.get(key)+"] ";
     }
-    addMessage('', output, '', 'hashtext');
+    window.addMessage('', output, '', 'hashtext');
 }

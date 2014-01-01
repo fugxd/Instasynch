@@ -25,10 +25,10 @@ function loadOnClickKickBan(){
     if(!isUserMod()){
         return;
     }
-    var oldAddMessage = addMessage;
+    var oldAddMessage = window.addMessage;
 
     //overwrite InstaSynch's  addMessage function
-    addMessage = function addMessage(username, message, userstyle, textstyle) {
+    window.addMessage = function(username, message, userstyle, textstyle) {
         
         oldAddMessage(username, message, userstyle, textstyle);
         //only add the onclick events if the user is a mod and its not a system message
@@ -60,38 +60,38 @@ function loadOnClickKickBan(){
                         userId,
                         i;
                     user = user.match(/([^ ]* - )?([\w_-]*):/)[2];
-                    for(i = 0; i< users.length;i++){
-                        if(users[i].username === user ) {
-                            if(users[i].permissions > 0){
+                    for(i = 0; i< window.users.length;i++){
+                        if(window.users[i].username === user ) {
+                            if(window.users[i].permissions > 0){
                                 isMod = true;
                                 break;
                             }
-                            userId = users[i].id;
+                            userId = window.users[i].id;
                             userFound = true;
                             break;
                         }
                     }       
                     if(event.altKey){
                         if(isMod){
-                            addMessage('', "Can't ban a mod", '', 'hashtext');
+                            window.addMessage('', "Can't ban a mod", '', 'hashtext');
                         }else{
                             if(userFound){
-                                sendcmd('ban', {userid: userId});    
-                                addMessage('', 'b& user: '+user, '', 'hashtext');
+                                window.sendcmd('ban', {userid: userId});    
+                                window.addMessage('', 'b& user: '+user, '', 'hashtext');
                             }else{
-                                sendcmd('leaverban', {username: user});    
-                                addMessage('', 'Leaverb& user: '+user, '', 'hashtext');
+                                window.sendcmd('leaverban', {username: user});    
+                                window.addMessage('', 'Leaverb& user: '+user, '', 'hashtext');
                             }
                         }
                     }else{          
                     if(isMod){
-                            addMessage('', "Can't kick a mod", '', 'hashtext');
+                            window.addMessage('', "Can't kick a mod", '', 'hashtext');
                         }else{
                             if(userFound){
-                                sendcmd('kick', {userid: userId});   
-                                addMessage('', 'Kicked user: '+user, '', 'hashtext');
+                                window.sendcmd('kick', {userid: userId});   
+                                window.addMessage('', 'Kicked user: '+user, '', 'hashtext');
                             }else{
-                                addMessage('', "Didn't find the user", '', 'hashtext');
+                                window.addMessage('', "Didn't find the user", '', 'hashtext');
                             }
                         }
                     }

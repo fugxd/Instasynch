@@ -22,10 +22,10 @@
 */
 
 function loadNameNotification(){
-    var oldAddMessage = addMessage;
+    var oldAddMessage = window.addMessage;
 
     //overwrite InstaSynch's addMessage function
-    addMessage = function addMessage(username, message, userstyle, textstyle) {
+    window.addMessage = function(username, message, userstyle, textstyle) {
         //continue with InstaSynch's addMessage function
         oldAddMessage(username, message, userstyle, textstyle);
         if(!newMsg){

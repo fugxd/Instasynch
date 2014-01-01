@@ -31,19 +31,19 @@ function bump(params){
         i;
     
     if(!user){
-        addMessage('','No user specified: \'bump [user]','','hashtext');
+        window.addMessage('','No user specified: \'bump [user]','','hashtext');
         return;
     }
-    for (i = playlist.length - 1; i >= 0; i--) {
-        if(playlist[i].addedby.toLowerCase() === user.toLowerCase()){
+    for (i = window.playlist.length - 1; i >= 0; i--) {
+        if(window.playlist[i].addedby.toLowerCase() === user.toLowerCase()){
             bumpIndex = i;
             break;
         }
     }
     if (bumpIndex === -1){
-        addMessage('',"The user didn't add any videos",'','hashtext');
+        window.addMessage('',"The user didn't add any videos",'','hashtext');
     }else{
-        sendcmd('move', {info: playlist[bumpIndex].info, position: getActiveVideoIndex()+1});
+        window.sendcmd('move', {info: window.playlist[bumpIndex].info, position: getActiveVideoIndex()+1});
     }
 }
 

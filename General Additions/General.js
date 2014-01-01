@@ -25,7 +25,7 @@
 function loadGeneralStuff(){
     //get Username
     thisUsername = $.cookie('username');
-    addMessage('', '<strong>Scripts 1.21 loaded. Recent changes:<br>'+
+    window.addMessage('', '<strong>Scripts 1.3 loaded. Recent changes:<br>'+
                     '&bull; PlayMessages (turn off with ~PlayMessages) <br>'+
                     '&bull; BigPlaylist: bigger playlist with thumbnails (turn off with ~BigPlaylist, also thanks fugXD) <br>'+
                     '&bull; \'Shuffle: shuffles a wall or the playlist <br>'+
@@ -43,13 +43,13 @@ function isUserMod(){
 }
 
 function isBibbyRoom(){
-    return ROOMNAME.match(/bibby/i)?true:false;
+    return window.ROOMNAME.match(/bibby/i)?true:false;
 }
 
 function getIndexOfUser(id){
     var i;
-    for (i = 0; i < users.length; i++){
-        if (id === users[i].id){
+    for (i = 0; i < window.users.length; i++){
+        if (id === window.users[i].id){
             return i;
         }
     }
@@ -58,12 +58,12 @@ function getIndexOfUser(id){
 
 function getUsernameArray(lowerCase){
     var arr = [];
-    for(i = 0; i< users.length;i++){
-        if(users[i].username !== 'unnamed'){
+    for(i = 0; i< window.users.length;i++){
+        if(window.users[i].username !== 'unnamed'){
             if(!lowerCase){
-                arr.push(users[i].username);
+                arr.push(window.users[i].username);
             }else{
-                arr.push(users[i].username.toLowerCase());
+                arr.push(window.users[i].username.toLowerCase());
             }
         }
     }

@@ -35,10 +35,10 @@ function loadNameAutocomplete() {
                 name,
                 data,
                 partToComplete = '',
-                username,
                 i,
                 j,
-                sub;
+                sub,
+                usernames = getUsernameArray(false);
             if(!messagetags || !messagetags[3]){
                 return;
             }
@@ -50,16 +50,15 @@ function loadNameAutocomplete() {
             name = new RegExp('^'+messagetags[3],'i');
 
             //find matching users
-            for(i = 0; i< users.length;i++){
-                username = users[i].username;
-                if(username.match(name)){
+            for(i = 0; i< usernames.length;i++){
+                if(usernames[i].match(name)){
                     if(partToComplete == ''){
-                        partToComplete = username;
+                        partToComplete = usernames[i];
                     }else{
                         //check for partial matches with other found users
                         for(j = partToComplete.length; j>=0 ;j--){
                             sub = partToComplete.substring(0,j);
-                            if(username.indexOf(sub) == 0){
+                            if(usernames[i].indexOf(sub) == 0){
                                 partToComplete = sub;
                                 break;
                             }

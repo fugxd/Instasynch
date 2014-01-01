@@ -23,7 +23,7 @@ function loadBigPlaylist() {
     bigPlaylist = settings.get('bigPlaylist','true');
     commands.set('addOnSettings','BigPlaylist',toggleBigPlaylist);
     if (bigPlaylist) {
-        // change playlist to table based
+        // change window.playlist to table based
         $('<style type="text/css"> #tablePlaylistBody tr:hover{background:#555;} #tablePlaylistBody td {padding:3px;border:solid #666 3px;} .active{color:#000; background:#D1E1FA;} </style>').appendTo('head');
         $('#ulPlay').replaceWith($('<table>',{'id':'tablePlaylist'}));
         $('#tablePlaylist').css('width','100%')
@@ -31,9 +31,9 @@ function loadBigPlaylist() {
         $('#tablePlaylist').append(
             $('<tbody>',{'id':'tablePlaylistBody'})
         );
-        var oldMakeLeader = makeLeader,
+        var oldMakeLeader = window.makeLeader,
             oldIsLeader;
-        makeLeader = function makeLeader(userId){
+        window.makeLeader = function(userId){
             oldIsLeader = window.isLeader;
             oldMakeLeader(userId);
             //InstaSynch core.js, version 0.9.7
@@ -42,7 +42,7 @@ function loadBigPlaylist() {
                 $( "#tablePlaylistBody" ).sortable(
                 {
                     update : function (event, ui){
-                                sendcmd('move', {info: ui.item.data("info"), position: ui.item.index()});
+                                window.sendcmd('move', {info: ui.item.data("info"), position: ui.item.index()});
                                 $( "#tablePlaylistBody" ).sortable( "cancel" );
                              },
                      start: function(event,ui)
@@ -62,8 +62,8 @@ function loadBigPlaylist() {
 
         // override functions from InstaSynch's io.js, version 0.9.7
         // overrides addVideo, removeVideo, moveVideo and playVideo
-        addVideo = function addVideo(vidinfo) {
-            playlist.push({info: vidinfo.info, title: vidinfo.title, addedby: vidinfo.addedby, duration: vidinfo.duration});
+        window.addVideo = function(vidinfo) {
+            window.playlist.push({info: vidinfo.info, title: vidinfo.title, addedby: vidinfo.addedby, duration: vidinfo.duration});
 
             var vidurl = '',
                 vidicon = '';
@@ -81,7 +81,7 @@ function loadBigPlaylist() {
             var removeBtn = $('<div/>', {
                 'class': 'removeBtn x',
                 'click': function () {
-                    sendcmd('remove', {info: $(this).parent().parent().data('info')});
+                    window.sendcmd('remove', {info: $(this).parent().parent().data('info')});
                 }
             });
 
@@ -106,41 +106,41 @@ function loadBigPlaylist() {
                             }
                             else
                             {
-                                if (isLeader) {
-                                    sendcmd('play', {info: $(this).parent().data('info')});
+                                if (window.isLeader) {
+                                    window.sendcmd('play', {info: $(this).parent().data('info')});
                                 } else {
-                                        $('#cin').val($('#cin').val() + getVideoIndex($(this).parent().data('info')) + ' ');
+                                        $('#cin').val($('#cin').val() + window.getVideoIndex($(this).parent().data('info')) + ' ');
                                         $('#cin').focus();
                                 }
                             }
                         }
                     ).css('cursor','pointer')
                 ).append(
-                    $('<td>').html(secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align','right')
+                    $('<td>').html(window.secondsToTime(vidinfo.duration) + '<br/>' + vidinfo.addedby).css('text-align','right')
                 ).append(
                     $('<td>').append(removeBtn).append($('<br>'))
                 )
             );
-            totalTime += vidinfo.duration;
-            $('.total-videos').html(playlist.length + ' videos');
-            $('.total-duration').html(secondsToTime(totalTime));
+            window.totalTime += vidinfo.duration;
+            $('.total-videos').html(window.playlist.length + ' videos');
+            $('.total-duration').html(window.secondsToTime(window.totalTime));
         }
 
-        removeVideo = function removeVideo(vidinfo) {
-            var indexOfVid = getVideoIndex(vidinfo);
-            if (indexOfVid > -1 && indexOfVid < playlist.length) {
-                totalTime -= playlist[indexOfVid].duration;
-                playlist.splice(indexOfVid, 1);
+        window.removeVideo = function(vidinfo) {
+            var indexOfVid = window.getVideoIndex(vidinfo);
+            if (indexOfVid > -1 && indexOfVid < window.playlist.length) {
+                window.totalTime -= window.playlist[indexOfVid].duration;
+                window.playlist.splice(indexOfVid, 1);
                 $($('#tablePlaylistBody').children('tr')[indexOfVid]).remove();
             }
-            $('.total-videos').html(playlist.length + ' videos');
-            $('.total-duration').html(secondsToTime(totalTime));
+            $('.total-videos').html(window.playlist.length + ' videos');
+            $('.total-duration').html(window.secondsToTime(window.totalTime));
         }
 
-        moveVideo = function moveVideo(vidinfo, position) {
-            var indexOfVid = getVideoIndex(vidinfo);
+        window.moveVideo = function(vidinfo, position) {
+            var indexOfVid = window.getVideoIndex(vidinfo);
             if (indexOfVid > -1) {
-                playlist.move(indexOfVid, position);
+                window.playlist.move(indexOfVid, position);
                 var playlistElements = $('#tablePlaylistBody tr').clone(true);
                 playlistElements.move = function (old_index, new_index) {
                     if (new_index >= this.length) {
@@ -157,20 +157,20 @@ function loadBigPlaylist() {
             }
         }
 
-        playVideo = function playVideo(vidinfo, time, playing) {
-            var addedby = '';
-            var title = '';
-            var indexOfVid = getVideoIndex(vidinfo);
+        window.playVideo = function playVideo(vidinfo, time, playing) {
+            var addedby = '',
+                title = '',
+                indexOfVid = window.getVideoIndex(vidinfo);
             if (indexOfVid > -1) 
             {
-                title = ((playlist[indexOfVid].title.length>240)?playlist[indexOfVid].title.substring(0,240)+"...":playlist[indexOfVid].title);
-                addedby = playlist[indexOfVid].addedby;
+                title = ((window.playlist[indexOfVid].title.length>240)?window.playlist[indexOfVid].title.substring(0,240)+"...":window.playlist[indexOfVid].title);
+                addedby = window.playlist[indexOfVid].addedby;
                 $('.active').removeClass('active');
                 $($('#tablePlaylistBody').children('tr')[indexOfVid]).addClass('active');
                 $('#vidTitle').html(title + '<div class="via"> via ' + addedby + '</div>');
                 video.play(vidinfo, time, playing);   
-                $('#slider').slider('option', 'max', playlist[indexOfVid].duration);
-                $('#sliderDuration').html('/' + secondsToTime(playlist[indexOfVid].duration))
+                $('#slider').slider('option', 'max', window.playlist[indexOfVid].duration);
+                $('#sliderDuration').html('/' + window.secondsToTime(window.playlist[indexOfVid].duration))
             }
         }
     }
@@ -181,5 +181,5 @@ var bigPlaylist = true;
 function toggleBigPlaylist(){
     bigPlaylist = !bigPlaylist;
     settings.set('bigPlaylist',bigPlaylist);
-    addMessage('','This setting requires a reload of the Page.','','hashtext');
+    window.addMessage('','This setting requires a reload of the Page.','','hashtext');
 }

@@ -82,10 +82,10 @@ function loadMouseWheelVolumecontrol(){
     //     //set the globalVolume to the player after it has been loaded
     // };
 
-    var oldPlayVideo = playVideo,
+    var oldPlayVideo = window.playVideo,
         newPlayer = false;
 
-    playVideo = function playVideo(vidinfo, time, playing){
+    window.playVideo = function(vidinfo, time, playing){
         oldPlayVideo(vidinfo,time,playing);
         if(oldProvider !== vidinfo.provider){
             newPlayer = true;

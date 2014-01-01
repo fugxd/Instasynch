@@ -26,7 +26,7 @@ function loadInputHistory(){
 
     $("#chat input").bind('keypress',function(event){
         if(event.keyCode === 13){
-            if($(this).val() != ""){
+            if($(this).val() != ''){
                 if(inputHistoryIndex != 0){
                     //remove the string from the array
                     inputHistory.splice(inputHistoryIndex,1);
@@ -82,7 +82,7 @@ function setInputHistoryIndex(index){
     }
 }
 
-var inputHistory = [""],
+var inputHistory = [''],
     inputHistoryIndex = 0;
 
 preConnectFunctions.push(loadInputHistory);

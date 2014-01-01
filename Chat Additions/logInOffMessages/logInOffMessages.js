@@ -29,15 +29,15 @@ function loadLogInOffMessages(){
     commands.set('addOnSettings',"LogInOffMessages",toggleLogInOffMessages);
     
     // Overwriting Adduser
-    var oldAddUser = addUser,
-        oldRemoveUser = removeUser;
+    var oldAddUser = window.addUser,
+        oldRemoveUser = window.removeUser;
 
-    addUser = function(user, css, sort) {
+    window.addUser = function(user, css, sort) {
         // Only if blackname or mod
         if (user.loggedin && logInOffMessages){
-            addMessage('', user.username + ' logged on.', '','hashtext'); 
+            window.addMessage('', user.username + ' logged on.', '','hashtext'); 
             if (user.username === 'JustPassingBy'){
-                addMessage('','Wish him a happy birthday !', '', 'hastext');
+                window.addMessage('','Wish him a happy birthday !', '', 'hastext');
             }
         }
         oldAddUser(user,css,sort);
@@ -45,11 +45,10 @@ function loadLogInOffMessages(){
 
     // Overwriting removeUser
 
-    removeUser = function(id) {
-        var user = users[getIndexOfUser(id)];
+    window.removeUser = function(id) {
+        var user = window.users[getIndexOfUser(id)];
         if (user.loggedin && logInOffMessages){
-            addMessage('',user.username + ' logged off.', '','hashtext');
-
+            window.addMessage('',user.username + ' logged off.', '','hashtext');
         }
         oldRemoveUser(id);
     };
