@@ -46,7 +46,7 @@ Installing
 
 To use the scripts install <a href=https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=de>tampermonkey(chrome)</a> or <a href="https://addons.mozilla.org/de/firefox/addon/greasemonkey/">greasemonkey(firefox)</a>.
 
-Then go to http://userscripts.org/scripts/show/181142 and install the script
+Enable autoupdate in the plugin and then go to http://userscripts.org/scripts/show/181142 and install the script.
 
 
 Changes
