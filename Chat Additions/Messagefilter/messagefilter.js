@@ -133,10 +133,6 @@ function parseMessage(message,isChatMessage){
     for (word in filteredwords) {
         message = message.replace(new RegExp(word, 'g'), filteredwords[word]);
     }
-    //filter tags
-    for (word in tags) {
-        message = message.replace(new RegExp(word, 'gi'),function(){return (filterTags)?tags[word]:'';});
-    }    
     //filter advancedTags
     for (word in advancedTags) {
         message = message.replace(new RegExp(advancedTags[word], 'g'),
@@ -146,10 +142,15 @@ function parseMessage(message,isChatMessage){
                     case 'hexcolor': ret = '<span style="color:' +m1+ '">';break;
                     case 'marquee' : ret = '<MARQUEE behavior="scroll" direction='+(m1?"left":"right")+' width="100%" scrollamount="'+ m2 +'">'; break;
                     case 'alternate': ret = '<MARQUEE behavior="alternate" direction="right" width="100%" scrollamount="'+ m1 +'">'; break;
+                    case 'spoiler': ret = '[spoiler]'+ m1 +'[/spoiler]'; break;
                 }
                 return (filterTags)?ret:'';
             });
     }
+    //filter tags
+    for (word in tags) {
+        message = message.replace(new RegExp(word, 'gi'),function(){return (filterTags)?tags[word]:'';});
+    }    
     //remove unnused tags [asd] if there is a emote
     if(emoteFound && isChatMessage){
         message = message.replace(/\[[^\]]*\]/, '');
@@ -235,7 +236,8 @@ var filterTags = true,
     advancedTags = {
        'hexcolor': '\\[(#[0-9A-F]{1,6})\\]',
        'marquee': '\\[marquee(-)?(\\d{1,2})\\]',
-       'alternate': '\\[alt(\\d{1,2})\\]'
+       'alternate': '\\[alt(\\d{1,2})\\]',
+       'spoiler': '\\|([^\\|]*)\\|'
     },
     tags = {
     '\\[black\\]': '<span style="color:black">',
