@@ -112,15 +112,15 @@ function loadAutoComplete() {
                 lastIndex = lastIndexOfSet(message.substring(0,caretPosition),['/','\'','[','~','@','$']),
                 partToComplete = message.substring(lastIndex,caretPosition),
                 matches = [];
-
+            
             if(partToComplete.length>0){
                 switch(partToComplete[0]){
-                    case '/': if(!autocompleteEmotes) return; break;
+                    case '/': if(!autocompleteEmotes|| (lastIndex!==0 && message[lastIndex-1].match(/\w/))) return;  break;
                     case '\'': if(!autocompleteCommands || (lastIndex!==0 && message[lastIndex-1].match(/\w/))) return; break;
                     case '[': if(!autocompleteTags) return; break;
-                    case '~': if(!autocompleteAddonSettings) return; break; 
-                    case '@': if(!autocompleteNames)return; break;
-                    case '$': if(!autocompleteBotCommands)return; break;
+                    case '~': if(!autocompleteAddonSettings|| (lastIndex!==0 && message[lastIndex-1].match(/\w/))) return;  break; 
+                    case '@': if(!autocompleteNames|| (lastIndex!==0 && message[lastIndex-1].match(/\w/))) return;  break;
+                    case '$': if(!autocompleteBotCommands|| (lastIndex!==0 && message[lastIndex-1].match(/\w/))) return;  break;
 
                 }
                 if(partToComplete[0] ==='@'){
