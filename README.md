@@ -210,7 +210,6 @@ BigPlaylist
 
 Replacement for the old playlist that features thumbnails and a indicator for youtube/vimeo a
 
-Click <a href="Playlist Additions/BigPlaylist/bigplaylistexample.gif" >here</a> for the example.
 
 Notifications
 -------------
