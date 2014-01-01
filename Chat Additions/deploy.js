@@ -1165,14 +1165,21 @@ function loadOnClickKickBan(){
         }
     };
     var chatCtrlDown = false,
+        oldScroll,
+        blockScrolling = function(event){
+            event.stopPropagation();
+        },
         chatKeyDown = function (event) {
             if(!chatCtrlDown && (event.ctrlKey || (event.ctrlKey && event.altKey))) {
-                $('#chat_list').scrollTop($('#chat_list').scrollTop()-5);
+                window.autoscroll = false;
+                $('#chat_list').bind('scroll',blockScrolling);
                 chatCtrlDown = true;
             }
         },
         chatKeyUp = function (event) {
             if(chatCtrlDown && !event.ctrlKey){
+                window.autoscroll = true;
+                $('#chat_list').unbind('scroll',blockScrolling);
                 $('#chat_list').scrollTop($('#chat_list')[0].scrollHeight);
                 chatCtrlDown = false;
             }
