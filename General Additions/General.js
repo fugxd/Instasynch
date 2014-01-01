@@ -25,15 +25,14 @@
 function loadGeneralStuff(){
     //get Username
     thisUsername = $.cookie('username');
-    addMessage('', '<strong>Scripts loaded. Recent changes:<br>'+
+    addMessage('', '<strong>Scripts 1.21 loaded. Recent changes:<br>'+
                     '&bull; PlayMessages (turn off with ~PlayMessages) <br>'+
                     '&bull; BigPlaylist: bigger playlist with thumbnails (turn off with ~BigPlaylist, also thanks fugXD) <br>'+
                     '&bull; \'Shuffle: shuffles a wall or the playlist <br>'+
                     '&bull; \'History: shows the last 9 videos <br>'+
                     '&bull; Timestamps: (turn off with ~Timestamp) <br>'+
                     '&bull; YouTube Search: type the search term into the add video field <br>'+
-                    '&bull; Notifications: the favicon on the browser tab will change when someone says your name like @username</strong><br>'+
-                    '<font color="#FF0000">If you are having issues with the playlist loading please load the script again from https://raw.github.com/Bibbytube/Instasynch/master/loadAll.js<font>','' ,'hashtext'); 
+                    '&bull; Notifications: the favicon on the browser tab will change when someone says your name like @username</strong>','' ,'hashtext'); 
 }
 function getActiveVideoIndex(){
     return $('.active').index();
